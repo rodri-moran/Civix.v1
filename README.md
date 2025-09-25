@@ -15,7 +15,7 @@ Este proyecto busca **mejorar la comunicación entre ciudadanos y la comuna**, o
 
 ---
 
-## ⚙️ Tecnologías utilizadas
+##  Tecnologías utilizadas
 - **Frontend**: Angular + Bootstrap 5  
 - **Backend**: Spring Boot (Java), Spring Cloud Gateway, Spring Security + JWT  
 - **Base de datos**: PostgreSQL  
@@ -24,7 +24,7 @@ Este proyecto busca **mejorar la comunicación entre ciudadanos y la comuna**, o
 
 ---
 
-## 🚀 Instalación y ejecución
+##  Instalación y ejecución
 1. Clonar este repositorio:  
    ```bash
    git clone https://github.com/usuario/nombre-repo.git
