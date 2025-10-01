@@ -1,0 +1,35 @@
+application:
+  security:
+    jwt:
+      secret-key: miClaveSuperUltraMegaSecretaClaveDeJWT1234567890
+      expiration: 86400000 # 1 dia
+      refresh-token:
+        expiration: 604800000
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:postgresql://localhost:5435/authdb
+    username: auth
+    password: auth
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: update
+        jdbc:
+          time_zone: America/Argentina/Buenos_Aires
+
+##TODO poner en variable de entorno
+jwt:
+  secret: miClaveSuperUltraMegaSecretaClaveDeJWT1234567890
+
+server:
+  port: 8082

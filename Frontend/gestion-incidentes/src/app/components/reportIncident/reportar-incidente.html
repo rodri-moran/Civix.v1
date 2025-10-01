@@ -1,0 +1,160 @@
+<header class="text-white shadow-sm custom-header">
+  <div class="container-fluid d-flex justify-content-between align-items-center py-3 px-4">
+    <div class="logo">
+      <a routerLink="/citizen-dashboard" class="h4 mb-0">Comuna Digital</a>
+    </div>
+    <nav class="d-flex gap-3">
+      <a href="#inicio" class="nav-link text-white">Inicio</a>
+      <a href="#servicios" class="nav-link text-white">Servicios</a>
+      <a href="#contacto" class="nav-link text-white">Contacto</a>
+    </nav>
+    <button class="btn btn-outline-light">Cerrar Sesión</button>
+  </div>
+</header>
+
+<div class="d-flex">
+  <aside class="bg-white border-end vh-100 p-3" style="width: 250px">
+    <nav class="nav flex-column fs-6">
+      <a href="#perfil" class="nav-link text-dark d-flex align-items-center mb-3">
+        <span class="me-3">👤</span> Perfil
+      </a>
+      <a routerLink="/mis-reportes" class="nav-link text-dark d-flex align-items-center mb-3">
+        <span class="me-3">📊</span> Mis reportes
+      </a>
+      <a
+        href="#incidentes"
+        class="nav-link active bg-primary text-white rounded d-flex align-items-center mb-3"
+      >
+        <span class="me-3">⚠️</span> Reportar Incidente
+      </a>
+      <a href="#noticias" class="nav-link text-dark d-flex align-items-center mb-3">
+        <span class="me-3">📰</span> Noticias
+      </a>
+      <a href="#estadisticas" class="nav-link text-dark d-flex align-items-center mb-3">
+        <span class="me-3">📈</span> Estadísticas
+      </a>
+      <a href="#configuracion" class="nav-link text-dark d-flex align-items-center mb-3">
+        <span class="me-3">⚙️</span> Configuración
+      </a>
+    </nav>
+  </aside>
+
+  <main class="flex-grow-1 p-4">
+    <section class="bg-white rounded shadow-sm p-5 border">
+      <h2 class="mb-4 text-primary">Reportar un Incidente</h2>
+      <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+        <div class="mb-3">
+          <label for="title" class="form-label">Título</label>
+          <input
+            type="text"
+            id="title"
+            class="form-control"
+            placeholder="Ej: Bache en la calle principal"
+            required
+            name="title"
+            [(ngModel)]="title"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">Descripción</label>
+          <textarea
+            id="description"
+            rows="4"
+            class="form-control"
+            placeholder="Explica brevemente el incidente"
+            required
+            name="description"
+            [(ngModel)]="description"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="address" class="form-label">Dirección</label>
+          <input
+            type="text"
+            id="address"
+            class="form-control"
+            placeholder="Ej: Av. Siempre Viva 742"
+            name="address"
+            [(ngModel)]="address"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="imageUrl" class="form-label">Subir Imagen</label>
+          <input type="file" id="imageUrl" class="form-control" accept="image/*" />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg">Enviar Reporte</button>
+      </form>
+    </section>
+  </main>
+</div>
+
+<footer class="bg-dark text-white mt-5">
+  <div class="container py-4 text-center">
+    <small>&copy; 2025 Comuna Digital. Todos los derechos reservados.</small>
+  </div>
+</footer>
+
+<div
+  class="modal fade"
+  id="successModal"
+  tabindex="-1"
+  aria-labelledby="successModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">Reporte enviado</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+      <div class="modal-body">Tu reporte se envió correctamente. ¡Gracias por colaborar!</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="errorModal"
+  tabindex="-1"
+  aria-labelledby="errorModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Ocurrió un error mientras se enviaba el reporte. Por favor, intenta de nuevo.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .custom-header {
+    background-color: var(--color-primary, #2c3e50);
+  }
+</style>
