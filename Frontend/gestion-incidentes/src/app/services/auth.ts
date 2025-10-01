@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 interface AuthResponse {
   token: string;
   role: string;
+  userId: number
 }
 
 @Injectable({
@@ -27,5 +28,15 @@ export class Auth {
       passwordHash,
       role    
     })
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('role');
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
   }
 }

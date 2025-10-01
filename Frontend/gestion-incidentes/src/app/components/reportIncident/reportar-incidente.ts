@@ -26,13 +26,14 @@ export class ReportarIncidente {
   title: string = '';
   description: string = '';
   address: string = '';
+  userId: number = Number(localStorage.getItem('userId'));
 
   private apiUrl = 'http://localhost:8080/api/report/public';
 
   constructor(private http: HttpClient) {}
 
-  createReport(title: string, description: string, address: string): Observable<ResponseDto> {
-    return this.http.post<ResponseDto>(this.apiUrl, { title, description, address });
+  createReport(title: string, description: string, address: string, userId: number): Observable<ResponseDto> {
+    return this.http.post<ResponseDto>(this.apiUrl, { title, description, address, userId });
   }
 
   onSubmit(): void {
@@ -41,7 +42,7 @@ export class ReportarIncidente {
       return;
     }
 
-    this.createReport(this.title, this.description, this.address).subscribe({
+    this.createReport(this.title, this.description, this.address, this.userId).subscribe({
       next: (response) => {
         this.showSuccessModal();
 

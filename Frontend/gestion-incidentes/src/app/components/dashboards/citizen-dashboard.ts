@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Auth } from '../../services/auth';  
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-citizen-dashboard',
@@ -11,5 +11,14 @@ import { RouterLink } from '@angular/router';
   styleUrl: './citizen-dashboard.css'
 })
 export class CitizenDashboard {
+    constructor(private authService: Auth, private router: Router) {}
 
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }

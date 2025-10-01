@@ -4,12 +4,12 @@ import { Register } from './components/register/register';
 import { CitizenDashboard } from './components/dashboards/citizen-dashboard';
 import { ReportarIncidente } from './components/reportIncident/reportar-incidente';
 import { MisReportes } from './components/misReportes/mis-reportes';
+import { AuthGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: Register},
-  { path: 'citizen-dashboard', component: CitizenDashboard},
-  { path: 'reportar-incidente', component: ReportarIncidente},
-  { path: 'mis-reportes', component: MisReportes}
+  { path: 'login', loadComponent: () => import('./components/login/login').then(m => m.LoginComponent) },
+  { path: 'register', loadComponent: () => import('./components/register/register').then(m => m.Register) },
+  { path: 'mis-reportes', loadComponent: () => import('./components/misReportes/mis-reportes').then(m => m.MisReportes), canActivate: [AuthGuard] },
+  { path: 'reportar', loadComponent: () => import('./components/reportIncident/reportar-incidente').then(m => m.ReportarIncidente), canActivate: [AuthGuard] },
+  { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

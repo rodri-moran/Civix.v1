@@ -3,10 +3,12 @@ package com.example.auth_service.dtos;
 public class AuthResponseDto {
     private String token;
     private String role;
+    private Long userId;
 
-    public AuthResponseDto(String token, String role){
+    public AuthResponseDto(String token, String role, Long userId){
         this.token = token;
         this.role = role;
+        this.userId = userId;
     }
 
     public String getToken() {
@@ -23,5 +25,13 @@ public class AuthResponseDto {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

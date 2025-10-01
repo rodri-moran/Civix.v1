@@ -40,41 +40,38 @@
   </aside>
 
   <main class="flex-grow-1 p-4">
-    <table class="table">
-      <thead>
+    <h3 class="mb-4">📊 Mis Reportes</h3>
+    <table class="table table-striped table-hover shadow-sm rounded">
+      <thead class="table-dark">
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
-          <th scope="col">Handle</th>
+          <th>#</th>
+          <th>Título</th>
+          <th>Descripción</th>
+          <th>Dirección</th>
+          <th>Estado</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-          <td>the Bird</td>
-          <td>@twitter</td>
+        <tr *ngFor="let reporte of reports; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ reporte.title }}</td>
+          <td>{{ reporte.description }}</td>
+          <td>{{ reporte.address }}</td>
+          <td>
+            <span class="badge bg-primary">{{ reporte.status }}</span>
+          </td>
         </tr>
       </tbody>
     </table>
-  </main>
-</div>
 
-<style>
-  .custom-header {
-    background-color: var(--color-primary, #2c3e50);
-  }
-</style>
+    <div *ngIf="reports.length === 0" class="alert alert-info mt-3">
+      No has realizado ningún reporte todavía.
+    </div>
+  </main>
+
+  <style>
+    .custom-header {
+      background-color: var(--color-primary, #2c3e50);
+    }
+  </style>
+</div>

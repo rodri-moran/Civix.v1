@@ -35,7 +35,7 @@ public class AuthenticationService {
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
-        return new AuthResponseDto(token, user.getRole().name());
+        return new AuthResponseDto(token, user.getRole().name(), user.getId());
     }
 
     public AuthResponseDto register(RegisterRequestDto request){
@@ -48,7 +48,7 @@ public class AuthenticationService {
                 .block();
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
-        return new AuthResponseDto(token, user.getRole().name());
+        return new AuthResponseDto(token, user.getRole().name(), user.getId());
     }
 
 }

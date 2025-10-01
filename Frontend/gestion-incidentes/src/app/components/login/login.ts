@@ -33,6 +33,8 @@ ngOnDestroy() {
       next: (response) => {
         console.log('Token recibido:', response.token);
         localStorage.setItem('token', response.token); 
+        localStorage.setItem('userId', response.userId.toString());
+        console.log(response.userId)
         this.router.navigate(["/citizen-dashboard"])
       },
       error: (err) => {
