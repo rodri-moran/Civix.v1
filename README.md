@@ -27,7 +27,7 @@ Este proyecto busca **mejorar la comunicación entre ciudadanos y la comuna**, o
 ##  Instalación y ejecución
 1. Clonar este repositorio:  
    ```bash
-   git clone https://github.com/usuario/nombre-repo.git
+   git clone https://github.com/RodriMoran406158/RedComunal.git
 
 2. Configurar las variables de entorno (DB, JWT, etc.).
 
