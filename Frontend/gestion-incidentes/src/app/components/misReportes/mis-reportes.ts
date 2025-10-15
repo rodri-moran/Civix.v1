@@ -24,7 +24,7 @@ interface Report {
 export class MisReportes {
   private apiUrl = "http://localhost:8080/api/report/public/get-by-user-id"
   reports: Report[] = [];
-
+  
   constructor(private http: HttpClient){}    
     ngOnInit() {
       const userIdStr = localStorage.getItem('userId');

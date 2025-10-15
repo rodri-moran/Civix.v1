@@ -13,4 +13,10 @@ import { RouterLink, Router } from '@angular/router';
 })
 export class CitizenDashboard {
     constructor(private authService: Auth, private router: Router) {}
+      isAdmin: boolean = false;
+
+    ngOnInit() {
+      const role = localStorage.getItem('role');
+      this.isAdmin = role === 'ADMIN'
+    }
 }

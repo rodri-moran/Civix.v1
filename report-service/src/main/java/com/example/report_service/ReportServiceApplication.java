@@ -2,8 +2,14 @@ package com.example.report_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+@ComponentScan(basePackages = {
+		"com.example.report_service",
+		"org.example.filter",
+		"org.example.config"
+})
 public class ReportServiceApplication {
 
 	public static void main(String[] args) {

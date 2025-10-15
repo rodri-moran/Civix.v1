@@ -1,0 +1,40 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold text-dark m-0">Cuadrillas</h3>
+  <button
+    class="btn btn-success d-flex align-items-center shadow-sm rounded-pill px-3"
+    (click)="crearCuadrilla()"
+  >
+    <i class="bi bi-plus-lg me-2"></i> Nueva cuadrilla
+  </button>
+</div>
+
+<div class="table-responsive shadow-sm rounded-4 border bg-white p-3">
+  <table class="table table-hover align-middle mb-0">
+    <thead class="table-light border-bottom">
+      <tr class="text-secondary text-uppercase small">
+        <th>#</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Área</th>
+        <th>Integrantes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let squad of squads; let i = index" class="table-row-hover">
+        <td class="fw-semibold">{{ i + 1 }}</td>
+        <td>{{ squad.name }}</td>
+        <td>{{ squad.description }}</td>
+        <td
+          [ngClass]="{
+            'text-danger': squad.area === 'RECOLECCION',
+            'bg-primary': squad.area === 'OBRAS',
+            'text-info': squad.area === 'ALUMBRADO'
+          }"
+        >
+          {{ squad.area }}
+        </td>
+        <td>{{ squad.teamSize }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

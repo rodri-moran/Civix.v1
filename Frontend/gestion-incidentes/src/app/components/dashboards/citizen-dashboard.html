@@ -4,9 +4,9 @@
       <a routerLink="/citizen-dashboard" class="h4 mb-0">Comuna Digital</a>
     </div>
     <nav class="d-flex gap-3">
-      <a  class="nav-link text-white">Inicio</a>
-      <a  class="nav-link text-white">Servicios</a>
-      <a  class="nav-link text-white">Contacto</a>
+      <a class="nav-link text-white">Inicio</a>
+      <a class="nav-link text-white">Servicios</a>
+      <a class="nav-link text-white">Contacto</a>
     </nav>
     <button class="btn btn-outline-light">Cerrar Sesión</button>
   </div>
@@ -35,6 +35,13 @@
       </a>
       <a href="#configuracion" class="nav-link text-dark d-flex align-items-center mb-3">
         <span class="me-3">⚙️</span> Configuración
+      </a>
+      <a
+        *ngIf="isAdmin"
+        class="nav-link text-dark d-flex align-items-center mb-3"
+        routerLink="/admin/dashboard"
+      >
+        <span class="me-3">👨‍💼</span> Panel de Administrador
       </a>
     </nav>
   </aside>

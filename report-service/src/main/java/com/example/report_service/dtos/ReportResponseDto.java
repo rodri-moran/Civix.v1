@@ -16,6 +16,15 @@ public class ReportResponseDto {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     private Long userId;
+    private SquadResponseDTO squad;
+
+    public SquadResponseDTO getSquad() {
+        return squad;
+    }
+
+    public void setSquad(SquadResponseDTO squad) {
+        this.squad = squad;
+    }
 
     public String getTitle() {
         return title;

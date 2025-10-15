@@ -2,7 +2,10 @@ package com.example.report_service.controller;
 
 import com.example.report_service.dtos.ReportRequestDto;
 import com.example.report_service.dtos.ReportResponseDto;
+import com.example.report_service.dtos.SquadRequestDTO;
+import com.example.report_service.dtos.SquadResponseDTO;
 import com.example.report_service.services.ReportService;
+import com.example.report_service.services.SquadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +17,53 @@ import java.util.List;
 public class ReportController {
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private SquadService service;
 
     @PostMapping("/public")
     public ResponseEntity<ReportResponseDto> createReport(@RequestBody ReportRequestDto dto){
         return ResponseEntity.ok(reportService.createReport(dto));
+    }
+    @DeleteMapping("/admin/delete/{id}")
+    public ResponseEntity<ReportResponseDto> deleteById(@PathVariable Long id){
+        return ResponseEntity.ok(reportService.deleteById(id));
+    }
+    @GetMapping("/admin/report/{id}")
+    public ResponseEntity<ReportResponseDto> getById(@PathVariable Long id){
+        return ResponseEntity.ok(reportService.getById(id));
     }
 
     @GetMapping("/public/get-by-user-id/{userId}")
     public ResponseEntity<List<ReportResponseDto>> getReportsByUserId(@PathVariable Long userId){
         return ResponseEntity.ok(reportService.getReportsByUserId(userId));
     }
+    @GetMapping("/admin/getAll")
+    public ResponseEntity<List<ReportResponseDto>> getAll(){
+        System.out.println("**** llegó la petición *****");
+        return ResponseEntity.ok(reportService.getAll());
+    }
+
+    @PostMapping("/admin/squad")
+    public ResponseEntity<SquadResponseDTO> createSquad(@RequestBody SquadRequestDTO dto){
+        System.out.println("**** llegó la petición *****");
+        return ResponseEntity.ok(service.createSquad(dto));
+    }
+    @GetMapping("/admin/squads")
+    public ResponseEntity<List<SquadResponseDTO>>getAllSquads(){
+        return ResponseEntity.ok(service.getAll());
+    }
+    @DeleteMapping("/admin/squad/{id}/delete")
+    public ResponseEntity<SquadResponseDTO> deleteSquadById(@PathVariable Long id){
+        System.out.println("**** llegó la petición *****");
+        return ResponseEntity.ok(service.deleteById(id));
+    }
+    @GetMapping("/admin/squad/{id}")
+    public ResponseEntity<SquadResponseDTO> getSquadById(@PathVariable Long id){
+            return ResponseEntity.ok(service.getById(id));
+    }
+    @PutMapping("/admin/report/{id}/assign/{squadId}")
+    public ResponseEntity<ReportResponseDto>assignSquadToReport(@PathVariable Long id, @PathVariable Long squadId){
+            return ResponseEntity.ok(reportService.assignSquadToReport(id, squadId));
+    }
+
 }

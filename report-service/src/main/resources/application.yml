@@ -16,3 +16,6 @@ spring:
           time_zone: America/Argentina/Buenos_Aires
 server:
   port: 8083
+
+jwt:
+  secret: miClaveSuperUltraMegaSecretaClaveDeJWT1234567890

@@ -1,6 +1,7 @@
 package com.example.report_service.entity;
 
 import com.example.report_service.enums.Status;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -27,6 +28,10 @@ public class ReportEntity {
     private String longitude;
 
     private Status status;
+
+    @ManyToOne
+    @JoinColumn(name = "squad_id")
+    private SquadEntity squad;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -110,5 +115,13 @@ public class ReportEntity {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public SquadEntity getSquad() {
+        return squad;
+    }
+
+    public void setSquad(SquadEntity squad) {
+        this.squad = squad;
     }
 }

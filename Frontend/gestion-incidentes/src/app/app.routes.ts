@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 export const routes: Routes = [
   { 
     path: 'login', 
@@ -19,5 +20,44 @@ export const routes: Routes = [
   { 
     path: 'citizen-dashboard', 
     loadComponent: () => import('./components/dashboards/citizen-dashboard').then(m => m.CitizenDashboard)
+  },
+  {
+    path: 'admin',
+    loadComponent: () =>
+      import('./components/admin/admin-layout/admin-layout').then(m => m.AdminLayoutComponent),
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard'
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./components/admin/dashboard/admin-dashboard-component/admin-dashboard-component').then(
+            m => m.AdminDashboardComponent
+          )
+      },
+      {
+        path: 'reportes',
+        loadComponent: () =>
+          import('./components/admin/admin-reports/admin-reports').then(m => m.AdminReports)
+      },
+      {
+        path: 'cuadrillas',
+        loadComponent: () =>
+          import('./components/admin/squads-component/squads-component.component').then(m => m.SquadsComponentComponent)
+      },
+      {
+        path: 'noticias',
+        loadComponent: () =>
+          import('./components/admin/news/news.component').then(m => m.NewsComponent)
+      },
+      {
+        path: 'estadisticas',
+        loadComponent: () =>
+          import('./components/admin/statistics/statistics.component').then(m => m.StatisticsComponent)
+      }
+    ]
   }
 ];
