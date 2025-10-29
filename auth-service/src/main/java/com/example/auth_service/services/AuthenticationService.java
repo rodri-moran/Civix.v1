@@ -24,7 +24,7 @@ public class AuthenticationService {
         //TODO CAMBIAR AL FINALIZAR PRODUCCIÓN
         UserResponseDto user = webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8081/api/users/public/by-email/{email}", dto.getEmail())
+                .uri("http://user-service:8081/api/users/public/by-email/{email}", dto.getEmail())
                 .retrieve()
                 .bodyToMono(UserResponseDto.class)
                 .block();
@@ -41,7 +41,7 @@ public class AuthenticationService {
     public AuthResponseDto register(RegisterRequestDto request){
         UserResponseDto user = webClientBuilder.build()
                 .post()
-                .uri("http://localhost:8081/api/users/public/register")
+                .uri("http://user-service:8081/api/users/public/register")
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(UserResponseDto.class)

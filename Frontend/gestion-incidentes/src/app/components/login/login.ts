@@ -3,15 +3,17 @@ import { FormsModule } from '@angular/forms';
 import { Auth } from '../../services/auth';  
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { LoaderComponent } from "../../shared/loader/loader";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink, LoaderComponent],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
 export class LoginComponent {
+  isLoading = false;  
   email: string = '';
   password: string = '';
   errorMessage: string = '';
@@ -27,6 +29,7 @@ ngOnDestroy() {
 }
 
   onSubmit() {
+    this.isLoading = true;
     console.log('email: '+this.email)
 
     this.authService.login(this.email, this.password).subscribe({
@@ -37,10 +40,13 @@ ngOnDestroy() {
         localStorage.setItem('role', response.role)
         console.log(response.userId)
         console.log(response.role)
+        this.isLoading = false;
+
         this.router.navigate(["/citizen-dashboard"])
       },
       error: (err) => {
         console.error(err);
+        this.isLoading = false;
         this.errorMessage = 'Credenciales inválidas';
       }
     });

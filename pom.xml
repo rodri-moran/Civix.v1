@@ -17,8 +17,6 @@
         <module>report-service</module>
         <module>statistics-service</module>
         <module>user-service</module>
-        <module>common-security</module>
-        <module>squad-service</module>
     </modules>
 
 </project>

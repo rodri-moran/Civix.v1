@@ -48,4 +48,14 @@ public class SquadServiceImpl implements SquadService{
                 .orElseThrow(() -> new EntityNotFoundException("Squad con el id: " + id + " no encontrado"));
         return modelMapper.map(squadEntity, SquadResponseDTO.class);
     }
+
+    @Override
+    public SquadResponseDTO updateSquad(SquadRequestDTO requestDto, Long idSquadToUpdate) {
+        SquadEntity squadEntity = repo.findById(idSquadToUpdate)
+                .orElseThrow(() -> new EntityNotFoundException("Squad con el id: " + idSquadToUpdate + " no encontrado"));
+        modelMapper.map(requestDto, squadEntity);
+
+        SquadEntity saved = repo.save(squadEntity);
+        return modelMapper.map(saved, SquadResponseDTO.class);
+    }
 }

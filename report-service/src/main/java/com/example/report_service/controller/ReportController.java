@@ -45,7 +45,6 @@ public class ReportController {
 
     @PostMapping("/admin/squad")
     public ResponseEntity<SquadResponseDTO> createSquad(@RequestBody SquadRequestDTO dto){
-        System.out.println("**** llegó la petición *****");
         return ResponseEntity.ok(service.createSquad(dto));
     }
     @GetMapping("/admin/squads")
@@ -63,7 +62,12 @@ public class ReportController {
     }
     @PutMapping("/admin/report/{id}/assign/{squadId}")
     public ResponseEntity<ReportResponseDto>assignSquadToReport(@PathVariable Long id, @PathVariable Long squadId){
+            System.out.println("**** llegó la petición *****");
             return ResponseEntity.ok(reportService.assignSquadToReport(id, squadId));
+    }
+    @PutMapping("/admin/squad/{id}")
+    public ResponseEntity<SquadResponseDTO> updateSquad(@PathVariable Long id, @RequestBody SquadRequestDTO request){
+        return ResponseEntity.ok(service.updateSquad(request, id));
     }
 
 }

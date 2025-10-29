@@ -12,4 +12,5 @@ public interface SquadService {
     List<SquadResponseDTO> getAll();
     SquadResponseDTO deleteById(Long id);
     SquadResponseDTO getById(Long id);
+    SquadResponseDTO updateSquad(SquadRequestDTO requestDto, Long idSquadToUpdate);
 }

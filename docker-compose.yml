@@ -1,21 +1,46 @@
+version: "3.8"
+
 services:
-  user-db:
-    image: postgres:16
-    environment:
-      POSTGRES_DB: userdb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: user
-      TZ: America/Argentina/Buenos_Aires
+  # GATEWAY
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: gateway
     ports:
-      - "5434:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${USER_DB_USER}"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - user-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - comuna-network
+
+  # AUTH SERVICE
+  auth-service:
+    container_name: auth-service
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - auth-db
+      - user-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/authdb
+      SPRING_DATASOURCE_USERNAME: auth
+      SPRING_DATASOURCE_PASSWORD: auth
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+    networks:
+      - comuna-network
+
 
   auth-db:
     image: postgres:16
+    container_name: auth-db
     environment:
       POSTGRES_DB: authdb
       POSTGRES_USER: auth
@@ -23,15 +48,61 @@ services:
       TZ: America/Argentina/Buenos_Aires
     ports:
       - "5435:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${AUTH_DB_USER}"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+    networks:
+      - comuna-network
 
+  # USER SERVICE
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - user-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/userdb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: user
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    networks:
+      - comuna-network
+
+  user-db:
+    image: postgres:16
+    container_name: user-db
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+      TZ: America/Argentina/Buenos_Aires
+    ports:
+      - "5434:5432"
+    networks:
+      - comuna-network
+
+  # REPORT SERVICE
+  report-service:
+    build:
+      context: ./report-service
+      dockerfile: Dockerfile
+    container_name: report-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - report-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://report-db:5432/reportdb
+      SPRING_DATASOURCE_USERNAME: report
+      SPRING_DATASOURCE_PASSWORD: report
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    networks:
+      - comuna-network
 
   report-db:
     image: postgres:16
+    container_name: report-db
     environment:
       POSTGRES_DB: reportdb
       POSTGRES_USER: report
@@ -39,38 +110,9 @@ services:
       TZ: America/Argentina/Buenos_Aires
     ports:
       - "5436:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${REPORT_DB_USER}"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+    networks:
+      - comuna-network
 
-
-  statistics-db:
-    image: postgres:16
-    environment:
-      POSTGRES_DB: statisticsdb
-      POSTGRES_USER: statistics
-      POSTGRES_PASSWORD: statistics
-      TZ: America/Argentina/Buenos_Aires
-    ports:
-      - "5438:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${STATISTICS_DB_USER}"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-  inventory-db:
-    image: postgres:16
-    environment:
-      POSTGRES_DB: inventorydb
-      POSTGRES_USER: inventory
-      POSTGRES_PASSWORD: inventory
-      TZ: America/Argentina/Buenos_Aires
-    ports: [ "5433:5432" ]
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${INVENTORY_DB_USER}" ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+networks:
+  comuna-network:
+    driver: bridge

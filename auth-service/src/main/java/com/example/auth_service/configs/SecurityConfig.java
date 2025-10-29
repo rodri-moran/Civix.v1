@@ -22,29 +22,26 @@ public class SecurityConfig {
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable()) // desactivar CSRF para APIs REST
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        http
+                .csrf(csrf -> csrf.disable())             // API REST
+                .cors(cors -> cors.disable())             // CORS manejado por Gateway
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // login y register públicos
-                        .anyRequest().authenticated() // to.do lo demás requiere autenticación
+                        .requestMatchers("/api/auth/**").permitAll() // login/register público
+                        .anyRequest().authenticated()               // el resto requiere token
                 )
-                .build();
+        ;
+
+        return http.build();
     }
-
-
-
 //    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowedOrigins(List.of("http://localhost:4200"));
-//        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//        config.setAllowedHeaders(List.of("*"));
-//        config.setAllowCredentials(true);
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", config);
-//        return source;
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        return http
+//                .csrf(csrf -> csrf.disable()) // desactivar CSRF para APIs REST
+////                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/api/auth/**").permitAll() // login y register públicos
+//                        .anyRequest().authenticated() // to.do lo demás requiere autenticación
+//                )
+//                .build();
 //    }
-
 }

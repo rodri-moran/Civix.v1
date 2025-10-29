@@ -1,10 +1,15 @@
 package com.example.report_service.dtos;
 
 import com.example.report_service.enums.Status;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public class ReportResponseDto {
+
+    private Long id;
+
     private String title;
 
     private String description;
@@ -12,12 +17,19 @@ public class ReportResponseDto {
     private String address;
 
     private Status status;
-
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private OffsetDateTime createdAt;
 
     private Long userId;
     private SquadResponseDTO squad;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
     public SquadResponseDTO getSquad() {
         return squad;
     }
@@ -58,11 +70,11 @@ public class ReportResponseDto {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

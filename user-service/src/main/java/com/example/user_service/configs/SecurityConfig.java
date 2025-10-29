@@ -26,27 +26,31 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                // Desactivar CSRF (para API REST)
                 .csrf(csrf -> csrf.disable())
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                // CORS deshabilitado (lo maneja el gateway)
+                .cors(cors -> cors.disable())
+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/public","/api/users/public/**").permitAll()
+                        // Endpoints públicos
+                        .requestMatchers("/api/users/public", "/api/users/public/**").permitAll()
+
+                        // Endpoints solo admin
                         .requestMatchers("/api/users/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+
+                        // Endpoints para usuarios autenticados
+                        .requestMatchers("/api/users/**").hasAnyRole("USER", "ADMIN")
+
+                        // Cualquier otra request requiere autenticación
                         .anyRequest().authenticated()
                 )
+
+                // Agregar filtro JWT para validar token antes del UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+
                 .build();
     }
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
+
 }

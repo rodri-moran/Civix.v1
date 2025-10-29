@@ -1,31 +1,91 @@
-<header class="text-white shadow-sm custom-header">
+<header class="text-white shadow-sm admin-header">
   <div class="container-fluid d-flex justify-content-between align-items-center py-3 px-4">
+    <!-- Botón hamburguesa -->
+    <button class="btn btn-link text-white d-md-none me-3" (click)="toggleSidebar()">
+      <i class="bi bi-list fs-3"></i>
+    </button>
+
+    <!-- Logo -->
     <div class="logo">
-      <a routerLink="/admin" class="h4 mb-0 text-white text-decoration-none"> Comuna Digital </a>
+      <a
+        (click)="goToCitizenDashboard()"
+        role="button"
+        class="h4 mb-0 text-white text-decoration-none"
+      >
+        Comuna Digital - Administración
+      </a>
     </div>
 
-    <button class="btn btn-outline-light btn-sm px-3">Cerrar Sesión</button>
+    <!-- Perfil -->
+    <div class="dropdown">
+      <button
+        class="btn btn-outline-light d-flex align-items-center gap-2"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <span class="fs-5">👤</span>
+        <span class="fw-semibold">{{ userName }}</span>
+      </button>
+
+      <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded">
+        <li>
+          <a class="dropdown-item" routerLink="/admin/perfil">
+            <i class="bi bi-person"></i> Perfil
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" routerLink="/admin/configuracion">
+            <i class="bi bi-gear"></i> Configuración
+          </a>
+        </li>
+        <li><hr class="dropdown-divider" /></li>
+        <li>
+          <button class="dropdown-item text-danger" (click)="logout()">
+            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+          </button>
+        </li>
+      </ul>
+    </div>
   </div>
 </header>
 
 <div class="d-flex">
-  <aside class="sidebar bg-light border-end p-3" style="transition: width 0.3s ease">
-    <div class="sidebar-content">
-      <nav class="nav flex-column mt-4">
-        <a
-          *ngFor="let item of menuItems"
-          (click)="navigate(item.route)"
-          class="nav-link d-flex align-items-center mb-3 p-2 rounded hover-highlight"
-          [class.active]="currentRoute === item.route"
-        >
-          <i [class]="item.icon + ' me-2 text-primary'"></i>
-          <span>{{ item.title }}</span>
-        </a>
-      </nav>
-    </div>
-  </aside>
+  <!-- Overlay -->
+  <div class="sidebar-overlay" [class.show]="isOpen" (click)="toggleSidebar()"></div>
 
-  <main class="flex-grow-1 p-4">
-    <router-outlet></router-outlet>
-  </main>
+  <!-- Sidebar -->
+  <div class="sidebar-admin" [class.open]="isOpen">
+    <!-- Botón cerrar -->
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <i class="bi" [ngClass]="isOpen ? 'bi-x-lg' : 'bi-list'"></i>
+    </button>
+
+    <!-- Usuario -->
+    <div class="user-box text-center mb-4" *ngIf="isOpen">
+      <div class="user-avatar mx-auto mb-2">
+        <i class="bi bi-person-circle fs-1 text-primary"></i>
+      </div>
+      <h6 class="fw-semibold mb-0">{{ userName }}</h6>
+      <small class="text-white">Administrador</small>
+    </div>
+
+    <!-- Menú -->
+    <nav class="nav flex-column mt-2" *ngIf="isOpen">
+      <a
+        *ngFor="let item of menuItems"
+        (click)="navigate(item.route)"
+        class="nav-item-modern"
+        [class.active]="currentRoute === item.route"
+      >
+        <i [class]="item.icon"></i><span>{{ item.title }}</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Contenido -->
+  <div class="content-wrapper flex-grow-1">
+    <main class="flex-grow-1 p-4">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>

@@ -1,11 +1,154 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ReportServiceService } from '../../../services/report-service.service';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+declare var bootstrap: any;
+interface Squad {
+  id: number;
+  name: string;
+  description: string;
+  area: string;
+  teamSize: number;
+}
+interface Report {
+  id: number, 
+  title: string,
+  description: string,
+  address: string,
+  status: string
+  createdAt: string;
+  squad?: Squad;
+  imageUrl?: string;
+}
+
+
 
 @Component({
   selector: 'app-admin-reports',
-  imports: [],
+  imports: [ CommonModule, RouterLink, FormsModule],
   templateUrl: './admin-reports.html',
   styleUrl: './admin-reports.css'
 })
-export class AdminReports {
 
+export class AdminReports implements OnInit {
+
+
+  //statusMap es un objeto literal (como un diccionario o mapa).
+  //Cada clave (PENDING, IN_PROCESS, RESOLVED) representa el valor que llega del backend.
+  //Cada valor asociado es otro objeto que tiene dos propiedades:
+  //text: el texto que se quiere mostrar en el front (en español).
+  //class: la clase de Bootstrap que define el color del badge.
+
+  //Entonces, si el backend devuelve IN_PROCESS, se puede acceder a:
+  //statusMap["IN_PROCESS"].text → "En proceso"
+  //statusMap["IN_PROCESS"].class → "bg-warning text-dark"
+  statusMap: { [key: string]: { text: string; class: string } } = {
+  PENDING: { text: 'Pendiente', class: 'bg-primary' },
+  IN_PROCESS: { text: 'En proceso', class: 'bg-warning text-dark' },
+  RESOLVED: { text: 'Resuelto', class: 'bg-success' }
+};
+
+  private apiUrl = "http://localhost:8080/api/report/admin/getAll"
+  private apiUrlSquads = "http://localhost:8080/api/report/admin/squads"
+  reports : Report[] = [];
+  squads: Squad[] = [];
+  constructor(private http: HttpClient, private service: ReportServiceService){}
+  ngOnInit() : void{
+    const token = localStorage.getItem("token");
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    })
+
+    this.http.get<Squad[]>(this.apiUrlSquads, { headers }).subscribe({
+        next: (data) => {
+          this.squads = data;
+        },
+        error: (err) => {
+          console.error("Error cargando cuadrillas", err);
+      }})  
+
+
+    this.service.getReports().subscribe({
+      next: (data) => {
+        console.log('Reportes recibidos: ' + data );
+        this.reports = data.sort((a, b) => {
+          const estadoOrden = getEstadoOrden(a.status) - getEstadoOrden(b.status);
+          if(estadoOrden!== 0) return estadoOrden;
+
+          const fechaA = new Date(a.createdAt).getTime();
+          const fechaB = new Date(b.createdAt).getTime();
+          return fechaB - fechaA;
+        });
+      }, error: (err) => {
+        console.log('Error al obtener los reportes: ', err);
+      }
+    })
+    
+  }
+
+  selectedReport?: Report;
+  selectedSquadId?: number;
+  reportToDetail?: Report;
+
+
+  openAssignModal(reporte: Report) {
+    this.selectedReport = reporte;
+    this.selectedSquadId = reporte.squad?.id;
+  }
+
+  assignSquad() {
+    if (!this.selectedReport || !this.selectedSquadId) return;
+    const selectedSquad = this.squads.find(s => s.id === this.selectedSquadId);
+    if(!selectedSquad) return;
+
+    this.service.assignSquadToReport(this.selectedReport.id, this.selectedSquadId).subscribe({
+      next:(data) => {
+        console.log("respuesta de back al asignar squad a report: " + data)
+        this.selectedReport!.squad = selectedSquad;
+        this.selectedReport!.status = 'IN_PROCESS';
+        this.showMessage(true, 'La cuadrilla fue asignada correctamente al reporte.');
+
+      }, 
+      error: (err) => {
+        console.error('Error al asignar cuadrilla', err)
+        this.showMessage(false, 'Hubo un error al asignar la cuadrilla. Intenta nuevamente.');
+
+      }
+    })
+
+    const modalEl = document.getElementById('assignModal');
+    if (modalEl) {
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      modal?.hide();
+    }
+  }
+
+  isSuccess: boolean = true;
+  messageText: string = '';
+
+showMessage(isSuccess: boolean, text: string) {
+  this.isSuccess = isSuccess;
+  this.messageText = text;
+
+  const modalEl = document.getElementById('messageModal');
+  if (modalEl) {
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+  }
+}
+
+openDetailModal(report: Report) {
+  this.reportToDetail = report;
+}
+}
+function getEstadoOrden(status: string): number {
+  switch (status.toLowerCase()) {
+    case 'PENDING': return 0;
+    case 'IN_PROCESS': return 1;
+    case 'RESOLVED': return 2;
+    default: return 99;
+  }
 }

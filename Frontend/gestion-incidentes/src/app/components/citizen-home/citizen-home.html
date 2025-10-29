@@ -1,0 +1,43 @@
+<section class="text-black section-main rounded shadow-sm p-5 mb-4 border">
+  <h2 class="mb-3">Sistema de Gestión de Incidentes</h2>
+  <p class="lead mb-4">
+    Reporta, gestiona y da seguimiento a los incidentes de tu comuna de manera eficiente y
+    transparente
+  </p>
+  <button *ngIf="!isAdmin" class="btn btn-primary btn-lg" routerLink="/reportar-incidente">
+    Reportar Incidente
+  </button>
+</section>
+
+<section class="mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="h5">Noticias de la Comuna</h3>
+    <a href="#todas" class="text-decoration-none">Ver todas →</a>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    <article class="col" *ngFor="let noticia of noticias">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <small class="text-muted d-block mb-2">{{ noticia.fecha }}</small>
+          <h5 class="card-title">{{ noticia.titulo }}</h5>
+          <p class="card-text">{{ noticia.descripcion }}</p>
+          <span class="badge" [ngClass]="noticia.color">{{ noticia.categoria }}</span>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+<!--
+<section>
+  <h3 class="h5 mb-3">Estadísticas del Mes</h3>
+  <div class="row row-cols-2 row-cols-md-4 g-4">
+    <div class="col" *ngFor="let stat of estadisticas">
+      <div class="card text-center shadow-sm p-3">
+        <h4 class="fw-bold text-primary">{{ stat.valor }}</h4>
+        <p class="text-muted mb-0">{{ stat.label }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+-->

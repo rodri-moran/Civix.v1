@@ -69,12 +69,14 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public ReportResponseDto assignSquadToReport(Long reportId, Long squadId) {
+        System.out.println("llegó al service con el reportId: " + reportId + " y el squadId: " + squadId);
         ReportEntity reportEntity = repository.findById(reportId)
                 .orElseThrow(() -> new EntityNotFoundException("Report con el id " + reportId + "no encontrado"));
         SquadEntity squadEntity = squadRepository.findById(squadId)
                 .orElseThrow(() -> new EntityNotFoundException("Squad con el id " + squadId + " no encontrado"));
-
+        System.out.println("pasó los primeros dos filtros");
         reportEntity.setSquad(squadEntity);
+        reportEntity.setStatus(Status.IN_PROCESS);
         squadEntity.getReports().add(reportEntity);
 
         reportEntity = repository.save(reportEntity);

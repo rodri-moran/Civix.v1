@@ -2,4 +2,4 @@ spring:
   application:
     name: notification-service
 server:
-  port: 8084
+  port: 8086
