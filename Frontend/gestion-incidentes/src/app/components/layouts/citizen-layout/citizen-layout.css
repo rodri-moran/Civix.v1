@@ -1,26 +1,23 @@
-/* --- HEADER --- */
 header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 70px;
-  background-color: #1e2a38; /* tono oscuro elegante */
+  background-color: #1e2a38;
   color: #fff;
   display: flex;
   align-items: center;
   z-index: 1000;
 }
 
-/* Para el gradiente opcional del header */
 .custom-header {
   background-color: #1e2a38 !important;
 }
 
-/* --- SIDEBAR --- */
 .sidebar {
   position: fixed;
-  top: 70px; /* debajo del header */
+  top: 70px; 
   left: 0;
   height: calc(100vh - 70px);
   width: 260px;
@@ -33,12 +30,10 @@ header {
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.25);
 }
 
-/* Sidebar colapsado */
 .sidebar:not(.open) {
   width: 70px;
 }
 
-/* --- BOTÓN HAMBURGUESA --- */
 .toggle-btn {
   background: none;
   border: none;
@@ -49,14 +44,13 @@ header {
   cursor: pointer;
 }
 
-/* --- USUARIO --- */
 .user-box {
   margin-bottom: 30px;
 }
 
 .user-avatar i {
   font-size: 3rem;
-  color: #4ea8ff; /* azul suave */
+  color: #4ea8ff; 
 }
 
 .user-box h6 {
@@ -66,11 +60,10 @@ header {
 }
 
 .user-box small {
-  color: #b0c4de; /* gris azulado claro */
+  color: #b0c4de;
   font-size: 0.9rem;
 }
 
-/* --- LINKS DEL MENÚ --- */
 .nav-item-modern {
   display: flex;
   align-items: center;
@@ -98,7 +91,6 @@ header {
   color: #fff !important;
 }
 
-/* --- CUANDO ESTÁ COLAPSADO --- */
 .sidebar:not(.open) .nav-item-modern span,
 .sidebar:not(.open) .user-box {
   display: none !important;
@@ -108,18 +100,10 @@ header {
   justify-content: center;
 }
 
-/* --- CONTENIDO --- */
-.content-wrapper {
-  margin-top: 70px;
-  margin-left: 260px;
-  transition: margin-left 0.3s ease;
-}
-
 .sidebar:not(.open) ~ .content-wrapper {
   margin-left: 70px;
 }
 
-/* --- DROPDOWN --- */
 .dropdown-menu {
   animation: fadeIn 0.15s ease-in-out;
 }
@@ -162,7 +146,6 @@ header {
   visibility: visible;
 }
 
-/* Sidebar actúa fijo en móvil */
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
@@ -184,15 +167,14 @@ header {
     margin-left: 0 !important;
     width: 100%;
   }
+  aside {
+    display:none;
+  }
 }
 
-
-
-/* Para asegurar que nunca haya desplazamiento lateral */
 body {
   overflow-x: hidden !important;
 }
-
 
 .dropdown-menu {
   background-color: #1e2a38; 
@@ -236,4 +218,69 @@ body {
 .dropdown-item.text-danger:hover {
   background-color: rgba(255, 107, 107, 0.1);
   color: #ff8787 !important;
+}
+aside {
+  width: 250px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #dee2e6;
+  height: calc(100vh - 70px);
+  padding: 1.5rem;
+  position:absolute;
+  top: 70px;
+  z-index: 1;
+  left: 0;
+  overflow-y: auto;
+}
+
+aside .nav-link {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: #343a40;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
+}
+
+aside .nav-link:hover {
+  background-color: #e9ecef;
+  color: #0d6efd;
+  transform: translateX(4px);
+}
+
+aside .nav-link.active {
+  background-color: #0d6efd;
+  color: #fff !important;
+  box-shadow: 0 2px 6px rgba(13, 110, 253, 0.25);
+}
+
+aside .nav-link span {
+  margin-left: 0.5rem;
+}
+.content-wrapper {
+  background-color: #ededed;
+  margin-top: 70px;
+  min-height: calc(100vh - 70px);
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem;
+  width: 100%;
+}
+
+.layout .sidebar.open ~ .content-wrapper {
+  padding-left: 260px; 
+}
+
+.layout .sidebar:not(.open) ~ .content-wrapper {
+  padding-left: 70px; 
+}
+
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding-left: 0 !important;
+  }
 }

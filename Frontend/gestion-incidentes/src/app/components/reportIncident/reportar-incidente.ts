@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -16,7 +16,7 @@ interface ResponseDto {
 @Component({
   selector: 'app-reportar-incidente',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, RouterOutlet],
   templateUrl: './reportar-incidente.html',
   styleUrls: ['./reportar-incidente.css']
 })
@@ -28,9 +28,16 @@ export class ReportarIncidente {
   address: string = '';
   userId: number = Number(localStorage.getItem('userId'));
 
+  isLoggedIn: boolean = false;
+
   private apiUrl = 'http://localhost:8080/api/report/public';
 
   constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    const token = localStorage.getItem('token');
+    this.isLoggedIn = !!token;
+  }
 
   createReport(title: string, description: string, address: string, userId: number): Observable<ResponseDto> {
     return this.http.post<ResponseDto>(this.apiUrl, { title, description, address, userId });
@@ -65,14 +72,17 @@ export class ReportarIncidente {
 
   private showSuccessModal(): void {
     const el = document.getElementById('successModal');
+    const mo = document.getElementById('movementModal');
     if (!el) {
       alert('Reporte enviado correctamente'); 
       return;
     }
     const modal = new bootstrap.Modal(el);
+     const movementModal = bootstrap.Modal.getInstance(mo) || new bootstrap.Modal(mo);
+    movementModal.hide();
     modal.show();
-
     setTimeout(() => modal.hide(), 3000);
+    
   }
 
   private showErrorModal(): void {

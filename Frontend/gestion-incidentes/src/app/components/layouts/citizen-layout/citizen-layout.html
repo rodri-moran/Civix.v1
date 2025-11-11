@@ -1,9 +1,9 @@
-<!-- citizen-layout.html -->
 <header class="text-white shadow-sm custom-header">
   <div class="container-fluid d-flex justify-content-between align-items-center py-3 px-4">
     <button class="btn btn-link text-white d-md-none me-3" (click)="toggleSidebar()">
       <i class="bi bi-list fs-3"></i>
     </button>
+
     <!-- Logo -->
     <div class="logo">
       <a routerLink="/citizen/dashboard" class="h4 mb-0 text-white text-decoration-none">
@@ -11,7 +11,7 @@
       </a>
     </div>
 
-    <!-- Perfil Usuario -->
+    <!-- Perfil / Login -->
     <div class="dropdown">
       <button
         class="btn btn-outline-light d-flex align-items-center gap-2"
@@ -19,114 +19,143 @@
         aria-expanded="false"
       >
         <span class="fs-5">👤</span>
-        <span class="fw-semibold">{{ userName }}</span>
+        <span class="fw-semibold">{{ isLoggedIn ? userName : 'Iniciar sesión' }}</span>
       </button>
 
       <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded">
-        <li>
-          <a class="dropdown-item" routerLink="/perfil">
-            <i class="bi bi-person"></i> Ver Perfil
-          </a>
-        </li>
-        <li>
-          <a class="dropdown-item" routerLink="/editar-perfil">
-            <i class="bi bi-pencil-square"></i> Editar Perfil
-          </a>
-        </li>
-        <li>
-          <a class="dropdown-item" routerLink="/configuracion">
-            <i class="bi bi-gear"></i> Configuración
-          </a>
-        </li>
-        <li>
-          <a class="dropdown-item" routerLink="/cambiar-pass">
-            <i class="bi bi-lock"></i> Cambiar Contraseña
-          </a>
-        </li>
-        <li><hr class="dropdown-divider" /></li>
-        <li>
-          <button class="dropdown-item text-danger" (click)="logout()">
-            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
-          </button>
-        </li>
+        <ng-container *ngIf="isLoggedIn; else guestMenu">
+          <li>
+            <a class="dropdown-item" routerLink="/perfil">
+              <i class="bi bi-person"></i> Ver Perfil
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/editar-perfil">
+              <i class="bi bi-pencil-square"></i> Editar Perfil
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/configuracion">
+              <i class="bi bi-gear"></i> Configuración
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/cambiar-pass">
+              <i class="bi bi-lock"></i> Cambiar Contraseña
+            </a>
+          </li>
+          <li><hr class="dropdown-divider" /></li>
+          <li>
+            <button class="dropdown-item text-danger" (click)="logout()">
+              <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </button>
+          </li>
+        </ng-container>
+
+        <ng-template #guestMenu>
+          <li>
+            <a class="dropdown-item text-primary" routerLink="/login">
+              <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+            </a>
+          </li>
+        </ng-template>
       </ul>
     </div>
   </div>
 </header>
 
 <div class="d-flex">
-  <!-- Sidebar -->
   <div class="sidebar-overlay" [class.show]="isOpen" (click)="toggleSidebar()"></div>
-  <div class="sidebar" [class.open]="isOpen">
-    <!-- ICONO HAMBURGUESA -->
-    <button class="toggle-btn" (click)="toggleSidebar()">
-      <i class="bi" [ngClass]="isOpen ? 'bi-x-lg' : 'bi-list'"></i>
-    </button>
+  <div class="layout">
+    <div class="sidebar" [class.open]="isOpen">
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        <i class="bi" [ngClass]="isOpen ? 'bi-x-lg' : 'bi-list'"></i>
+      </button>
 
-    <!-- USUARIO -->
-    <div class="user-box text-center mb-4" *ngIf="isOpen">
-      <div class="user-avatar mx-auto mb-2">
-        <i class="bi bi-person-circle fs-1 text-primary"></i>
+      <!-- Usuario -->
+      <div class="user-box text-center mb-4" *ngIf="isOpen">
+        <div class="user-avatar mx-auto mb-2">
+          <i class="bi bi-person-circle fs-1 text-primary"></i>
+        </div>
+
+        <ng-container *ngIf="isLoggedIn; else notLogged">
+          <h6 class="fw-semibold mb-0">{{ userName }}</h6>
+          <small class="text-white">{{ isAdmin ? 'Administrador' : 'Ciudadano' }}</small>
+        </ng-container>
+
+        <ng-template #notLogged>
+          <h6 class="fw-semibold mb-0">Invitado</h6>
+          <a routerLink="/login" class="btn btn-sm btn-light mt-2">Iniciar sesión</a>
+        </ng-template>
       </div>
-      <h6 class="fw-semibold mb-0">{{ userName }}</h6>
-      <small class="text-white">
-        {{ isAdmin ? 'Administrador' : 'Ciudadano' }}
-      </small>
+
+      <!-- Menú -->
+      <nav class="nav flex-column mt-2" *ngIf="isOpen">
+        <ng-container *ngIf="isLoggedIn; else guestLinks">
+          <a routerLink="/perfil" routerLinkActive="active" class="nav-item-modern">
+            <i class="bi bi-person-fill"></i><span>Perfil</span>
+          </a>
+
+          <a
+            *ngIf="!isAdmin"
+            routerLink="/mis-reportes"
+            routerLinkActive="active"
+            class="nav-item-modern"
+          >
+            <i class="bi bi-journal-text"></i><span>Mis reportes</span>
+          </a>
+
+          <a
+            *ngIf="!isAdmin"
+            routerLink="/reportar-incidente"
+            routerLinkActive="active"
+            class="nav-item-modern"
+          >
+            <i class="bi bi-exclamation-octagon"></i><span>Reportar incidente</span>
+          </a>
+
+          <a routerLink="/estadisticas" routerLinkActive="active" class="nav-item-modern">
+            <i class="bi bi-bar-chart"></i><span>Estadísticas</span>
+          </a>
+
+          <a routerLink="/configuracion" routerLinkActive="active" class="nav-item-modern">
+            <i class="bi bi-gear-fill"></i><span>Configuración</span>
+          </a>
+          <a routerLink="/terms" routerLinkActive="active" class="nav-item-modern">
+            <i class="bi bi-gear-fill"></i><span>Terminos y Condiciones</span>
+          </a>
+          <a routerLink="/faq" routerLinkActive="active" class="nav-item-modern">
+            <i class="bi bi-gear-fill"></i><span>Preguntas Frecuentes</span>
+          </a>
+
+          <a
+            *ngIf="isAdmin"
+            routerLink="/admin/dashboard"
+            routerLinkActive="active"
+            class="nav-item-modern"
+          >
+            <i class="bi bi-people-fill"></i><span>Panel Admin</span>
+          </a>
+        </ng-container>
+
+        <ng-template #guestLinks>
+          <a routerLink="/noticias" class="nav-item-modern">
+            <i class="bi bi-newspaper"></i><span>Noticias</span>
+          </a>
+        </ng-template>
+      </nav>
     </div>
-
-    <!-- MENÚ -->
-    <nav class="nav flex-column mt-2" *ngIf="isOpen">
-      <a routerLink="/perfil" routerLinkActive="active" class="nav-item-modern">
-        <i class="bi bi-person-fill"></i><span>Perfil</span>
-      </a>
-
-      <a
-        *ngIf="!isAdmin"
-        routerLink="/mis-reportes"
-        routerLinkActive="active"
-        class="nav-item-modern"
-      >
-        <i class="bi bi-journal-text"></i><span>Mis reportes</span>
-      </a>
-
-      <a
-        *ngIf="!isAdmin"
-        routerLink="/reportar-incidente"
-        routerLinkActive="active"
-        class="nav-item-modern"
-      >
-        <i class="bi bi-exclamation-octagon"></i><span>Reportar incidente</span>
-      </a>
-
-      <a routerLink="/noticias" routerLinkActive="active" class="nav-item-modern">
-        <i class="bi bi-newspaper"></i><span>Noticias</span>
-      </a>
-
-      <a routerLink="/estadisticas" routerLinkActive="active" class="nav-item-modern">
-        <i class="bi bi-bar-chart"></i><span>Estadísticas</span>
-      </a>
-
-      <a routerLink="/configuracion" routerLinkActive="active" class="nav-item-modern">
-        <i class="bi bi-gear-fill"></i><span>Configuración</span>
-      </a>
-
-      <a
-        *ngIf="isAdmin"
-        routerLink="/admin/dashboard"
-        routerLinkActive="active"
-        class="nav-item-modern"
-      >
-        <i class="bi bi-people-fill"></i><span>Panel Admin</span>
-      </a>
-    </nav>
   </div>
-  <div class="content-wrapper flex-grow-1">
-    <!-- Contenido dinámico -->
-    <main class="flex-grow-1 p-4">
-      <router-outlet></router-outlet>
+
+  <div class="content-wrapper">
+    <main class="flex-grow-1 pt-0 p-4">
+      <div class="container">
+        <router-outlet></router-outlet>
+      </div>
     </main>
   </div>
 </div>
+
 <footer class="bg-dark text-white mt-5">
   <div class="container py-4">
     <div class="row">
@@ -140,7 +169,7 @@
         <h5>Enlaces</h5>
         <ul class="list-unstyled small">
           <li><a href="#ayuda" class="text-white">Ayuda</a></li>
-          <li><a href="#terminos" class="text-white">Términos de Uso</a></li>
+          <li><a routerLink="/terms" class="text-white">Términos de Uso</a></li>
           <li><a href="#privacidad" class="text-white">Privacidad</a></li>
         </ul>
       </div>

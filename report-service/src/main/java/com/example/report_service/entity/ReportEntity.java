@@ -27,7 +27,7 @@ public class ReportEntity {
     private String latitude;
 
     private String longitude;
-
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @ManyToOne

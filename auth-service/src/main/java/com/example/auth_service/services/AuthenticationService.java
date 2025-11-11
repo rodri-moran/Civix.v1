@@ -29,13 +29,20 @@ public class AuthenticationService {
                 .bodyToMono(UserResponseDto.class)
                 .block();
 
+
         if (user == null || !passwordEncoder.matches(dto.getPassword(), user.getPasswordHash())) {
             throw new RuntimeException("Credenciales inválidas");
         }
+        System.out.println("name del user desde auth service: " + user.getName());
+        System.out.println("lastName del user desde auth service: " + user.getLastName());
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
-        return new AuthResponseDto(token, user.getRole().name(), user.getId());
+        return new AuthResponseDto(token,
+                user.getRole().name(),
+                user.getId(),
+                user.getName(),
+                user.getLastName());
     }
 
     public AuthResponseDto register(RegisterRequestDto request){
@@ -48,7 +55,11 @@ public class AuthenticationService {
                 .block();
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
-        return new AuthResponseDto(token, user.getRole().name(), user.getId());
+        return new AuthResponseDto(token,
+                user.getRole().name(),
+                user.getId(),
+                user.getName(),
+                user.getLastName());
     }
 
 }

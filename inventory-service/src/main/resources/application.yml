@@ -1,10 +1,12 @@
 spring:
   application:
     name: inventory-service
+
   datasource:
     url: jdbc:postgresql://localhost:5433/inventorydb
     username: inventory
     password: inventory
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,5 +16,9 @@ spring:
         ddl-auto: update
         jdbc:
           time_zone: America/Argentina/Buenos_Aires
+
 server:
-  port: 8085
+  port: 8084
+
+jwt:
+  secret: miClaveSuperUltraMegaSecretaClaveDeJWT1234567890

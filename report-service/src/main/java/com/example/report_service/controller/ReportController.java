@@ -1,9 +1,7 @@
 package com.example.report_service.controller;
 
-import com.example.report_service.dtos.ReportRequestDto;
-import com.example.report_service.dtos.ReportResponseDto;
-import com.example.report_service.dtos.SquadRequestDTO;
-import com.example.report_service.dtos.SquadResponseDTO;
+import com.example.report_service.dtos.*;
+import com.example.report_service.enums.Status;
 import com.example.report_service.services.ReportService;
 import com.example.report_service.services.SquadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,13 +59,26 @@ public class ReportController {
             return ResponseEntity.ok(service.getById(id));
     }
     @PutMapping("/admin/report/{id}/assign/{squadId}")
-    public ResponseEntity<ReportResponseDto>assignSquadToReport(@PathVariable Long id, @PathVariable Long squadId){
+    public ResponseEntity<ReportResponseDto>assignSquadToReport(@PathVariable Long id,
+                                                                @PathVariable Long squadId){
             System.out.println("**** llegó la petición *****");
             return ResponseEntity.ok(reportService.assignSquadToReport(id, squadId));
     }
     @PutMapping("/admin/squad/{id}")
-    public ResponseEntity<SquadResponseDTO> updateSquad(@PathVariable Long id, @RequestBody SquadRequestDTO request){
+    public ResponseEntity<SquadResponseDTO> updateSquad(@PathVariable Long id,
+                                                        @RequestBody SquadRequestDTO request){
         return ResponseEntity.ok(service.updateSquad(request, id));
+    }
+    @GetMapping("/admin/report")
+    public ResponseEntity<List<ReportResponseDto>> getReportsByStatus(@RequestParam String status){
+        return ResponseEntity.ok(reportService.getReportsByStatus(status));
+    }
+    @PutMapping("/admin/report/{reportId}")
+    public ResponseEntity<ReportResponseDto> updateReportStatus(@PathVariable Long reportId,
+                                                                @RequestParam Status status,
+                                                                @RequestBody ResourcesUsedDto resourcesUsed){
+        System.out.println("Llegó la petición a updateReportStatus");
+        return ResponseEntity.ok(reportService.updateReportStatus(reportId, status, resourcesUsed));
     }
 
 }

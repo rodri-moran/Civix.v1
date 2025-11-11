@@ -13,13 +13,13 @@ import { filter } from 'rxjs/operators';
 export class AdminLayoutComponent {
   userName: string = "Usuario";
   currentRoute = '';
-  isOpen = true; // sidebar abierto por defecto en desktop
+  isOpen = false; // sidebar abierto por defecto en desktop
 
   menuItems = [
     { title: 'Reportes', icon: 'bi bi-exclamation-triangle', route: '/admin/reportes' },
     { title: 'Cuadrillas', icon: 'bi bi-people', route: '/admin/cuadrillas' },
-    { title: 'Noticias', icon: 'bi bi-newspaper', route: '/admin/noticias' },
-    { title: 'Estadísticas', icon: 'bi bi-bar-chart', route: '/admin/estadisticas' }
+    { title: 'Estadísticas', icon: 'bi bi-bar-chart', route: '/admin/estadisticas' },
+    { title: 'Inventario', icon: 'bi bi-box-seam', route: 'admin/inventario'}
   ];
 
   constructor(private router: Router) {
@@ -33,7 +33,7 @@ export class AdminLayoutComponent {
 
   navigate(route: string) {
     this.router.navigate([route]);
-    if (window.innerWidth < 768) this.isOpen = false;
+    this.isOpen = false;
   }
 
   goToCitizenDashboard() {

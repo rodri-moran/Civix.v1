@@ -2,6 +2,7 @@ package com.example.report_service.services;
 
 import com.example.report_service.dtos.ReportRequestDto;
 import com.example.report_service.dtos.ReportResponseDto;
+import com.example.report_service.dtos.ResourcesUsedDto;
 import com.example.report_service.dtos.SquadResponseDTO;
 import com.example.report_service.entity.ReportEntity;
 import com.example.report_service.entity.SquadEntity;
@@ -12,6 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,6 +28,8 @@ public class ReportServiceImpl implements ReportService {
     private ModelMapper modelMapper;
     @Autowired
     private SquadRepository squadRepository;
+    @Autowired
+    private WebClient.Builder webClientBuilder;
     @Override
     public ReportResponseDto createReport(ReportRequestDto request) {
         request.setStatus(Status.PENDING);
@@ -95,6 +99,46 @@ public class ReportServiceImpl implements ReportService {
                 .orElseThrow(() -> new EntityNotFoundException("Report con el id " + id + " no encontrado."));
         return modelMapper.map(entity, ReportResponseDto.class);
     }
+
+    @Override
+    public List<ReportResponseDto> getReportsByStatus(String status) {
+        Status enumStatus = Status.valueOf(status.toUpperCase());
+        return repository.findByStatus(enumStatus)
+                .stream()
+                .map(x -> modelMapper.map(x, ReportResponseDto.class))
+                .toList();
+    }
+
+    @Override
+    public ReportResponseDto updateReportStatus(Long reportId, Status status, ResourcesUsedDto resourcesUsed) {
+        System.out.println("Llegó la petición a updateReportStatus del service");
+        if(status.equals(Status.RESOLVED)){
+            sendResourcesUsedToInventoryService(resourcesUsed);
+        }
+        ReportEntity entity = repository.findById(reportId)
+                .orElseThrow( () -> new EntityNotFoundException("Report con el id " + reportId + " no encontrado"));
+        System.out.println("ReportEntity buscada por id");
+        entity.setStatus(status);
+        repository.save(entity);
+        return modelMapper.map(entity, ReportResponseDto.class);
+    }
+    public void sendResourcesUsedToInventoryService(ResourcesUsedDto dto){
+        webClientBuilder.build()
+                .post()
+                .uri("http://localhost:8084/api/inventory/admin/movements")
+                .bodyValue(dto)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .subscribe();
+    }
+//    UserResponseDto user = webClientBuilder.build()
+//            .get()
+//            .uri("http://user-service:8081/api/users/public/by-email/{email}", dto.getEmail())
+//            .retrieve()
+//            .bodyToMono(UserResponseDto.class)
+//            .block();
+
+
 
     private ReportResponseDto convertEntityToDto (ReportEntity entity){
         return modelMapper.map(entity, ReportResponseDto.class);

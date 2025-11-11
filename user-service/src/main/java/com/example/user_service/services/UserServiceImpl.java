@@ -87,6 +87,8 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto findByEmail(String email) {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        System.out.println("name del user: " + user.getName());
+        System.out.println("lastName del user: " + user.getLastName());
         return modelMapper.map(user, UserResponseDto.class);
     }
 
@@ -100,6 +102,8 @@ public class UserServiceImpl implements UserService {
         dto.setEmail(user.getEmail());
         dto.setRole(user.getRole());
         dto.setPasswordHash(user.getPasswordHash());
+        dto.setName(user.getName());
+        dto.setLastName(user.getLastName());
         return dto;
     }
 

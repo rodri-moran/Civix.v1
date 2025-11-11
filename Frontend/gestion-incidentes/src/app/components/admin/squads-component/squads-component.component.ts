@@ -19,7 +19,6 @@ interface Area {
   name: string;
 }
 
-
 @Component({
   selector: 'app-squads-component',
   templateUrl: './squads-component.component.html',

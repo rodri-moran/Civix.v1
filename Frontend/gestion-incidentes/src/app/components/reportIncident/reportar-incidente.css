@@ -1,0 +1,41 @@
+.fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  transform: translateY(-2px);
+  transition: all 0.2s ease-in-out;
+}
+
+section {
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbfd 100%);
+}
+.form-container {
+  background: #fff;
+  border-radius: 10px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  width: 100%;
+}
+.form-wrapper {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto; 
+}

@@ -20,7 +20,8 @@ export class AdminDashboardComponent implements OnInit {
   { title: 'Reportes', icon: 'bi bi-exclamation-triangle', route: 'reportes', description: 'Ver y gestionar reportes ciudadanos.' },
   { title: 'Cuadrillas', icon: 'bi bi-people', route: 'cuadrillas', description: 'Administrar y asignar cuadrillas.' },
   { title: 'Noticias', icon: 'bi bi-newspaper', route: 'noticias', description: 'Publicar y editar noticias locales.' },
-  { title: 'Estadísticas', icon: 'bi bi-bar-chart', route: 'estadisticas', description: 'Visualizar métricas y actividad.' }
+  { title: 'Estadísticas', icon: 'bi bi-bar-chart', route: 'estadisticas', description: 'Visualizar métricas y actividad.' },
+  { title: 'Inventario', icon: 'bi bi-box-seam', route: 'inventario', description: 'Gestionar recursos, materiales y movimientos de stock.'}
 ];
 
   navigate(route: string) {

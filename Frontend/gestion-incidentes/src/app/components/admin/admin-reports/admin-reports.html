@@ -1,12 +1,42 @@
-<nav aria-label="breadcrumb" class="mb-3">
+<nav aria-label="breadcrumb" class="mb-0">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a routerLink="/admin/dashboard">Inicio</a></li>
     <li class="breadcrumb-item active" aria-current="page">Reportes</li>
   </ol>
 </nav>
 
-<main class="flex-grow-1 p-4">
+<main class="flex-grow-1 p-2">
   <h2 class="d-flex align-items-center gap-2">Reportes</h2>
+
+  <div class="dropdown">
+    <button
+      class="btn btn-outline-light d-flex align-items-center justify-content-center mb-2 mt-3"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      title="Filtrar reportes"
+    >
+      <i class="bi bi-filter fs-5"></i>
+    </button>
+
+    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded">
+      <li>
+        <a class="dropdown-item" (click)="filterByStatus('IN_PROCESS')">
+          <i class="bi bi-person"></i> En proceso
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item" (click)="filterByStatus('PENDING')">
+          <i class="bi bi-pencil-square"></i> Pendiente
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item" (click)="filterByStatus('RESOLVED')">
+          <i class="bi bi-gear"></i> Resuelto
+        </a>
+      </li>
+    </ul>
+  </div>
+
   <div class="table-responsive">
     <table class="table table-striped table-hover shadow-sm rounded align-middle">
       <thead class="table-dark text-center">
@@ -25,11 +55,41 @@
           <td>{{ i + 1 }}</td>
           <td>{{ reporte.title }}</td>
           <td>{{ reporte.address }}</td>
-          <td>
-            <span class="badge px-3 py-2" [ngClass]="statusMap[reporte.status]?.class">
-              {{ statusMap[reporte.status]?.text || reporte.status }}
-            </span>
+          <td class="position-relative">
+            <div class="d-inline-block dropdown">
+              <!-- Botón con el estado actual -->
+              <div
+                class="badge rounded-pill px-3 py-2 status-drop d-flex align-items-center justify-content-center"
+                [ngClass]="statusMap[reporte.status]?.class"
+                (click)="toggleDropdown(reporte.id)"
+              >
+                {{ statusMap[reporte.status]?.text }}
+                <i class="bi bi-chevron-down ms-1 small"></i>
+              </div>
+
+              <!-- Dropdown de estados -->
+              <ul
+                *ngIf="openDropdownId === reporte.id"
+                class="dropdown-menu show position-absolute mt-1 shadow-sm border-0 rounded"
+                style="min-width: 160px; z-index: 1050"
+              >
+                <li
+                  *ngFor="let key of statusKeys"
+                  (click)="onStatusSelect(reporte, key)"
+                  class="dropdown-item d-flex align-items-center justify-content-start gap-2"
+                  style="cursor: pointer"
+                >
+                  <span
+                    class="badge rounded-circle"
+                    [ngClass]="statusMap[key].class"
+                    style="width: 12px; height: 12px"
+                  ></span>
+                  <span class="fw-semibold">{{ statusMap[key].text }}</span>
+                </li>
+              </ul>
+            </div>
           </td>
+
           <td>
             <ng-container *ngIf="reporte.squad; else noSquad">
               {{ reporte.squad.name }}

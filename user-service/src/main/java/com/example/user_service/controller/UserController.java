@@ -53,6 +53,4 @@ public class UserController {
     public ResponseEntity<UserAuthDto> findByEmail(@PathVariable String email) {
         return ResponseEntity.ok(userService.findByEmailWithPassword(email));
     }
-
-
 }

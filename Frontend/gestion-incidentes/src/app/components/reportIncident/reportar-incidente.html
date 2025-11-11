@@ -1,47 +1,8 @@
-<header class="text-white shadow-sm custom-header">
-  <div class="container-fluid d-flex justify-content-between align-items-center py-3 px-4">
-    <div class="logo">
-      <a routerLink="/citizen-dashboard" class="h4 mb-0">Comuna Digital</a>
-    </div>
-    <nav class="d-flex gap-3">
-      <a href="#inicio" class="nav-link text-white">Inicio</a>
-      <a href="#servicios" class="nav-link text-white">Servicios</a>
-      <a href="#contacto" class="nav-link text-white">Contacto</a>
-    </nav>
-    <button class="btn btn-outline-light">Cerrar Sesión</button>
-  </div>
-</header>
-
-<div class="d-flex">
-  <aside class="bg-white border-end vh-100 p-3" style="width: 250px">
-    <nav class="nav flex-column fs-6">
-      <a href="#perfil" class="nav-link text-dark d-flex align-items-center mb-3">
-        <span class="me-3">👤</span> Perfil
-      </a>
-      <a routerLink="/mis-reportes" class="nav-link text-dark d-flex align-items-center mb-3">
-        <span class="me-3">📊</span> Mis reportes
-      </a>
-      <a
-        href="#incidentes"
-        class="nav-link active bg-primary text-white rounded d-flex align-items-center mb-3"
-      >
-        <span class="me-3">⚠️</span> Reportar Incidente
-      </a>
-      <a href="#noticias" class="nav-link text-dark d-flex align-items-center mb-3">
-        <span class="me-3">📰</span> Noticias
-      </a>
-      <a href="#estadisticas" class="nav-link text-dark d-flex align-items-center mb-3">
-        <span class="me-3">📈</span> Estadísticas
-      </a>
-      <a href="#configuracion" class="nav-link text-dark d-flex align-items-center mb-3">
-        <span class="me-3">⚙️</span> Configuración
-      </a>
-    </nav>
-  </aside>
-
-  <main class="flex-grow-1 p-4">
-    <section class="bg-white rounded shadow-sm p-5 border">
+<div class="form-wrapper">
+  <section class="bg-white rounded shadow-sm p-5 border form-container">
+    <ng-container *ngIf="isLoggedIn; else mustLogin">
       <h2 class="mb-4 text-primary">Reportar un Incidente</h2>
+
       <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
         <div class="mb-3">
           <label for="title" class="form-label">Título</label>
@@ -89,16 +50,11 @@
 
         <button type="submit" class="btn btn-primary btn-lg">Enviar Reporte</button>
       </form>
-    </section>
-  </main>
+    </ng-container>
+  </section>
 </div>
 
-<footer class="bg-dark text-white mt-5">
-  <div class="container py-4 text-center">
-    <small>&copy; 2025 Comuna Digital. Todos los derechos reservados.</small>
-  </div>
-</footer>
-
+<!-- 🔹 Modales -->
 <div
   class="modal fade"
   id="successModal"
@@ -152,9 +108,13 @@
     </div>
   </div>
 </div>
-
-<style>
-  .custom-header {
-    background-color: var(--color-primary, #2c3e50);
-  }
-</style>
+<ng-template #mustLogin>
+  <div class="text-center p-5">
+    <i class="bi bi-lock-fill text-primary display-4 mb-3"></i>
+    <h4 class="text-primary mb-2">Debes iniciar sesión</h4>
+    <p class="text-muted mb-4">
+      Para enviar reportes o acceder a estas funciones, por favor inicia sesión con tu cuenta.
+    </p>
+    <a routerLink="/login" class="btn btn-primary px-4">Iniciar sesión</a>
+  </div>
+</ng-template>

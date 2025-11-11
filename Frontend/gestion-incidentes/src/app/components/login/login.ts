@@ -37,7 +37,10 @@ ngOnDestroy() {
         console.log('Token recibido:', response.token);
         localStorage.setItem('token', response.token); 
         localStorage.setItem('userId', response.userId.toString());
-        localStorage.setItem('role', response.role)
+        localStorage.setItem('role', response.role);
+        console.log('name: ' + response.name);
+        console.log('lastName: ' + response.lastName);
+        localStorage.setItem('userName', `${response.name} ${response.lastName}`);
         console.log(response.userId)
         console.log(response.role)
         this.isLoading = false;

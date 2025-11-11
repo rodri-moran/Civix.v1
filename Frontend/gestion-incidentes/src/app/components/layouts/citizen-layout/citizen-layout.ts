@@ -12,8 +12,9 @@ import { Auth } from '../../../services/auth';
 })
 export class CitizenLayoutComponent {
   isSidebarCollapsed = false;
-
-  isOpen: boolean = true;
+  isLoggedIn: boolean = false;
+  userName: string = 'Invitado';
+  isOpen: boolean = false;
 
   toggleSidebar() {
     this.isOpen = !this.isOpen;
@@ -23,13 +24,26 @@ export class CitizenLayoutComponent {
       isAdmin: boolean = false;
 
     ngOnInit() {
+      console.log('citizen-layout cargado')
+      const token = localStorage.getItem('token')
       const role = localStorage.getItem('role');
+      const storedName = localStorage.getItem('userName');
       this.isAdmin = role === 'ADMIN'
-    }
-    userName: string = "Usuario"; //hacer en back
+
+      if(token){
+        this.isLoggedIn = true;
+        this.isAdmin = role === 'ADMIN';
+        this.userName = storedName || 'Usuario';
+      } else {
+        this.isLoggedIn = false;
+        this.userName = 'Invitado';
+      }
+    } 
+
 
 logout() {
-  localStorage.removeItem("token");
+  localStorage.clear();
+  this.isLoggedIn = false;
   this.router.navigate(['/login']);
 }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { __param } from 'tslib';
 
 
 export interface Report {
@@ -39,6 +40,13 @@ constructor(private http : HttpClient) { }
 
     return this.http.get<Report[]>(this.apiUrl, { headers });
   }
+  findByStatus(status: string): Observable<Report[]> {
+    const token = localStorage.getItem("token");
+    const headers = new HttpHeaders( {
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<Report[]>("http://localhost:8080/api/report/admin/report?status=" + status, { headers });
+  }
 
   assignSquadToReport(reportId: number,squadId: number): Observable<Report> { 
     console.log("reportId: " +reportId+" y squadId: "+squadId)
@@ -52,6 +60,16 @@ constructor(private http : HttpClient) { }
       {},
       { headers });
   }
+  updateStatus(reportId: number, status: String): Observable<Report> {
+    
+    const token = localStorage.getItem("token");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
 
-
+    return this.http.put<Report>(
+      `http://localhost:8080/api/report/admin/report/${reportId}?status=${status}`,
+       {} ,
+      { headers });
+  }
 }

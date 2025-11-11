@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ReportServiceService } from '../../../services/report-service.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -86,14 +86,28 @@ export class AdminReports implements OnInit {
         console.log('Error al obtener los reportes: ', err);
       }
     })
-    
   }
-
   selectedReport?: Report;
   selectedSquadId?: number;
   reportToDetail?: Report;
+  statusKeys = Object.keys(this.statusMap);
+  openDropdownId: number | null = null;
+  toggleDropdown(reportId: number) {
+    this.openDropdownId = this.openDropdownId === reportId ? null : reportId;
+  }
+  onStatusSelect(report: any, newStatus: string) {
+  report.status = newStatus;
+  this.openDropdownId = null;
 
-
+  this.service.updateStatus(report.id, newStatus).subscribe({
+    next: (data) => {
+      console.log('Estado de reporte actualizado: ' + data);
+    },
+    error: (err) => {
+      console.log('Error actualizando el estado del reporte: ', err);
+    }
+  });
+}
   openAssignModal(reporte: Report) {
     this.selectedReport = reporte;
     this.selectedSquadId = reporte.squad?.id;
@@ -143,6 +157,25 @@ showMessage(isSuccess: boolean, text: string) {
 openDetailModal(report: Report) {
   this.reportToDetail = report;
 }
+
+filterByStatus(status: string) {
+  this.service.findByStatus(status).subscribe({
+      next: (data) => {
+        console.log('Reportes recibidos: ' + data );
+        this.reports = data;
+      }, error: (err) => {
+        console.log('Error al obtener los reportes filtrados: ', err);
+      }
+    })
+}
+ @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const clickedInside = target.closest('.dropdown, .badge.cursor-pointer');
+    if (!clickedInside) {
+      this.openDropdownId = null;
+    }
+  }
 }
 function getEstadoOrden(status: string): number {
   switch (status.toLowerCase()) {
