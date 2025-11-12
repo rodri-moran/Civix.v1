@@ -4,6 +4,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Auth } from '../../services/auth';
 
 declare const bootstrap: any;
 
@@ -32,10 +33,10 @@ export class ReportarIncidente {
 
   private apiUrl = 'http://localhost:8080/api/report/public';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: Auth) {}
 
   ngOnInit() {
-    const token = localStorage.getItem('token');
+    const token = this.authService.getToken();
     this.isLoggedIn = !!token;
   }
 
@@ -49,8 +50,9 @@ export class ReportarIncidente {
       return;
     }
 
-    this.createReport(this.title, this.description, this.address, this.userId).subscribe({
+    this.createReport(this.title, this.description, this.address, this.userId).subscribe({      
       next: (response) => {
+        console.log('response: ', response)
         this.showSuccessModal();
 
         try {
@@ -71,19 +73,16 @@ export class ReportarIncidente {
   }
 
   private showSuccessModal(): void {
-    const el = document.getElementById('successModal');
-    const mo = document.getElementById('movementModal');
-    if (!el) {
-      alert('Reporte enviado correctamente'); 
-      return;
-    }
-    const modal = new bootstrap.Modal(el);
-     const movementModal = bootstrap.Modal.getInstance(mo) || new bootstrap.Modal(mo);
-    movementModal.hide();
-    modal.show();
-    setTimeout(() => modal.hide(), 3000);
-    
+  const el = document.getElementById('successModal');
+  if (!el) {
+    alert('Reporte enviado correctamente'); 
+    return;
   }
+
+  const modal = new bootstrap.Modal(el);
+  modal.show();
+  setTimeout(() => modal.hide(), 3000);
+}
 
   private showErrorModal(): void {
     const el = document.getElementById('errorModal');

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth } from '../../../services/auth';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-citizen-layout',
@@ -20,26 +21,28 @@ export class CitizenLayoutComponent {
     this.isOpen = !this.isOpen;
   }
 
-  constructor(private authService: Auth, private router: Router) {}
+  constructor(private authService: Auth, private router: Router, private cd: ChangeDetectorRef) {}
       isAdmin: boolean = false;
 
-    ngOnInit() {
-      console.log('citizen-layout cargado')
+    ngOnInit() {  
       const token = localStorage.getItem('token')
-      const role = localStorage.getItem('role');
+      const role = this.authService.getRole();
       const storedName = localStorage.getItem('userName');
-      this.isAdmin = role === 'ADMIN'
 
-      if(token){
+      if (token && !this.authService.isTokenExpired()) {
         this.isLoggedIn = true;
         this.isAdmin = role === 'ADMIN';
         this.userName = storedName || 'Usuario';
+        this.cd.detectChanges();
       } else {
+        this.authService.logout();
         this.isLoggedIn = false;
         this.userName = 'Invitado';
-      }
-    } 
+        this.router.navigate(['/login']);
+  }
+  console.log('token válido?', token, 'isLoggedIn:', this.isLoggedIn);
 
+    } 
 
 logout() {
   localStorage.clear();

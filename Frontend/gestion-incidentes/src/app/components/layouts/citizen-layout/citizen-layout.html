@@ -96,23 +96,20 @@
             <i class="bi bi-person-fill"></i><span>Perfil</span>
           </a>
 
-          <a
-            *ngIf="!isAdmin"
-            routerLink="/mis-reportes"
-            routerLinkActive="active"
-            class="nav-item-modern"
-          >
-            <i class="bi bi-journal-text"></i><span>Mis reportes</span>
-          </a>
+          <ng-container *ngIf="isAdmin; else citizenMenu">
+            <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item-modern">
+              <i class="bi bi-people-fill"></i><span>Panel de Administración</span>
+            </a>
+          </ng-container>
 
-          <a
-            *ngIf="!isAdmin"
-            routerLink="/reportar-incidente"
-            routerLinkActive="active"
-            class="nav-item-modern"
-          >
-            <i class="bi bi-exclamation-octagon"></i><span>Reportar incidente</span>
-          </a>
+          <ng-template #citizenMenu>
+            <a routerLink="/mis-reportes" routerLinkActive="active" class="nav-item-modern">
+              <i class="bi bi-journal-text"></i><span>Mis reportes</span>
+            </a>
+            <a routerLink="/reportar-incidente" routerLinkActive="active" class="nav-item-modern">
+              <i class="bi bi-exclamation-octagon"></i><span>Reportar incidente</span>
+            </a>
+          </ng-template>
 
           <a routerLink="/estadisticas" routerLinkActive="active" class="nav-item-modern">
             <i class="bi bi-bar-chart"></i><span>Estadísticas</span>
@@ -126,15 +123,6 @@
           </a>
           <a routerLink="/faq" routerLinkActive="active" class="nav-item-modern">
             <i class="bi bi-gear-fill"></i><span>Preguntas Frecuentes</span>
-          </a>
-
-          <a
-            *ngIf="isAdmin"
-            routerLink="/admin/dashboard"
-            routerLinkActive="active"
-            class="nav-item-modern"
-          >
-            <i class="bi bi-people-fill"></i><span>Panel Admin</span>
           </a>
         </ng-container>
 

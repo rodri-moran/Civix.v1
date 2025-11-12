@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-loader',
   templateUrl: './loader.html',
   styleUrls: ['./loader.css'],
-  imports: [FormsModule, CommonModule, RouterLink, LoaderComponent],
+  imports: [FormsModule, CommonModule],
   
 })
 export class LoaderComponent {

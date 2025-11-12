@@ -1,34 +1,30 @@
 import { Injectable } from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
+import { Auth } from '../services/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminGuard implements CanActivate {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: Auth) {}
 
   canActivate(): boolean {
+    const token = this.authService.getToken();
 
-    const token = localStorage.getItem('token');
-
-    if (!token) {
+    if (!token || this.authService.isTokenExpired()) {
+      this.authService.logout;
       this.router.navigate(['/login']);
       return false;
     }
 
-    // decodificar JWT para leer el rol
-    //Un JWT tiene esta estructura: HEADER.PAYLOAD.SIGNATURE
-    // atob lo decodifica desde Base64 a texto normal
-    const payload = JSON.parse(atob(token.split('.')[1]));
-
-    const role = payload.role;
+    const role = this.authService.getRole();
 
     if (role === 'ADMIN') {
       return true;
     }
 
-    this.router.navigate(['/unauthorized']); 
+    this.router.navigate(['/unauthorized']);
     return false;
   }
 }

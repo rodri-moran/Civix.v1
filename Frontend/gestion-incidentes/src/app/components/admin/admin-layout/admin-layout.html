@@ -24,7 +24,8 @@
         aria-expanded="false"
       >
         <span class="fs-5">👤</span>
-        <span class="fw-semibold">{{ userName }}</span>
+
+        <span class="fw-semibold">{{ hasToken ? userName : 'Iniciar sesión' }}</span>
       </button>
 
       <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded">
