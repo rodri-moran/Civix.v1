@@ -49,6 +49,17 @@ export const routes: Routes = [
       import('./components/legal/faq/faq').then(m => m.Faq)
   },
   {
+    path: 'perfil',
+    loadComponent: () =>
+      import('./components/profile/perfil/perfil').then(m => m.PerfilComponent)
+  },
+  {
+    path: 'editar-perfil',
+    loadComponent: () =>
+      import('./components/profile/editar-perfil/editar-perfil').then(m => m.EditarPerfilComponent)
+  },
+
+  {
     path: 'terms',
     loadComponent: () =>
       import('./components/legal/terms-and-conditions/terms-and-conditions').then(m => m.TermsAndConditions)

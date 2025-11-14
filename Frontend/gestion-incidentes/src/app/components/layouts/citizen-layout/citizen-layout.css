@@ -25,7 +25,8 @@ header {
   color: #fff;
   transition: width 0.3s ease, transform 0.3s ease;
   padding: 20px 10px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   z-index: 999;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.25);
 }
@@ -259,7 +260,7 @@ aside .nav-link span {
   margin-left: 0.5rem;
 }
 .content-wrapper {
-  background-color: #ededed;
+  background: linear-gradient(145deg, #f0f4ff, #e8ecf7);
   margin-top: 70px;
   min-height: calc(100vh - 70px);
   transition: all 0.3s ease;
@@ -283,4 +284,43 @@ aside .nav-link span {
   .content-wrapper {
     padding-left: 0 !important;
   }
+}
+
+footer {
+  margin-top: 0 !important;
+  background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+  padding: 50px 0;
+  color: #f1f5f9;
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15);
+
+}
+footer h5 {
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+footer p, footer a {
+  color: #d1d5db;
+  font-size: 0.95rem;
+}
+
+footer a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+.footer-bottom {
+  text-align: center;
+  padding: 15px 0 5px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08); 
+  padding-top: 12px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  opacity: 0.9;
 }

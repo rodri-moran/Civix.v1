@@ -1,11 +1,6 @@
 package com.example.user_service.controller;
 
-import com.example.user_service.dtos.UserAuthDto;
-import com.example.user_service.dtos.UserRequestDto;
-import com.example.user_service.dtos.UserResponseDto;
-import com.example.user_service.dtos.UserUpdateRequestDto;
-import com.example.user_service.entity.UserEntity;
-import com.example.user_service.models.User;
+import com.example.user_service.dtos.*;
 import com.example.user_service.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +31,7 @@ public class UserController {
     }
 
     @PutMapping("/public/{userId}")
-    public ResponseEntity<UserResponseDto> updateUser(@Valid @RequestBody UserUpdateRequestDto dto, @PathVariable Long userId){
+    public ResponseEntity<UserResponseDto> updateUser(@Valid @RequestBody UserUpdateDto dto, @PathVariable Long userId){
         return ResponseEntity.ok(userService.updateUser(dto, userId));
     }
 
@@ -52,5 +47,17 @@ public class UserController {
     @GetMapping("/public/by-email/{email}")
     public ResponseEntity<UserAuthDto> findByEmail(@PathVariable String email) {
         return ResponseEntity.ok(userService.findByEmailWithPassword(email));
+    }
+    @GetMapping("/public/me")
+    public ResponseEntity<UserDto> getProfile(
+            @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(userService.getProfile(token));
+    }
+
+    @PutMapping("/public/me")
+    public ResponseEntity<UserDto> updateProfile(
+            @RequestHeader("Authorization") String token,
+            @RequestBody UserUpdateDto dto) {
+        return ResponseEntity.ok(userService.updateProfile(token, dto));
     }
 }

@@ -1,12 +1,8 @@
 package com.example.user_service.services;
 
-import com.example.user_service.dtos.UserAuthDto;
-import com.example.user_service.dtos.UserRequestDto;
-import com.example.user_service.dtos.UserResponseDto;
-import com.example.user_service.dtos.UserUpdateRequestDto;
+import com.example.user_service.configs.JwtUtil;
+import com.example.user_service.dtos.*;
 import com.example.user_service.entity.UserEntity;
-import com.example.user_service.enums.Role;
-import com.example.user_service.models.User;
 import com.example.user_service.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -15,9 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,6 +20,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -63,7 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto updateUser(UserUpdateRequestDto dto, Long userId) {
+    public UserResponseDto updateUser(UserUpdateDto dto, Long userId) {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuario con id " + userId + " no encontrado"));
 
@@ -105,6 +102,29 @@ public class UserServiceImpl implements UserService {
         dto.setName(user.getName());
         dto.setLastName(user.getLastName());
         return dto;
+    }
+
+    @Override
+    public UserDto getProfile(String token) {
+        String email = jwtUtil.extractUsername(token.substring(7));
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return modelMapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public UserDto updateProfile(String token, UserUpdateDto dto) {
+        String email = jwtUtil.extractUsername(token.substring(7));
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (dto.getName() != null) user.setName(dto.getName());
+        if (dto.getLastName() != null) user.setLastName(dto.getLastName());
+        if (dto.getPhone() != null) user.setPhone(dto.getPhone());
+        if (dto.getAddress() != null) user.setAddress(dto.getAddress());
+
+        userRepository.save(user);
+        return modelMapper.map(user, UserDto.class);
     }
 
 

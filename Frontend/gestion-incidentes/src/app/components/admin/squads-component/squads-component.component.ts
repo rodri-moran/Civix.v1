@@ -79,7 +79,7 @@ export class SquadsComponentComponent{
         const token = localStorage.getItem('token');
         const headers = new HttpHeaders({
         Authorization: `Bearer ${token}`
-  });
+        });
       this.http.post<Squad>(this.apiUrlCreateSquad, newSquad, { headers }).subscribe({
         next: (data) => {
           console.log("Cuadrilla creada correctamente", data);

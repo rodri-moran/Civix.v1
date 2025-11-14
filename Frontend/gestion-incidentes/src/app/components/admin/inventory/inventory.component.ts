@@ -59,8 +59,7 @@ movement = {
   createResource() {
     this.inventoryService.createResource(this.newResource).subscribe({
       next: (data) => {
-        console.log('Recurso creado: ', data);
-        
+        console.log('Recurso creado: ', data);    
 
          this.newResource = {
           name: '',

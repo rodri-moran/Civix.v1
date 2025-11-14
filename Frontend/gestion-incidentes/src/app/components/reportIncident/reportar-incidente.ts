@@ -5,6 +5,9 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Auth } from '../../services/auth';
+import * as L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
 
 declare const bootstrap: any;
 
@@ -28,29 +31,55 @@ export class ReportarIncidente {
   description: string = '';
   address: string = '';
   userId: number = Number(localStorage.getItem('userId'));
+  longitude?: number;
+  latitude?: number;
 
   isLoggedIn: boolean = false;
+
+  private map!: L.Map;
 
   private apiUrl = 'http://localhost:8080/api/report/public';
 
   constructor(private http: HttpClient, private authService: Auth) {}
 
   ngOnInit() {
+  
     const token = this.authService.getToken();
     this.isLoggedIn = !!token;
   }
 
-  createReport(title: string, description: string, address: string, userId: number): Observable<ResponseDto> {
-    return this.http.post<ResponseDto>(this.apiUrl, { title, description, address, userId });
+  ngAfterViewInit(): void {
+  setTimeout(() => {
+    this.map = L.map('map').setView([-31.4167, -64.1833], 13);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(this.map);
+
+    this.map.on('click', (e: any) => {
+      const { lat, lng } = e.latlng;
+      this.latitude = lat;
+      this.longitude = lng;
+      console.log("Latitud:", this.latitude, "Longitud:", this.longitude);
+      L.marker([lat, lng]).addTo(this.map);
+    });
+  }, 50);
+}
+
+  createReport(title: string, description: string, address: string, latitude: number, longitude: number, userId: number): Observable<ResponseDto> {
+    console.log('longitud: ', this.longitude, 'latitud: ', this.latitude)
+    return this.http.post<ResponseDto>(this.apiUrl, { title, description, address, latitude, longitude, userId });
   }
 
   onSubmit(): void {
-    if (!this.title || !this.description || !this.address) {
+    console.log('longitud: ', this.longitude, 'latitud: ', this.latitude)
+    if (!this.title || !this.description || !this.address || !this.latitude || !this.longitude) {
       this.showErrorModal();
       return;
     }
-
-    this.createReport(this.title, this.description, this.address, this.userId).subscribe({      
+      
+    this.createReport(this.title, this.description, this.address, this.latitude, this.longitude, this.userId).subscribe({      
       next: (response) => {
         console.log('response: ', response)
         this.showSuccessModal();

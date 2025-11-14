@@ -25,6 +25,7 @@
 }
 
 section {
+  overflow: visible;
   background: linear-gradient(180deg, #ffffff 0%, #f9fbfd 100%);
 }
 .form-container {
@@ -38,4 +39,17 @@ section {
   width: 100%;
   max-width: 600px;
   margin: 0 auto; 
+}
+
+#map {
+  height: 350px;
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  z-index: 1;
+  position: relative;
+}
+.leaflet-pane,
+.leaflet-container {
+  z-index: 1 !important;
 }

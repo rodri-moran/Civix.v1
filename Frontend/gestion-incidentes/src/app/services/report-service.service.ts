@@ -8,6 +8,8 @@ export interface Report {
   id: number, 
   title: string,
   description: string,
+  latitude: number,
+  longitude: number,
   address: string,
   status: string
   createdAt: string;

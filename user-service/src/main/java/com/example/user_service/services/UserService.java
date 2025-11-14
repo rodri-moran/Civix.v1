@@ -1,11 +1,7 @@
 package com.example.user_service.services;
 
-import com.example.user_service.dtos.UserAuthDto;
-import com.example.user_service.dtos.UserRequestDto;
-import com.example.user_service.dtos.UserResponseDto;
-import com.example.user_service.dtos.UserUpdateRequestDto;
-import com.example.user_service.models.User;
-import com.example.user_service.repository.UserRepository;
+import com.example.user_service.dtos.*;
+import com.example.user_service.entity.UserEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +11,10 @@ public interface UserService {
     UserResponseDto createUser(UserRequestDto dto);
     UserResponseDto getUserById(Long userId);
     List<UserResponseDto> getAllUsers();
-    UserResponseDto updateUser(UserUpdateRequestDto dto, Long userId);
+    UserResponseDto updateUser(UserUpdateDto dto, Long userId);
     UserResponseDto deleteUser(Long idUser);
     UserResponseDto findByEmail(String email);
     UserAuthDto findByEmailWithPassword(String email);
+    UserDto getProfile(String token);
+    UserDto updateProfile(String token, UserUpdateDto dto);
 }

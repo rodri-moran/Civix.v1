@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import * as L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 declare var bootstrap: any;
 interface Squad {
@@ -17,6 +19,8 @@ interface Report {
   id: number, 
   title: string,
   description: string,
+  latitude: number,
+  longitude: number,
   address: string,
   status: string
   createdAt: string;
@@ -50,12 +54,13 @@ export class AdminReports implements OnInit {
   IN_PROCESS: { text: 'En proceso', class: 'bg-warning text-dark' },
   RESOLVED: { text: 'Resuelto', class: 'bg-success' }
 };
-
+  private map!: L.Map;
   private apiUrl = "http://localhost:8080/api/report/admin/getAll"
   private apiUrlSquads = "http://localhost:8080/api/report/admin/squads"
   reports : Report[] = [];
   squads: Squad[] = [];
   constructor(private http: HttpClient, private service: ReportServiceService){}
+  
   ngOnInit() : void{
     const token = localStorage.getItem("token");
     const headers = new HttpHeaders({
@@ -69,7 +74,6 @@ export class AdminReports implements OnInit {
         error: (err) => {
           console.error("Error cargando cuadrillas", err);
       }})  
-
 
     this.service.getReports().subscribe({
       next: (data) => {
@@ -156,6 +160,35 @@ showMessage(isSuccess: boolean, text: string) {
 
 openDetailModal(report: Report) {
   this.reportToDetail = report;
+
+  setTimeout(() => {
+    if (this.reportToDetail?.latitude != null && this.reportToDetail.longitude != null) {
+
+      if (this.map) {
+        this.map.remove();
+      }
+
+      this.map = L.map('map').setView(
+        [this.reportToDetail.latitude, this.reportToDetail.longitude],
+        13
+      );
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(this.map);
+
+      L.marker([
+        this.reportToDetail.latitude,
+        this.reportToDetail.longitude
+      ])
+      .addTo(this.map)
+      .bindPopup('Ubicación del reporte');
+    }
+
+    setTimeout(() => this.map.invalidateSize(), 200);
+
+  }, 50);
 }
 
 filterByStatus(status: string) {
