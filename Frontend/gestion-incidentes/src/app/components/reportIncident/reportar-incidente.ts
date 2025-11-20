@@ -25,6 +25,9 @@ interface ResponseDto {
   styleUrls: ['./reportar-incidente.css']
 })
 export class ReportarIncidente {
+
+  private currentMarker?: L.Marker;
+
   @ViewChild('registerForm') registerForm!: NgForm;
 
   title: string = '';
@@ -61,8 +64,11 @@ export class ReportarIncidente {
       const { lat, lng } = e.latlng;
       this.latitude = lat;
       this.longitude = lng;
-      console.log("Latitud:", this.latitude, "Longitud:", this.longitude);
-      L.marker([lat, lng]).addTo(this.map);
+
+       if (this.currentMarker) {
+        this.map.removeLayer(this.currentMarker);
+      }
+      this.currentMarker = L.marker([lat, lng]).addTo(this.map);
     });
   }, 50);
 }

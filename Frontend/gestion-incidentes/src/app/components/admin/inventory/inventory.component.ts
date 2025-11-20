@@ -40,7 +40,9 @@ movement = {
   areas = [
     'ALUMBRADO',
     'OBRAS',
-    'RECOLECCION'
+    'RECOLECCION',
+    'HERRAMIENTA',
+    'OTRO'
   ];
   constructor(private inventoryService : IventoryServiceService) { }
  

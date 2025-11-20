@@ -23,6 +23,14 @@ public class ReportResponseDto {
 
     private Long userId;
     private SquadResponseDTO squad;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private OffsetDateTime resolvedAt;
+    public OffsetDateTime getResolvedAt() {
+        return resolvedAt;
+    }
+    public void setResolvedAt(OffsetDateTime resolvedAt) {
+        this.resolvedAt = resolvedAt;
+    }
 
     public Double getLatitude() {
         return latitude;

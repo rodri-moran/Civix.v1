@@ -2,7 +2,6 @@ import { AdminLayoutComponent } from "./admin-layout/admin-layout";
 import { AdminReports } from "./admin-reports/admin-reports";
 import { NewsComponent } from "../news/news.component";
 import { SquadsComponentComponent } from "./squads-component/squads-component.component";
-import { StatisticsComponent } from "./statistics/statistics.component";
 import { Routes } from '@angular/router';
 
 const routes: Routes = [
@@ -14,8 +13,7 @@ const routes: Routes = [
       { path: 'dashboard', component: AdminReports }, 
       { path: 'reportes', component: AdminReports },
       { path: 'cuadrillas', component: SquadsComponentComponent },
-      { path: 'noticias', component: NewsComponent },
-      { path: 'estadisticas', component: StatisticsComponent }
+      { path: 'noticias', component: NewsComponent }
     ]
   }
 ];

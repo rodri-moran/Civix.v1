@@ -5,8 +5,10 @@ import com.example.report_service.dtos.ReportResponseDto;
 import com.example.report_service.dtos.ResourcesUsedDto;
 import com.example.report_service.dtos.SquadResponseDTO;
 import com.example.report_service.entity.ReportEntity;
+import com.example.report_service.entity.ReportStatusHistoryEntity;
 import com.example.report_service.entity.SquadEntity;
 import com.example.report_service.enums.Status;
+import com.example.report_service.repository.HistoryRepository;
 import com.example.report_service.repository.ReportRepository;
 import com.example.report_service.repository.SquadRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -30,6 +33,8 @@ public class ReportServiceImpl implements ReportService {
     private SquadRepository squadRepository;
     @Autowired
     private WebClient.Builder webClientBuilder;
+    @Autowired
+    private HistoryRepository historyRepository;
     @Override
     public ReportResponseDto createReport(ReportRequestDto request) {
         request.setStatus(Status.PENDING);
@@ -111,13 +116,24 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public ReportResponseDto updateReportStatus(Long reportId, Status status, ResourcesUsedDto resourcesUsed) {
-        System.out.println("Llegó la petición a updateReportStatus del service");
-        if(status.equals(Status.RESOLVED)){
-            sendResourcesUsedToInventoryService(resourcesUsed);
-        }
         ReportEntity entity = repository.findById(reportId)
                 .orElseThrow( () -> new EntityNotFoundException("Report con el id " + reportId + " no encontrado"));
-        System.out.println("ReportEntity buscada por id");
+
+        if(status.equals(Status.RESOLVED)){
+            sendResourcesUsedToInventoryService(resourcesUsed);
+            entity.setResolvedAt(OffsetDateTime.now());
+        } else {
+            entity.setResolvedAt(null);
+        }
+
+
+        ReportStatusHistoryEntity history = new ReportStatusHistoryEntity();
+        history.setReport(entity);
+        history.setOldStatus(entity.getStatus());
+        history.setNewStatus(status);
+
+        historyRepository.save(history);
+
         entity.setStatus(status);
         repository.save(entity);
         return modelMapper.map(entity, ReportResponseDto.class);
@@ -137,8 +153,6 @@ public class ReportServiceImpl implements ReportService {
 //            .retrieve()
 //            .bodyToMono(UserResponseDto.class)
 //            .block();
-
-
 
     private ReportResponseDto convertEntityToDto (ReportEntity entity){
         return modelMapper.map(entity, ReportResponseDto.class);

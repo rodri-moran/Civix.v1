@@ -36,8 +36,15 @@ public class ReportEntity {
     private SquadEntity squad;
 
     private OffsetDateTime createdAt = OffsetDateTime.now();
-
     private Long userId;
+    private OffsetDateTime resolvedAt;
+    public OffsetDateTime getResolvedAt() {
+        return resolvedAt;
+    }
+
+    public void setResolvedAt(OffsetDateTime resolvedAt) {
+        this.resolvedAt = resolvedAt;
+    }
 
     public Long getId() {
         return id;

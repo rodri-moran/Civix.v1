@@ -53,6 +53,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/profile/perfil/perfil').then(m => m.PerfilComponent)
   },
+  
   {
     path: 'editar-perfil',
     loadComponent: () =>
@@ -76,6 +77,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./components/reportIncident/reportar-incidente').then(
             m => m.ReportarIncidente
+          )
+      },
+      {
+        path: 'estadisticas',
+        loadComponent: () =>
+          import('./components/statistics/statistics.component').then(
+            m => m.StatisticsComponent
           )
       }
     ]
@@ -105,6 +113,13 @@ export const routes: Routes = [
           ).then(m => m.AdminDashboardComponent)
       },
       {
+        path: 'estadisticas',
+        loadComponent: () =>
+          import('./components/statistics/statistics.component').then(
+            m => m.StatisticsComponent
+          )
+      },
+      {
         path: 'reportes',
         loadComponent: () =>
           import('./components/admin/admin-reports/admin-reports').then(
@@ -125,13 +140,7 @@ export const routes: Routes = [
             './components/admin/squads-component/squads-component.component'
           ).then(m => m.SquadsComponentComponent)
       },
-      {
-        path: 'estadisticas',
-        loadComponent: () =>
-          import('./components/admin/statistics/statistics.component').then(
-            m => m.StatisticsComponent
-          )
-      },
+      
       {
         path: 'noticias',
         loadComponent: () =>

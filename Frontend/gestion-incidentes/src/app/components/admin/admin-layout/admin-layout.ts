@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -16,6 +16,7 @@ export class AdminLayoutComponent {
   userName: string = "Usuario";
   currentRoute = '';
   hasToken = false;
+  //isLoggedIn: boolean = false;
   isOpen = false; // sidebar abierto por defecto en desktop
 
   menuItems = [
@@ -25,16 +26,22 @@ export class AdminLayoutComponent {
     { title: 'Inventario', icon: 'bi bi-box-seam', route: 'admin/inventario'}
   ];
  ngOnInit() {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token')
+  const role = this.authService.getRole();
+  const storedName = localStorage.getItem('userName');
+
   if (token && !this.authService.isTokenExpired()) {
+    //this.isLoggedIn = true;
     this.hasToken = true;
+    this.userName = storedName || 'Usuario';
+    this.cd.detectChanges();
   } else {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
 }
 
-  constructor(private router: Router, private authService: Auth) {
+  constructor(private router: Router, private authService: Auth, private cd: ChangeDetectorRef) {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => this.currentRoute = event.urlAfterRedirects);
   }
