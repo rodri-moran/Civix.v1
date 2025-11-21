@@ -163,3 +163,47 @@ body {
   overflow-x: hidden !important;
 }
 
+/* -------- DROPDOWN ADMIN -------- */
+.dropdown-menu {
+  background-color: #1e2a38 !important;
+  border: none !important;
+  min-width: 200px;
+  padding: 6px 0;
+  font-weight: 500;
+  color: #e0e6ed !important;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #e0e6ed !important;
+  font-size: 0.95rem;
+  padding: 10px 16px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-item i {
+  font-size: 1rem;
+  color: #4ea8ff !important;
+}
+
+.dropdown-item:hover {
+  background-color: #253447 !important;
+  color: #ffffff !important;
+}
+
+.dropdown-divider {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dropdown-item.text-danger {
+  color: #ff6b6b !important;
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: rgba(255, 107, 107, 0.1) !important;
+  color: #ff8787 !important;
+}
+
+

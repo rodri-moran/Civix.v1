@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ResourceRepository extends JpaRepository<ResourceEntity, Long> {
     List<ResourceEntity> findByArea(Area area);
+    List<ResourceEntity> findByActiveTrue();
 }

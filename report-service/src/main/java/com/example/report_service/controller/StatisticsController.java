@@ -1,6 +1,6 @@
 package com.example.report_service.controller;
 import com.example.report_service.enums.Status;
-import com.example.report_service.services.StatisticsService;
+import com.example.report_service.services.interfaces.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

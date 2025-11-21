@@ -42,8 +42,9 @@ public class InventoryServiceImpl implements InventoryService{
     }
     @Override
     public List<ResourceDto> getAllResources() {
-        return resourceRepository.findAll().
-                stream().map(x -> mapper.map(x, ResourceDto.class))
+        return resourceRepository.findByActiveTrue().
+                stream()
+                .map(x -> mapper.map(x, ResourceDto.class))
                 .collect(Collectors.toList());
     }
     @Override
@@ -69,7 +70,8 @@ public class InventoryServiceImpl implements InventoryService{
     public ResourceCreateDto deleteResource(Long id) {
         ResourceEntity resourceEntity = resourceRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Recurso con el id "+ id +" no encontrado"));
-        resourceRepository.delete(resourceEntity);
+        resourceEntity.setActive(false);
+        resourceRepository.save(resourceEntity);
         return mapper.map(resourceEntity, ResourceCreateDto.class);
     }
     @Override

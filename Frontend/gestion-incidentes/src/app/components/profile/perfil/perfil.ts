@@ -72,7 +72,6 @@ export class PerfilComponent implements OnInit {
         this.editedValues = { ...updated };
         this.hasChanges = false;
         this.isEditing = false;
-        alert('Cambios guardados correctamente');
       },
       error: (err) => console.error("Error actualizando perfil", err)
     });

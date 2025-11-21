@@ -53,13 +53,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/profile/perfil/perfil').then(m => m.PerfilComponent)
   },
-  
-  {
-    path: 'editar-perfil',
-    loadComponent: () =>
-      import('./components/profile/editar-perfil/editar-perfil').then(m => m.EditarPerfilComponent)
-  },
-
   {
     path: 'terms',
     loadComponent: () =>
@@ -104,6 +97,14 @@ export const routes: Routes = [
         path: '',
         pathMatch: 'full',
         redirectTo: 'dashboard'
+      },
+
+      {
+        path: 'perfil',
+        loadComponent: () =>
+          import('./components/profile/perfil/perfil').then(
+            m => m.PerfilComponent
+          )
       },
       {
         path: 'dashboard',

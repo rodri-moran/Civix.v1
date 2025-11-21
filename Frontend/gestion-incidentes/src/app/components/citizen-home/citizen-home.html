@@ -19,25 +19,18 @@
     <article class="col" *ngFor="let noticia of noticias">
       <div class="card h-100 shadow-sm">
         <div class="card-body">
-          <small class="text-muted d-block mb-2">{{ noticia.fecha }}</small>
-          <h5 class="card-title">{{ noticia.titulo }}</h5>
-          <p class="card-text">{{ noticia.descripcion }}</p>
-          <span class="badge" [ngClass]="noticia.color">{{ noticia.categoria }}</span>
+          <small class="text-muted d-block mb-2">
+            {{ noticia.date | date:'dd-MM-yyyy' }}
+          </small>
+          <h4 class="card-title">{{ noticia.title }}</h4>
+          <p class="card-text">{{ noticia.description }}</p>
+          <!-- <span class="badge" [ngClass]="noticia.color">{{ noticia.category }}</span> -->
+
+          <span class="badge" [ngClass]="getBadgeColor(noticia.category)">
+            {{ noticia.category }}
+          </span>
         </div>
       </div>
     </article>
   </div>
 </section>
-<!--
-<section>
-  <h3 class="h5 mb-3">Estadísticas del Mes</h3>
-  <div class="row row-cols-2 row-cols-md-4 g-4">
-    <div class="col" *ngFor="let stat of estadisticas">
-      <div class="card text-center shadow-sm p-3">
-        <h4 class="fw-bold text-primary">{{ stat.valor }}</h4>
-        <p class="text-muted mb-0">{{ stat.label }}</p>
-      </div>
-    </div>
-  </div>
-</section>
--->

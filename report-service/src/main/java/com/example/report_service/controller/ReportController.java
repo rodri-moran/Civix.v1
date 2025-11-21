@@ -2,8 +2,9 @@ package com.example.report_service.controller;
 
 import com.example.report_service.dtos.*;
 import com.example.report_service.enums.Status;
-import com.example.report_service.services.ReportService;
-import com.example.report_service.services.SquadService;
+import com.example.report_service.services.interfaces.NewService;
+import com.example.report_service.services.interfaces.ReportService;
+import com.example.report_service.services.interfaces.SquadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,17 @@ public class ReportController {
     private ReportService reportService;
     @Autowired
     private SquadService service;
+    @Autowired
+    private NewService newService;
+    @PostMapping("/admin")
+    public ResponseEntity<NewResponseDto> createNew(@RequestBody NewDto dto){
+        System.out.println("Dto de crear noticia: " + dto);
+        return ResponseEntity.ok(newService.createNew(dto));
+    }
+    @GetMapping("/admin")
+    public ResponseEntity<List<NewResponseDto>> getAllNews(){
+        return ResponseEntity.ok(newService.getAllNews());
+    }
 
     @PostMapping("/public")
     public ResponseEntity<ReportResponseDto> createReport(@RequestBody ReportRequestDto dto){

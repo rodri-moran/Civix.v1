@@ -1,13 +1,10 @@
 package com.example.user_service.entity;
-
 import com.example.user_service.enums.Role;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
-
 import java.time.LocalDate;
-
 @Entity
 @Table(name = "user_entity")
 @Data
@@ -30,7 +27,7 @@ public class UserEntity {
 
     private LocalDate registrationDate;
     @Nullable
-    private Integer phone;
+    private String phone;
 
     @Nullable
     private String address;

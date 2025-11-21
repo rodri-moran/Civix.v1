@@ -61,7 +61,7 @@ movement = {
   createResource() {
     this.inventoryService.createResource(this.newResource).subscribe({
       next: (data) => {
-        console.log('Recurso creado: ', data);    
+        this.refreshResources();
 
          this.newResource = {
           name: '',
@@ -90,10 +90,15 @@ movement = {
         quantity: this.movement.quantity
       }]
     }
-    console.log('movimiento a cargar: ', dto)
+
+
     this.inventoryService.registerMovement(dto).subscribe({
       next: () => {
+
         this.showSuccesMovementModal();
+
+        this.refreshResources();
+
         this.movement = { typeMovement: 'ENTRADA', reason: '', resourceId: 0, quantity: 0 };
       },
       error: (err) => {
@@ -114,6 +119,7 @@ movement = {
       }
     })
   }
+
   showSuccesMovementModal(): void {
     const el = document.getElementById('successModalMovement')
     const mo = document.getElementById('movementModal'); 
@@ -126,6 +132,7 @@ movement = {
     successModal .show();
     setTimeout(() => successModal .hide(), 3000);
   }
+
   showErrorMovementModal(): void {
     const el = document.getElementById('errorModalMovement')
     const modal = new bootstrap.Modal(el);
@@ -133,4 +140,49 @@ movement = {
     setTimeout(() => modal.hide(), 3000);
 
   }
+
+  refreshResources() {
+  this.inventoryService.getAllResources().subscribe({
+    next: (data) => {
+      this.resources = data;
+    },
+    error: (err) => console.error('Error al refrescar recursos: ', err)
+  });
+}
+
+deleteResource(): void {
+  const el = document.getElementById('deleteModal')
+  
+  const successModal  = new bootstrap.Modal(el);
+
+  successModal .show();
+}
+
+selectedResourceId: number | null = null;
+
+openDeleteModal(id: number) {
+  this.selectedResourceId = id;
+}
+
+confirmDelete() {
+  if (!this.selectedResourceId) return;
+
+  this.inventoryService.deleteResource(this.selectedResourceId).subscribe({
+    next: () => {
+      
+      const modalEl = document.getElementById('deleteModal');
+      const modalInstance = bootstrap.Modal.getInstance(modalEl!);
+      modalInstance?.hide();
+      
+      this.refreshResources();
+
+      this.selectedResourceId = null;
+    },
+    error: err => {
+      console.error('Error al eliminar recurso: ', err);
+      alert('No se pudo eliminar el recurso.');
+    }
+  });
+}
+
 }

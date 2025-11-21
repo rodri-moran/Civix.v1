@@ -46,4 +46,13 @@ constructor(private http :HttpClient) { }
       'http://localhost:8080/api/inventory/admin/movements'
     )
   }
+  deleteResource(id: number) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    })
+
+  return this.http.delete(`http://localhost:8080/api/inventory/admin/delete/${id}`);
+}
+
 }

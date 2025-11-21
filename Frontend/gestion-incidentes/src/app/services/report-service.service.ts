@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { __param } from 'tslib';
 
-
 export interface Report {
   id: number, 
   title: string,
@@ -27,7 +26,6 @@ interface Squad {
 @Injectable({
   providedIn: 'root'
 })
-
 
 export class ReportServiceService {
   private apiUrl = 'http://localhost:8080/api/report/admin/getAll'

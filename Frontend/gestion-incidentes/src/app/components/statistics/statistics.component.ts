@@ -139,12 +139,20 @@ export class StatisticsComponent implements OnInit {
       }
 
       this.fastestSquad = fastestSquad ?? "Sin datos";
-      this.fastestSquadTime = this.formatSecondsToDaysHours(fastestSeconds);
+
+      if(fastestSeconds == Number.MAX_VALUE){
+        this.fastestSquadTime = this.formatSecondsToDaysHours(0);
+      }
+      else {
+        this.fastestSquadTime = this.formatSecondsToDaysHours(fastestSeconds);
+      }
+      
     });
 }
 formatSecondsToDaysHours(seconds: number): string {
   const hours = Math.floor(seconds / 3600);
   const days = Math.floor(hours / 24);
+  
   const remainingHours = hours % 24;
 
   if (days > 0) {

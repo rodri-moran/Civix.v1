@@ -5,4 +5,5 @@ export interface ResourceDto {
   stock: number;
   unit: string;
   area: string;
+  active: boolean
 }

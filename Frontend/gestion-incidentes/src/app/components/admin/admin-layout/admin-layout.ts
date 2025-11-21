@@ -63,4 +63,8 @@ export class AdminLayoutComponent {
     localStorage.removeItem("token");
     this.router.navigate(['/login']);
   }
+
+  profile() {
+    this.router.navigate(['/admin']);
+  }
 }
