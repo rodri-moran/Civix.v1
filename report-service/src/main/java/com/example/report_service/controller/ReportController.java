@@ -1,5 +1,4 @@
 package com.example.report_service.controller;
-
 import com.example.report_service.dtos.*;
 import com.example.report_service.enums.Status;
 import com.example.report_service.services.interfaces.NewService;
@@ -8,9 +7,7 @@ import com.example.report_service.services.interfaces.SquadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/report")
 public class ReportController {
@@ -22,10 +19,9 @@ public class ReportController {
     private NewService newService;
     @PostMapping("/admin")
     public ResponseEntity<NewResponseDto> createNew(@RequestBody NewDto dto){
-        System.out.println("Dto de crear noticia: " + dto);
         return ResponseEntity.ok(newService.createNew(dto));
     }
-    @GetMapping("/admin")
+    @GetMapping("/public")
     public ResponseEntity<List<NewResponseDto>> getAllNews(){
         return ResponseEntity.ok(newService.getAllNews());
     }
@@ -92,5 +88,4 @@ public class ReportController {
         System.out.println("Llegó la petición a updateReportStatus");
         return ResponseEntity.ok(reportService.updateReportStatus(reportId, status, resourcesUsed));
     }
-
 }

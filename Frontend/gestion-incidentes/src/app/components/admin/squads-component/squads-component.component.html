@@ -33,10 +33,10 @@
         <td>{{ squad.description }}</td>
         <td
           [ngClass]="{
-            'text-danger': squad.area === 'RECOLECCION',
-            'bg-primary': squad.area === 'OBRAS',
-            'text-info': squad.area === 'ALUMBRADO'
-          }"
+    'text-danger': squad.area === 'RECOLECCION',
+    'text-primary': squad.area === 'OBRAS',
+    'text-info': squad.area === 'ALUMBRADO'
+  }"
         >
           {{ squad.area }}
         </td>

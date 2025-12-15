@@ -28,8 +28,7 @@ constructor(private http: HttpClient, ) { }
         });
         
     return this.http.get<NewResponseDto[]>(
-      "http://localhost:8080/api/report/admin",
-      { headers },
+      "http://localhost:8080/api/report/public"
     )
   }
 }

@@ -3,19 +3,24 @@ spring:
     name: inventory-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/inventorydb
+    url: jdbc:postgresql://inventory-db:5433/inventorydb
     username: inventory
     password: inventory
 
   jpa:
     hibernate:
       ddl-auto: update
+#    defer-datasource-initialization: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         ddl-auto: update
         jdbc:
           time_zone: America/Argentina/Buenos_Aires
+#  sql:
+#    init:
+#      mode: always
+#      data-locations: classpath:data.sql
 
 server:
   port: 8084

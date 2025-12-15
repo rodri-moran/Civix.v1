@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user-service.service';
 import { UserDto } from '../../../dtos/UserDto.dto';
+import { RouterLink } from '@angular/router';
+
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
   templateUrl: './perfil.html',
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, RouterLink]
 })
 export class PerfilComponent implements OnInit {
 

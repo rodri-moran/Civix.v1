@@ -15,6 +15,7 @@ interface Report {
   createdAt: string;
 }
 
+
 @Component({
   selector: 'app-mis-reportes',
   imports: [CommonModule, FormsModule, RouterLink, HttpClientModule],
@@ -22,6 +23,11 @@ interface Report {
   styleUrl: './mis-reportes.css'
 })
 export class MisReportes {
+  statusLabels: any = {
+  PENDING: { text: 'Pendiente', class: 'bg-primary text-white' },
+  IN_PROCESS: { text: 'En proceso', class: 'bg-warning text-dark' },
+  RESOLVED: { text: 'Resuelto', class: 'bg-success text-white' }
+};
   private apiUrl = "http://localhost:8080/api/report/public/get-by-user-id"
   reports: Report[] = [];
   

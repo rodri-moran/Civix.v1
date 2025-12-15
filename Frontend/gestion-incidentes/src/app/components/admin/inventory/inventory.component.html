@@ -56,7 +56,10 @@
             [ngClass]="{
               'bg-primary text-white': resource.area === 'ALUMBRADO',
               'bg-warning text-dark': resource.area === 'OBRAS',
-              'bg-success text-white': resource.area === 'RECOLECCION'
+              'bg-success text-white': resource.area === 'RECOLECCION',
+              'bg-info text-dark': resource.area === 'HERRAMIENTA',
+              'bg-secondary text-white': resource.area === 'OTRO'
+
             }"
           >
             {{ resource.area }}

@@ -1,0 +1,24 @@
+-- INSERT INTO user_entity (name, lastname, email, passwordhash, role, registrationdate, phone, address)
+-- VALUES (
+--            'Admin',
+--            'Principal',
+--            'email@gmail.com',
+--            '$2a$10$Dow1pXjq5D8zVQdN7evYzedHp2PqItKQbV9a9lsP76C1bmk4WzOGa', -- hash de admin123
+--            'ADMIN',
+--            CURRENT_DATE,
+--            '3510000000',
+--            'Calle Falsa 123'
+--        );
+--
+-- INSERT INTO user_entity (name, lastname, email, passwordhash, role, registrationdate, phone, address)
+-- VALUES (
+--            'Rodrigo',
+--            'Moran',
+--            'email@gmail.com',
+--            '$2a$10$zWmboT0KjrZiEUzOSlUteeYzsVQEJvLu7MjbQGzV3Jc70SaACsP2G', -- hash de admin123
+--            'CIUDADANO',
+--            CURRENT_DATE,
+--            '3510000000',
+--            'Calle Falsa 123'
+--        );
+

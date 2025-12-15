@@ -11,6 +11,7 @@ import {
   LinearScale
 } from 'chart.js';
 import { StatisticsService } from '../../services/statistics.service';
+import { RouterLink } from '@angular/router';
 
 Chart.register(
   PieController, ArcElement, Tooltip, Legend,
@@ -21,7 +22,8 @@ Chart.register(
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
   styleUrls: ['./statistics.component.css'],
-  standalone: true
+  standalone: true,
+  imports: [RouterLink]
 })
 export class StatisticsComponent implements OnInit {
   fastestSquadTime = '0';

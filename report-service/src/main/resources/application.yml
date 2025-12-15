@@ -2,18 +2,23 @@ spring:
   application:
     name: report-service
   datasource:
-    url: jdbc:postgresql://localhost:5436/reportdb
+    url: jdbc:postgresql://report-db:5436/reportdb
     username: report
     password: report
   jpa:
     hibernate:
       ddl-auto: update
+#    defer-datasource-initialization: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         ddl-auto: update
         jdbc:
           time_zone: America/Argentina/Buenos_Aires
+#  sql:
+#    init:
+#      mode: always
+#      data-locations: classpath:data.sql
 server:
   port: 8083
 

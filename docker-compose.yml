@@ -40,6 +40,8 @@ services:
 
   auth-db:
     image: postgres:16
+    ##volumes:
+      ##- ./auth-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     container_name: auth-db
     environment:
       POSTGRES_DB: authdb
@@ -71,6 +73,8 @@ services:
 
   user-db:
     image: postgres:16
+    #volumes:
+      #- ./user-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     container_name: user-db
     environment:
       POSTGRES_DB: userdb
@@ -102,6 +106,8 @@ services:
 
   report-db:
     image: postgres:16
+    #volumes:
+      #- ./report-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     container_name: report-db
     environment:
       POSTGRES_DB: reportdb
@@ -133,6 +139,8 @@ services:
 
   inventory-db:
     image: postgres:16
+    #volumes:
+      #- ./inventory-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     container_name: inventory-db
     environment:
       POSTGRES_DB: inventorydb
@@ -143,7 +151,6 @@ services:
       - "5437:5432"
     networks:
       - comuna-network
-
 
 networks:
   comuna-network:

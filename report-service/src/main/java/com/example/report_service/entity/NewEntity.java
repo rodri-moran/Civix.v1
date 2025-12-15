@@ -12,6 +12,7 @@ public class NewEntity {
     private Long id;
     private OffsetDateTime date;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String category;
 }

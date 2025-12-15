@@ -44,6 +44,13 @@ export const routes: Routes = [
           )
       },
       {
+      path: 'noticias',
+      loadComponent: () =>
+        import('./components/news/news.component').then(
+          m => m.NewsComponent
+        )
+    },
+      {
     path: 'faq',
     loadComponent: () =>
       import('./components/legal/faq/faq').then(m => m.Faq)

@@ -1,0 +1,103 @@
+-- -- ============================================
+-- -- SQUADENTITY
+-- -- ============================================
+-- INSERT INTO squad_entity (name, description, area, teamsize)
+-- VALUES ('Iluminación Urbana', 'Responsables del mantenimiento del alumbrado público', 'ALUMBRADO', 6);
+--
+-- INSERT INTO squad_entity (name, description, area, teamsize)
+-- VALUES ('Obras Públicas', 'Cuadrilla para bacheo, veredas y mantenimiento', 'OBRAS', 8);
+--
+-- INSERT INTO squad_entity (name, description, area, teamsize)
+-- VALUES ('Recolección Diaria', 'Equipo encargado de recolección de residuos', 'RECOLECCION', 10);
+--
+-- INSERT INTO squad_entity (name, description, area, teamsize)
+-- VALUES ('Cuadrilla de Emergencias', 'Atención rápida ante incidentes prioritarios', 'OTRA', 4);
+--
+-- INSERT INTO squad_entity (name, description, area, teamsize)
+-- VALUES ('Arbolado Urbano', 'Poda, remoción, mantenimiento del arbolado', 'OTRA', 5);
+--
+-- INSERT INTO squad_entity (name, description, area, teamsize)
+-- VALUES ('Infraestructura Vial', 'Mantenimiento de calles, señalización y cartelería', 'OBRAS', 7);
+--
+-- INSERT INTO squad_entity (name, description, area, teamsize)
+-- VALUES ('Limpieza Especial', 'Limpieza después de eventos o acumulación puntual', 'RECOLECCION', 6);
+--
+--
+--
+-- -- ============================================
+-- -- REPORTS
+-- -- ============================================
+--
+-- INSERT INTO reports (title, description, imageurl, address, latitude, longitude, status, squad_id, createdat, userid, resolvedat)
+-- VALUES ('Lámpara rota', 'Luminaria sin funcionar en esquina principal.', NULL, 'Av. San Martín 450', -31.421, -64.187, 'PENDING', 1, NOW(), 2, NULL);
+--
+-- INSERT INTO reports (title, description, imageurl, address, latitude, longitude, status, squad_id, createdat, userid, resolvedat)
+-- VALUES ('Bache profundo', 'Pozo en la calle dificulta circulación.', NULL, 'Calle Belgrano 820', -31.430, -64.200, 'IN_PROCESS', 2, NOW(), 2, NULL);
+--
+-- INSERT INTO reports (title, description, imageurl, address, latitude, longitude, status, squad_id, createdat, userid, resolvedat)
+-- VALUES ('Árbol caído', 'Árbol bloqueando vereda y parte de la calle.', NULL, 'Ituzaingó 1000', -31.425, -64.210, 'PENDING', 5, NOW(), 2, NULL);
+--
+-- INSERT INTO reports (title, description, imageurl, address, latitude, longitude, status, squad_id, createdat, userid, resolvedat)
+-- VALUES ('Contenedor dañado', 'Contenedor de residuos roto.', NULL, 'Córdoba 230', -31.423, -64.215, 'RESOLVED', 3, NOW(), 2, NOW());
+--
+-- INSERT INTO reports (title, description, imageurl, address, latitude, longitude, status, squad_id, createdat, userid, resolvedat)
+-- VALUES ('Semáforo intermitente', 'Falla en semáforo peatonal.', NULL, 'Bv. Illia 150', -31.427, -64.198, 'IN_PROCESS', 6, NOW(), 2, NULL);
+--
+-- INSERT INTO reports (title, description, imageurl, address, latitude, longitude, status, squad_id, createdat, userid, resolvedat)
+-- VALUES ('Basural improvisado', 'Acumulación de residuos en baldío.', NULL, 'Sarmiento 300', -31.415, -64.202, 'PENDING', 7, NOW(), 2, NULL);
+--
+-- INSERT INTO reports (title, description, imageurl, address, latitude, longitude, status, squad_id, createdat, userid, resolvedat)
+-- VALUES ('Tapa de alcantarilla rota', 'Riesgo para peatones.', NULL, 'Rivadavia 900', -31.419, -64.190, 'RESOLVED', 4, NOW(), 2, NOW());
+--
+--
+--
+-- -- ============================================
+-- -- REPORT STATUS HISTORY
+-- -- ============================================
+--
+-- INSERT INTO report_status_history_entity (report_id, oldstatus, newstatus, changedat)
+-- VALUES (1, 'PENDING', 'IN_PROCESS', NOW());
+--
+-- INSERT INTO report_status_history_entity (report_id, oldstatus, newstatus, changedat)
+-- VALUES (2, 'PENDING', 'IN_PROCESS', NOW());
+--
+-- INSERT INTO report_status_history_entity (report_id, oldstatus, newstatus, changedat)
+-- VALUES (3, 'PENDING', 'PENDING', NOW());
+--
+-- INSERT INTO report_status_history_entity (report_id, oldstatus, newstatus, changedat)
+-- VALUES (4, 'IN_PROCESS', 'RESOLVED', NOW());
+--
+-- INSERT INTO report_status_history_entity (report_id, oldstatus, newstatus, changedat)
+-- VALUES (5, 'PENDING', 'IN_PROCESS', NOW());
+--
+-- INSERT INTO report_status_history_entity (report_id, oldstatus, newstatus, changedat)
+-- VALUES (6, 'PENDING', 'IN_PROCESS', NOW());
+--
+-- INSERT INTO report_status_history_entity (report_id, oldstatus, newstatus, changedat)
+-- VALUES (7, 'IN_PROCESS', 'RESOLVED', NOW());
+--
+--
+--
+-- -- ============================================
+-- -- NEWS (TABLA: new_entity)
+-- -- ============================================
+-- INSERT INTO new_entity (date, title, description, category)
+-- VALUES (NOW(), 'Nueva luminaria en Barrio Centro', 'Se instalaron nuevas luminarias LED para mejorar la seguridad nocturna.', 'ALUMBRADO');
+--
+-- INSERT INTO new_entity (date, title, description, category)
+-- VALUES (NOW(), 'Plan de bacheo semanal', 'La cuadrilla de Obras inicia trabajos de reparación en calles principales.', 'OBRAS');
+--
+-- INSERT INTO new_entity (date, title, description, category)
+-- VALUES (NOW(), 'Operativo de limpieza', 'Se retiraron más de 2 toneladas de residuos acumulados.', 'RECOLECCION');
+--
+-- INSERT INTO new_entity (date, title, description, category)
+-- VALUES (NOW(), 'Emergencia por tormenta', 'Se activó protocolo por fuertes vientos que afectaron árboles y tendido eléctrico.', 'OTRA');
+--
+-- INSERT INTO new_entity (date, title, description, category)
+-- VALUES (NOW(), 'Nueva señalización vial', 'Infraestructura Vial instaló nueva cartelería en avenidas principales.', 'OBRAS');
+--
+-- INSERT INTO new_entity (date, title, description, category)
+-- VALUES (NOW(), 'Mantenimiento preventivo', 'Se realizó mantenimiento en semáforos clave del centro.', 'ALUMBRADO');
+--
+-- INSERT INTO new_entity (date, title, description, category)
+-- VALUES (NOW(), 'Programa de recolección diferenciada', 'Inicia prueba piloto para separación de residuos en origen.', 'RECOLECCION');
