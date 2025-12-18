@@ -29,7 +29,7 @@
 -- INSERT INTO resource_entity (name, description, stock, unit, area, active)
 -- VALUES
 --     ('Escoba industrial', 'Para limpieza y recolección de residuos', 80, 'unidades', 'RECOLECCION', true);
---
+
 -- -- ============================================
 -- -- INSERTS PARA inventory_movements
 -- -- ============================================

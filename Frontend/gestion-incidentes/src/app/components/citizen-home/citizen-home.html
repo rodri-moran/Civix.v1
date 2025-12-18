@@ -1,17 +1,32 @@
-<section class="text-black section-main rounded shadow-sm p-5 mb-4 border">
-  <h2 class="mb-3">Sistema de Gestión de Incidentes</h2>
-  <p class="lead mb-4">
-    Reporta, gestiona y da seguimiento a los incidentes de tu comuna de manera eficiente y
-    transparente
-  </p>
-  <button *ngIf="!isAdmin" class="btn btn-primary btn-lg" routerLink="/reportar-incidente">
-    Reportar Incidente
-  </button>
+<section class="section-main rounded-4 shadow-sm p-5 mb-5 border">
+  <div class="d-flex flex-column gap-3">
+    <h2 class="fw-bold display-6">
+      Sistema de Gestión de Incidentes
+    </h2>
+
+    <p class="lead text-muted col-md-8">
+      Reportá, gestioná y hacé seguimiento a los incidentes de tu comuna de manera
+      eficiente y transparente.
+    </p>
+
+    <div>
+      <button
+        *ngIf="!isAdmin"
+        class="btn btn-primary btn-lg px-4"
+        routerLink="/reportar-incidente">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        Reportar Incidente
+      </button>
+    </div>
+  </div>
 </section>
 
 <section class="mb-5">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3 class="h5">Noticias de la Comuna</h3>
+    <h5 class="section-title d-flex align-items-center gap-2">
+  <i class="bi bi-newspaper"></i>
+  Noticias de la Comuna
+</h5>
     <a href="#todas" class="text-decoration-none">Ver todas →</a>
   </div>
 

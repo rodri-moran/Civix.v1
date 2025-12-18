@@ -104,3 +104,55 @@ a {
 .leaflet-container {
   z-index: 1 !important;
 }
+
+.reports-header {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.reports-header h2 {
+  letter-spacing: -0.4px;
+}
+
+.table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #eef4ff !important;
+}
+
+.status-drop {
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.status-drop:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+}
+
+.btn-link i {
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-link:hover i {
+  color: #0d6efd;
+  transform: scale(1.1);
+}
+
+.modal-body label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.modal-body p {
+  margin-bottom: 0.6rem;
+}
+
+#map {
+  border: 1px solid #dee2e6;
+}
+

@@ -88,10 +88,11 @@ export class StatisticsComponent implements OnInit {
         }]
       },
       options: {
-        scales: {
-          y: { beginAtZero: true }
-        }
-      }
+    indexAxis: 'y', 
+    scales: {
+      x: { beginAtZero: true }
+    }
+  }
     });
   }
   )};

@@ -19,7 +19,6 @@
   <table class="table table-hover align-middle mb-0">
     <thead class="table-light border-bottom">
       <tr class="text-secondary text-uppercase small">
-        <th>#</th>
         <th>Nombre</th>
         <th>Descripción</th>
         <th>Área</th>
@@ -28,7 +27,6 @@
     </thead>
     <tbody>
       <tr *ngFor="let squad of squads; let i = index" class="table-row-hover">
-        <td class="fw-semibold">{{ i + 1 }}</td>
         <td>{{ squad.name }}</td>
         <td>{{ squad.description }}</td>
         <td

@@ -72,15 +72,41 @@ export class CitizenHome {
 
     getBadgeColor(category: string): string {
   switch (category) {
-    case "Tecnología": return "bg-primary text-white";
-    case "Gestión Pública": return "bg-success text-white";
-    case "Capacitación": return "bg-warning text-dark";
-    case "Transparencia": return "bg-info text-dark";
-    case "Obras y Servicios": return "bg-secondary text-white";
-    case "Seguridad": return "bg-danger text-white";
-    case "Ambiente": return "bg-success text-white";
-    case "Economía": return "bg-dark text-white";
-    default: return "bg-secondary";
-  }
+
+  case "Tecnología":
+    return "bg-primary text-white";
+
+  case "Gestión Pública":
+    return "bg-secondary text-white";
+
+  case "Capacitación":
+    return "bg-warning text-dark";
+
+  case "Transparencia":
+    return "bg-info text-dark";
+
+  case "Obras y Servicios":
+    return "bg-dark text-white";
+
+  case "Seguridad":
+    return "bg-danger text-white";
+
+  case "Ambiente":
+    return "bg-success text-white";
+
+  case "Economía":
+    return "bg-light text-dark";
+
+  case "Alumbrado":
+    return "bg-warning-subtle text-dark";
+
+  case "Recolección":
+  case "RECOLECCION":
+    return "bg-success-subtle text-dark";
+
+  default:
+    return "bg-secondary text-white";
+}
+
 }
 }

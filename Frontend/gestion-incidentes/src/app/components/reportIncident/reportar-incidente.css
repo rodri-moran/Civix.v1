@@ -30,15 +30,23 @@ section {
 }
 .form-container {
   background: #fff;
-  border-radius: 10px;
-  padding: 2.5rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   width: 100%;
+  max-width: 720px;
+  padding: 32px;
+  border-radius: 20px;
 }
+
 .form-wrapper {
   width: 100%;
   max-width: 600px;
   margin: 0 auto; 
+    min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 15px;
+  background: #f4f7fb;
 }
 
 #map {
@@ -52,4 +60,56 @@ section {
 .leaflet-pane,
 .leaflet-container {
   z-index: 1 !important;
+}
+
+.form-title {
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+.form-section {
+  margin-bottom: 32px;
+}
+
+.form-section-title {
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1e2a38;
+}
+
+.form-container .form-control {
+  border-radius: 10px;
+  padding: 12px 14px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  transition: all 0.2s ease;
+}
+
+.form-container .form-control:focus {
+  background-color: #fff;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+/* MAPA */
+.report-map {
+  height: 300px;
+  border-radius: 16px;
+  border: 1px solid #dee2e6;
+  overflow: hidden;
+}
+
+/* BOTÓN */
+.form-container .btn-primary {
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(13,110,253,0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-container .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(13,110,253,0.35);
 }

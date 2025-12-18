@@ -34,7 +34,6 @@
   <table class="table table-hover align-middle mb-0 text-center">
     <thead class="table-light border-bottom">
       <tr class="text-secondary text-uppercase small">
-        <th>#</th>
         <th>Nombre</th>
         <th>Descripción</th>
         <th>Área</th>
@@ -46,7 +45,6 @@
 
     <tbody>
       <tr *ngFor="let resource of resources; let i = index" class="table-row-hover">
-        <td class="fw-semibold">{{ i + 1 }}</td>
         <td>{{ resource.name }}</td>
         <td>{{ resource.description }}</td>
 

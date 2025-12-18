@@ -1,26 +1,27 @@
 -- -- ============================================
 -- -- SQUADENTITY
 -- -- ============================================
--- INSERT INTO squad_entity (name, description, area, teamsize)
--- VALUES ('Iluminación Urbana', 'Responsables del mantenimiento del alumbrado público', 'ALUMBRADO', 6);
+-- INSERT INTO squad_entity (name, description, area, team_size)
+-- VALUES
+--     ('Iluminación Urbana', 'Responsables del mantenimiento del alumbrado público', 'ALUMBRADO', 6),
 --
--- INSERT INTO squad_entity (name, description, area, teamsize)
--- VALUES ('Obras Públicas', 'Cuadrilla para bacheo, veredas y mantenimiento', 'OBRAS', 8);
+--     ('Obras Públicas', 'Cuadrilla para bacheo, veredas y mantenimiento', 'OBRAS', 8),
 --
--- INSERT INTO squad_entity (name, description, area, teamsize)
--- VALUES ('Recolección Diaria', 'Equipo encargado de recolección de residuos', 'RECOLECCION', 10);
+--     ('Recolección Diaria', 'Equipo encargado de recolección de residuos', 'RECOLECCION', 10),
 --
--- INSERT INTO squad_entity (name, description, area, teamsize)
--- VALUES ('Cuadrilla de Emergencias', 'Atención rápida ante incidentes prioritarios', 'OTRA', 4);
+--     ('Cuadrilla de Emergencias', 'Atención rápida ante incidentes prioritarios', 'OTRA', 4),
 --
--- INSERT INTO squad_entity (name, description, area, teamsize)
--- VALUES ('Arbolado Urbano', 'Poda, remoción, mantenimiento del arbolado', 'OTRA', 5);
+--     ('Arbolado Urbano', 'Poda, remoción, mantenimiento del arbolado', 'OTRA', 5),
 --
--- INSERT INTO squad_entity (name, description, area, teamsize)
--- VALUES ('Infraestructura Vial', 'Mantenimiento de calles, señalización y cartelería', 'OBRAS', 7);
+--     ('Infraestructura Vial', 'Mantenimiento de calles, señalización y cartelería', 'OBRAS', 7),
 --
--- INSERT INTO squad_entity (name, description, area, teamsize)
--- VALUES ('Limpieza Especial', 'Limpieza después de eventos o acumulación puntual', 'RECOLECCION', 6);
+--     ('Limpieza Especial', 'Limpieza después de eventos o acumulación puntual', 'RECOLECCION', 6),
+--
+--
+--     ('Señalización Urbana', 'Mantenimiento de carteles y señalización vial', 'OBRAS', 5),
+--
+--     ('Espacios Verdes', 'Mantenimiento de plazas y parques', 'OTRA', 6);
+
 --
 --
 --

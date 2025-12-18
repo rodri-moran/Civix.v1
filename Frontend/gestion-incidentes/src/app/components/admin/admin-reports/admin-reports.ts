@@ -59,6 +59,8 @@ export class AdminReports implements OnInit {
   private apiUrlSquads = "http://localhost:8080/api/report/admin/squads"
   reports : Report[] = [];
   squads: Squad[] = [];
+  isAssigning = false;
+
   constructor(private http: HttpClient, private service: ReportServiceService){}
   
   ngOnInit() : void{
@@ -118,9 +120,11 @@ export class AdminReports implements OnInit {
   }
 
   assignSquad() {
-    if (!this.selectedReport || !this.selectedSquadId) return;
+    if (!this.selectedReport || !this.selectedSquadId || this.isAssigning) return;
     const selectedSquad = this.squads.find(s => s.id === this.selectedSquadId);
     if(!selectedSquad) return;
+
+    this.isAssigning = true;
 
     this.service.assignSquadToReport(this.selectedReport.id, this.selectedSquadId).subscribe({
       next:(data) => {
@@ -129,11 +133,13 @@ export class AdminReports implements OnInit {
         this.selectedReport!.status = 'IN_PROCESS';
         this.showMessage(true, 'La cuadrilla fue asignada correctamente al reporte.');
 
+        this.isAssigning = false;
+        this.closeAssignModal();
       }, 
       error: (err) => {
         console.error('Error al asignar cuadrilla', err)
         this.showMessage(false, 'Hubo un error al asignar la cuadrilla. Intenta nuevamente.');
-
+        this.isAssigning = false;
       }
     })
 
@@ -143,6 +149,24 @@ export class AdminReports implements OnInit {
       modal?.hide();
     }
   }
+  selectedSquad?: Squad;
+
+  onSquadChange() {
+    this.selectedSquad = this.squads.find(
+      s => s.id === this.selectedSquadId
+    );
+  }
+
+  closeAssignModal() {
+  const modalEl = document.getElementById('assignModal');
+  if (modalEl) {
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    modal?.hide();
+  }
+
+  this.selectedSquadId = undefined;
+}
+
 
   isSuccess: boolean = true;
   messageText: string = '';

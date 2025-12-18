@@ -74,12 +74,16 @@
 }
 
 .card-title {
+  margin-top: 6px;
+  margin-bottom: 4px;
   min-height: 28px;
 }
 
 .card-text {
   min-height: 50px;
   text-align: center;
+  line-height: 1.4;
+  opacity: 0.85;
 }
 
 @media (min-width: 1400px) {
@@ -113,4 +117,29 @@
     font-size: 1.1rem;
     min-height: 60px;
   }
+}
+
+.admin-container p {
+  font-size: 1.05rem;
+}
+
+.card-hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  transition: border-color 0.25s ease;
+}
+
+.card-hover:hover::after {
+  border-color: rgba(44, 110, 255, 0.35);
+}
+
+.card-hover {
+  cursor: pointer;
+}
+
+.card-hover:focus-visible {
+  outline: 3px solid rgba(13,110,253,0.4);
 }

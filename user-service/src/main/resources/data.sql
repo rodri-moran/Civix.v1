@@ -3,7 +3,7 @@
 --            'Admin',
 --            'Principal',
 --            'email@gmail.com',
---            '$2a$10$Dow1pXjq5D8zVQdN7evYzedHp2PqItKQbV9a9lsP76C1bmk4WzOGa', -- hash de admin123
+--            '$2a$12$KmGiNCC8zsMKeIqFhDBWrufUFJtdIlT4KPbm6VrPN1n.jfP3PaX46', -- hash de admin123
 --            'ADMIN',
 --            CURRENT_DATE,
 --            '3510000000',
@@ -15,7 +15,7 @@
 --            'Rodrigo',
 --            'Moran',
 --            'email@gmail.com',
---            '$2a$10$zWmboT0KjrZiEUzOSlUteeYzsVQEJvLu7MjbQGzV3Jc70SaACsP2G', -- hash de admin123
+--            '$2a$10$zWmboT0KjrZiEUzOSlUteeYzsVQEJvLu7MjbQGzV3Jc70SaACsP2G',
 --            'CIUDADANO',
 --            CURRENT_DATE,
 --            '3510000000',

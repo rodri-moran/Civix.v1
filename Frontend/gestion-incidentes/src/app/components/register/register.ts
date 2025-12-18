@@ -48,6 +48,8 @@ ngOnDestroy() {
       next: (response) => {
         console.log('Token recibido:', response.token);
         localStorage.setItem('token', response.token); 
+        localStorage.setItem('userName', `${response.name} ${response.lastName}`);
+
         this.router.navigate(['/login'])
       }, 
       error:(err) => {

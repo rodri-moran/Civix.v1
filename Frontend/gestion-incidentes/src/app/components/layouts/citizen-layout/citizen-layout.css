@@ -324,3 +324,23 @@ footer a:hover {
   color: #9ca3af;
   opacity: 0.9;
 }
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  text-decoration: none;
+}
+
+.logo-img {
+  height: 80px;
+  width: auto;
+}
+
+.logo-text {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}

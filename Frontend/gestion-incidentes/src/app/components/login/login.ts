@@ -41,6 +41,7 @@ ngOnDestroy() {
         console.log('name: ' + response.name);
         console.log('lastName: ' + response.lastName);
         localStorage.setItem('userName', `${response.name} ${response.lastName}`);
+        console.log(response.name + response.lastName)
         console.log(response.userId)
         console.log(response.role)
         this.isLoading = false;
