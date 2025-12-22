@@ -175,14 +175,32 @@ confirmDelete() {
       modalInstance?.hide();
       
       this.refreshResources();
+      this.showSucessDeleteResourceToast();
 
       this.selectedResourceId = null;
     },
     error: err => {
+      this.showErrorDeleteToast();
       console.error('Error al eliminar recurso: ', err);
-      alert('No se pudo eliminar el recurso.');
+     
     }
   });
 }
+
+  showSucessDeleteResourceToast() {
+    const toastEl = document.getElementById('toastSuccess');
+    if (toastEl) {
+      const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+      toast.show();
+    }
+  }
+
+  showErrorDeleteToast() {
+    const toastEl = document.getElementById('toastError');
+    if (toastEl) {
+      const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+      toast.show();
+    }
+  }
 
 }

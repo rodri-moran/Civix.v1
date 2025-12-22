@@ -58,6 +58,7 @@ export class AdminReports implements OnInit {
   private apiUrl = "http://localhost:8080/api/report/admin/getAll"
   private apiUrlSquads = "http://localhost:8080/api/report/admin/squads"
   reports : Report[] = [];
+  allReports: Report[] = [];
   squads: Squad[] = [];
   isAssigning = false;
 
@@ -80,7 +81,7 @@ export class AdminReports implements OnInit {
     this.service.getReports().subscribe({
       next: (data) => {
         console.log('Reportes recibidos: ' + data );
-        this.reports = data.sort((a, b) => {
+        const sorted = data.sort((a, b) => {
           const estadoOrden = getEstadoOrden(a.status) - getEstadoOrden(b.status);
           if(estadoOrden!== 0) return estadoOrden;
 
@@ -88,6 +89,9 @@ export class AdminReports implements OnInit {
           const fechaB = new Date(b.createdAt).getTime();
           return fechaB - fechaA;
         });
+
+        this.allReports = sorted;
+        this.reports = [...sorted];
       }, error: (err) => {
         console.log('Error al obtener los reportes: ', err);
       }
@@ -215,15 +219,15 @@ openDetailModal(report: Report) {
   }, 50);
 }
 
-filterByStatus(status: string) {
-  this.service.findByStatus(status).subscribe({
-      next: (data) => {
-        console.log('Reportes recibidos: ' + data );
-        this.reports = data;
-      }, error: (err) => {
-        console.log('Error al obtener los reportes filtrados: ', err);
-      }
-    })
+filterByStatus(status?: string) {
+  if (!status || status === 'ALL') {
+    this.reports = [...this.allReports];
+    return;
+  }
+
+  this.reports = this.allReports.filter(
+    report => report.status === status
+  );
 }
  @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {

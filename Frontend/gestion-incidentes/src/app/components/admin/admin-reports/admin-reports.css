@@ -22,13 +22,8 @@ a {
 .test1 {
   cursor: pointer;
 }
-.table-responsive {
-  overflow: visible !important;
-}
 
-.table, tbody, tr, td {
-  overflow: visible;
-}
+
 
 .dropdown-menu {
   position: absolute;
@@ -55,13 +50,7 @@ a {
 }
 
 /* --- Dropdown general --- */
-.dropdown-menu {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-  padding: 0.3rem 0;
-  min-width: 160px;
-}
+
 
 /* --- Items --- */
 .dropdown-item {
@@ -156,3 +145,28 @@ a {
   border: 1px solid #dee2e6;
 }
 
+@media (max-width: 768px) {
+
+
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* .dropdown-menu {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  padding: 0.3rem 0;
+  min-width: 160px;
+} */
+
+td {
+  position: relative;
+}
+
+.dropdown-menu {
+  z-index: 1055;
+}
