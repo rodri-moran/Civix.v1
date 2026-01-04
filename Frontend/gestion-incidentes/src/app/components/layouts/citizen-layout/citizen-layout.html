@@ -7,16 +7,8 @@
     <!-- Logo -->
     <div class="logo">
       <div class="logo">
-        <a
-          routerLink="/citizen/dashboard"
-          class="logo-link"
-        >
-          <img
-            src="/images/logo.png"
-            alt="Civix"
-            class="logo-img"
-          />
-
+        <a routerLink="/citizen/dashboard" class="logo-link">
+          <img src="/images/logo.png" alt="Civix" class="logo-img" />
         </a>
       </div>
     </div>
@@ -86,7 +78,7 @@
 
         <ng-container *ngIf="isLoggedIn; else notLogged">
           <h6 class="fw-semibold mb-0">{{ userName }}</h6>
-          <small class="text-white">{{ isAdmin ? 'Administrador' : 'Ciudadano' }}</small>
+          <small class="text-white">{{ roleLabel }}</small>
         </ng-container>
 
         <ng-template #notLogged>
@@ -107,14 +99,21 @@
               <i class="bi bi-people-fill"></i><span>Panel de Administración</span>
             </a>
           </ng-container>
+          <ng-container *ngIf="isSupervisor; else citizenMenu">
+            <a routerLink="/cuadrilla" routerLinkActive="active" class="nav-item-modern">
+              <i class="bi bi-people-fill"></i><span>Panel de Cuadrilla</span>
+            </a>
+          </ng-container>
 
           <ng-template #citizenMenu>
-            <a routerLink="/mis-reportes" routerLinkActive="active" class="nav-item-modern">
-              <i class="bi bi-journal-text"></i><span>Mis reportes</span>
-            </a>
-            <a routerLink="/reportar-incidente" routerLinkActive="active" class="nav-item-modern">
-              <i class="bi bi-exclamation-octagon"></i><span>Reportar incidente</span>
-            </a>
+            <ng-container *ngIf="!isAdmin && !isSupervisor">
+              <a routerLink="/mis-reportes" routerLinkActive="active" class="nav-item-modern">
+                <i class="bi bi-journal-text"></i><span>Mis reportes</span>
+              </a>
+              <a routerLink="/reportar-incidente" routerLinkActive="active" class="nav-item-modern">
+                <i class="bi bi-exclamation-octagon"></i><span>Reportar incidente</span>
+              </a>
+            </ng-container>
           </ng-template>
 
           <a routerLink="/estadisticas" routerLinkActive="active" class="nav-item-modern">

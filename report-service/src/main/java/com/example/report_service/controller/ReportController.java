@@ -81,10 +81,10 @@ public class ReportController {
     public ResponseEntity<List<ReportResponseDto>> getReportsByStatus(@RequestParam String status){
         return ResponseEntity.ok(reportService.getReportsByStatus(status));
     }
-    @PutMapping("/admin/report/{reportId}")
+    @PutMapping("/status/{reportId}")
     public ResponseEntity<ReportResponseDto> updateReportStatus(@PathVariable Long reportId,
                                                                 @RequestParam Status status,
-                                                                @RequestBody ResourcesUsedDto resourcesUsed){
+                                                                @RequestBody(required = false) ResourcesUsedDto resourcesUsed){
         System.out.println("Llegó la petición a updateReportStatus");
         return ResponseEntity.ok(reportService.updateReportStatus(reportId, status, resourcesUsed));
     }

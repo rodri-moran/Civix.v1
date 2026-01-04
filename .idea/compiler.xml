@@ -19,14 +19,14 @@
         </processorPath>
         <module name="auth-service" />
         <module name="report-service" />
-        <module name="inventory-service" />
         <module name="user-service" />
+        <module name="inventory-service" />
         <module name="statistics-service" />
-        <module name="notification-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="common-security" target="17" />
+      <module name="notification-service" target="17" />
       <module name="RedComunal" target="1.5" />
       <module name="squad-service" target="17" />
     </bytecodeTargetLevel>

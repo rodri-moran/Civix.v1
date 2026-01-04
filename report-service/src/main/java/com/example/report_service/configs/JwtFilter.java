@@ -36,13 +36,16 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 // se extrae los claims del token
                 Claims claims = jwtUtil.extractClaims(token);
-                String username = claims.getSubject();
+
+                Long userId = claims.get("userId", Long.class);
                 String role = claims.get("role", String.class);
 
                 //se crea la autenticación con el rol
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(username, null,
+                        new UsernamePasswordAuthenticationToken(userId, null,
                                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role)));
+
+                authentication.setDetails(claims.get("userId", Long.class));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -50,7 +53,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 throw new RuntimeException("Token inválido o expirado");
             }
         }
-
         filterChain.doFilter(request, response);
     }
 }

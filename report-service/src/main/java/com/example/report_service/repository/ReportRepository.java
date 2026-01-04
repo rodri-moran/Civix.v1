@@ -1,4 +1,5 @@
 package com.example.report_service.repository;
+import com.example.report_service.dtos.ReportResponseDto;
 import com.example.report_service.entity.ReportEntity;
 import com.example.report_service.enums.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,7 @@ public interface ReportRepository extends JpaRepository<ReportEntity, Long> {
     //getAverageResolutionTimeBySquad
     @Query("SELECT r.squad.name, r.createdAt, r.resolvedAt FROM ReportEntity r WHERE r.resolvedAt IS NOT NULL")
     List<Object[]> getResolutionData();
+
+
+    List<ReportEntity> findBySquad_SupervisorUserId(Long supervisorUserId);
 }

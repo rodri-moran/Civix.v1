@@ -17,6 +17,6 @@ public interface ReportService {
     ReportResponseDto assignSquadToReport(Long reportId, Long squadId);
     ReportResponseDto getById(Long id);
     List<ReportResponseDto> getReportsByStatus(String status);
-
     ReportResponseDto updateReportStatus(Long reportId, Status status, ResourcesUsedDto resourcesUsed);
+    List<ReportResponseDto> getReportsBySupervisorId(Long id);
 }

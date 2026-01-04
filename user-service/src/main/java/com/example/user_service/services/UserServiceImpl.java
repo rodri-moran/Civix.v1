@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setRegistrationDate(LocalDate.now());
 
 
-        //se hashear la contraseña antes de guardar
+        //se hashea la contraseña antes de guardar
         userEntity.setPasswordHash(passwordEncoder.encode(dto.getPasswordHash()));
 
         UserEntity saved = userRepository.save(userEntity);
@@ -126,6 +126,4 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return modelMapper.map(user, UserDto.class);
     }
-
-
 }

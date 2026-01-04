@@ -36,7 +36,7 @@ public class AuthenticationService {
         System.out.println("name del user desde auth service: " + user.getName());
         System.out.println("lastName del user desde auth service: " + user.getLastName());
 
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        String token = jwtUtil.generateToken(user.getId(),user.getEmail(), user.getRole().name());
 
         return new AuthResponseDto(token,
                 user.getRole().name(),
@@ -53,7 +53,7 @@ public class AuthenticationService {
                 .retrieve()
                 .bodyToMono(UserResponseDto.class)
                 .block();
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole().name());
 
         return new AuthResponseDto(token,
                 user.getRole().name(),

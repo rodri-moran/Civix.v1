@@ -9,7 +9,7 @@ import { ChangeDetectorRef } from '@angular/core';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './citizen-layout.html',
-  styleUrls: ['./citizen-layout.css']
+  styleUrls: ['./citizen-layout.css'],
 })
 export class CitizenLayoutComponent {
   isSidebarCollapsed = false;
@@ -22,31 +22,41 @@ export class CitizenLayoutComponent {
   }
 
   constructor(private authService: Auth, private router: Router, private cd: ChangeDetectorRef) {}
-      isAdmin: boolean = false;
+  roleLabel = '';
+  isAdmin: boolean = false;
+  isSupervisor: boolean = false;
 
-    ngOnInit() {  
-      const token = localStorage.getItem('token')
-      const role = this.authService.getRole();
-      const storedName = localStorage.getItem('userName');
+  ngOnInit() {
+    const token = localStorage.getItem('token');
+    const role = this.authService.getRole();
+    const storedName = localStorage.getItem('userName');
 
-      if (token && !this.authService.isTokenExpired()) {
-        this.isLoggedIn = true;
-        this.isAdmin = role === 'ADMIN';
-        this.userName = storedName || 'Usuario';
-        this.cd.detectChanges();
-      } else {
-        this.authService.logout();
-        this.isLoggedIn = false;
-        this.userName = 'Invitado';
-        this.router.navigate(['/login']);
+    if (token && !this.authService.isTokenExpired()) {
+      this.isLoggedIn = true;
+      this.isAdmin = role === 'ADMIN';
+      this.isSupervisor = role === 'CUADRILLA';
+      this.userName = storedName || 'Usuario';
+      this.cd.detectChanges();
+    } else {
+      this.authService.logout();
+      this.isLoggedIn = false;
+      this.userName = 'Invitado';
+      this.router.navigate(['/login']);
+    }
+    if(this.isAdmin) {
+      this.roleLabel = 'Administrador';
+    } else if(this.isSupervisor) {
+      this.roleLabel = 'Responsable de Cuadrilla';
+    } else {
+      this.roleLabel = 'Ciudadano'
+    }
+
+    console.log('token válido?', token, 'isLoggedIn:', this.isLoggedIn);
   }
-  console.log('token válido?', token, 'isLoggedIn:', this.isLoggedIn);
 
-    } 
-
-logout() {
-  localStorage.clear();
-  this.isLoggedIn = false;
-  this.router.navigate(['/login']);
-}
+  logout() {
+    localStorage.clear();
+    this.isLoggedIn = false;
+    this.router.navigate(['/login']);
+  }
 }

@@ -26,23 +26,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                // Desactivar CSRF (para API REST)
                 .csrf(csrf -> csrf.disable())
-
-                // CORS deshabilitado (lo maneja el gateway)
                 .cors(cors -> cors.disable())
 
                 .authorizeHttpRequests(auth -> auth
                         // Endpoints públicos
-                        .requestMatchers("/api/users/public", "/api/users/public/**").permitAll()
-
-                        // Endpoints solo admin
+                        .requestMatchers("/api/users/public/**").permitAll()
                         .requestMatchers("/api/users/admin/**").hasRole("ADMIN")
-
-                        // Endpoints para usuarios autenticados
-                        .requestMatchers("/api/users/**").hasAnyRole("USER", "ADMIN")
-
-                        // Cualquier otra request requiere autenticación
+                        .requestMatchers("/api/users/**").authenticated()
                         .anyRequest().authenticated()
                 )
 
@@ -51,6 +42,4 @@ public class SecurityConfig {
 
                 .build();
     }
-
-
 }

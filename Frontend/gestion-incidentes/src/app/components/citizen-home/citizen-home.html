@@ -11,7 +11,7 @@
 
     <div>
       <button
-        *ngIf="!isAdmin"
+        *ngIf="!isAdmin && !isSupervisor"
         class="btn btn-primary btn-lg px-4"
         routerLink="/reportar-incidente">
         <i class="bi bi-exclamation-triangle me-2"></i>

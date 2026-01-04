@@ -15,14 +15,25 @@ export class IventoryServiceService {
 constructor(private http :HttpClient) { }
 
   createResource(resourceCreate : ResourceCreateDto) : Observable<ResourceCreateDto>{
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders( {
+      'Authorization': `Bearer ${token}`
+    })
     return this.http.post<ResourceCreateDto>(
       this.apiUrl,
-      resourceCreate
+      resourceCreate,
+      { headers }
     );
   }
   getAllResources() : Observable<ResourceDto[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    })
+
     return this.http.get<ResourceDto[]>(
-      this.apiUrl
+      'http://localhost:8080/api/inventory/squad/getAll',
+      { headers }
     )
   }
 
@@ -33,8 +44,9 @@ constructor(private http :HttpClient) { }
     })
 
     return this.http.post(
-      'http://localhost:8080/api/inventory/admin/movements',
-      movement
+      'http://localhost:8080/api/inventory/squad/movements',
+      movement,
+      { headers }
     );
   }
   getAllMovements() : Observable<InventoryMovementResponseDto[]>{
@@ -43,7 +55,8 @@ constructor(private http :HttpClient) { }
       'Authorization': `Bearer ${token}`
     })
     return this.http.get<InventoryMovementResponseDto[]>(
-      'http://localhost:8080/api/inventory/admin/movements'
+      'http://localhost:8080/api/inventory/admin/movements',
+      { headers }
     )
   }
   deleteResource(id: number) {
@@ -52,7 +65,8 @@ constructor(private http :HttpClient) { }
       'Authorization': `Bearer ${token}`
     })
 
-  return this.http.delete(`http://localhost:8080/api/inventory/admin/delete/${id}`);
+  return this.http.delete(`http://localhost:8080/api/inventory/admin/delete/${id}`,
+    { headers }
+  );
 }
-
 }

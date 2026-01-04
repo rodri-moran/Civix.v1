@@ -85,6 +85,13 @@ export const routes: Routes = [
           import('./components/statistics/statistics.component').then(
             m => m.StatisticsComponent
           )
+      },
+        {
+        path: 'cuadrilla',
+        loadComponent: () =>
+          import('./components/cuadrilla/cuadrilla.component').then(
+            m => m.CuadrillaComponent
+          )
       }
     ]
   },

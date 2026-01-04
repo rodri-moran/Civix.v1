@@ -51,10 +51,13 @@ export class CitizenHome {
   // ];
     constructor(private authService: Auth, private router: Router, private newService: NewService) {}
       isAdmin: boolean = false;
+      isSupervisor: boolean = false;
 
     ngOnInit() {
       const role = localStorage.getItem('role');
+      console.log('ROL:', role)
       this.isAdmin = role === 'ADMIN'
+      this.isSupervisor = role === 'CUADRILLA'
       this.loadNews();
     }
     userName: string = "Usuario"; //hacer en back

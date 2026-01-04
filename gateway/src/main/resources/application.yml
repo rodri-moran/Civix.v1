@@ -22,7 +22,7 @@ spring:
           - id: report-service
             uri: http://report-service:8083
             predicates:
-              - Path=/api/report/**
+              - Path=/api/report/**,/api/squad/reports/**
             filters:
               - StripPrefix=0
 

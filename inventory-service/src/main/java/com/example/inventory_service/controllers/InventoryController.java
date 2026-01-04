@@ -23,7 +23,7 @@ public class InventoryController {
     }
 
     //Para Administradores / Responsables:
-    @GetMapping("/admin")
+    @GetMapping("/squad/getAll")
     public ResponseEntity<List<ResourceDto>> getAllResources(){
         return ResponseEntity.ok(inventoryService.getAllResources());
     }
@@ -39,7 +39,8 @@ public class InventoryController {
     public ResponseEntity<ResourceCreateDto> deleteResource(@PathVariable Long id){
         return ResponseEntity.ok(inventoryService.deleteResource(id));
     }
-    @PostMapping("/admin/movements")
+
+    @PostMapping("/squad/movements")
     public ResponseEntity<InventoryMovementDto> registerMovement(@RequestBody InventoryMovementDto dto){
         return ResponseEntity.ok(inventoryService.registerMovement(dto));
     }
@@ -48,7 +49,7 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.getAllMovements());
     }
     //Para Cuadrillas / Supervisores:
-    @GetMapping("/cuadrilla/resources")
+    @GetMapping("/squad/resources")
     public ResponseEntity<List<ResourceCreateDto>>getResourcesByArea(@RequestParam Area area){
         return ResponseEntity.ok(inventoryService.getResourcesByArea(area));
     }
