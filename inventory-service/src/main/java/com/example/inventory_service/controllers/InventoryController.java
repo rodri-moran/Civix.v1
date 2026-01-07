@@ -50,7 +50,7 @@ public class InventoryController {
     }
     //Para Cuadrillas / Supervisores:
     @GetMapping("/squad/resources")
-    public ResponseEntity<List<ResourceCreateDto>>getResourcesByArea(@RequestParam Area area){
+    public ResponseEntity<List<ResourceCreateDto>> getResourcesByArea(@RequestParam Area area){
         return ResponseEntity.ok(inventoryService.getResourcesByArea(area));
     }
 }

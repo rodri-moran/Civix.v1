@@ -17,16 +17,6 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    public String generateToken(String username, String role) {
-        return Jwts.builder()
-                .setSubject(username)
-                .claim("role", role)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hora
-                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)
-                .compact();
-    }
-
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
@@ -34,18 +24,5 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
-    private Key getKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
-    }
 
-    public String generateServiceToken() {
-        return Jwts.builder()
-                .setSubject("report-service")
-                .claim("role", "ADMIN")
-                .claim("role", "CUADRILLA")
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
-                .signWith(getKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
 }

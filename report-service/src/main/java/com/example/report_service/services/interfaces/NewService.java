@@ -10,4 +10,5 @@ import java.util.List;
 public interface NewService {
     NewResponseDto createNew(NewDto dto);
     List<NewResponseDto> getAllNews();
+    void deleteNew(Long id);
 }

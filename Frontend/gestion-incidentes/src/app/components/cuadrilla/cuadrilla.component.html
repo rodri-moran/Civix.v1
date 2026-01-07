@@ -1,181 +1,269 @@
-<div class="reports-header mb-4">
+<div class="reports-header m-4">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-1">
       <li class="breadcrumb-item">
-        <a routerLink="/admin/dashboard">Inicio</a>
+        <a routerLink="">Inicio</a>
       </li>
       <li class="breadcrumb-item active">Reportes</li>
     </ol>
   </nav>
   <div class="d-flex align-items-center justify-content-between">
-    <h2 class="fw-bold mb-0">Reportes asignados a tus cuadrillas</h2>
-
-    <button
-      class="btn btn-outline-light d-flex align-items-center gap-2"
-      data-bs-toggle="dropdown"
-      title="Filtrar reportes"
-    >
-      <i class="bi bi-filter"></i>
-      Filtrar
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded">
-      <li>
-        <a class="dropdown-item" (click)="filterByStatus('IN_PROCESS')">
-          <i class="bi bi-person"></i> En proceso
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" (click)="filterByStatus('PENDING')">
-          <i class="bi bi-pencil-square"></i> Pendiente
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" (click)="filterByStatus('RESOLVED')">
-          <i class="bi bi-gear"></i> Resuelto
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" (click)="filterByStatus('ALL')">
-          <i class="bi bi-list"></i> Todos
-        </a>
-      </li>
-    </ul>
+    <h2 class="fw-bold mb-0">Panel de Supervisor</h2>
   </div>
 </div>
-<main class=" p-2">
-  <div class="table-responsive d-none d-md-block ">
-    <table class="table table-striped table-hover shadow-sm align-middle">
-      <thead class="table-dark text-center">
-        <tr>
-          <th>Título</th>
-          <th>Dirección</th>
-          <th>Estado</th>
-          <th>Cuadrilla asignada</th>
-          <th>Fecha y hora</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
 
-      <tbody>
-        <tr *ngFor="let reporte of reports; let i = index" class="text-center">
-          <td>{{ reporte.title }}</td>
-          <td>{{ reporte.address }}</td>
-          <td class="position-relative">
-            <div class="d-inline-block dropdown">
-              <!-- Botón con el estado actual -->
-              <div
-                class="badge rounded-pill px-3 py-2 status-drop d-flex align-items-center justify-content-center"
-                [ngClass]="statusMap[reporte.status]?.class"
-                (click)="toggleDropdown(reporte.id)"
-              >
-                {{ statusMap[reporte.status]?.text }}
-                <i class="bi bi-chevron-down ms-1 small"></i>
-              </div>
+<div class="container-fluid px-4 py-3">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <!-- REPORTES -->
+       
+      <h5 class="fw-semibold mb-3">Reportes asignados</h5>
+      <button
+        class="btn btn-outline-light d-flex align-items-center gap-2 mb-3"
+        data-bs-toggle="dropdown"
+        title="Filtrar reportes"
+      >
+        <i class="bi bi-filter"></i>
+        Filtrar
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded">
+        <li>
+          <a class="dropdown-item" (click)="filterByStatus('IN_PROCESS')">
+            <i class="bi bi-person"></i> En proceso
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" (click)="filterByStatus('PENDING')">
+            <i class="bi bi-pencil-square"></i> Pendiente
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" (click)="filterByStatus('RESOLVED')">
+            <i class="bi bi-gear"></i> Resuelto
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" (click)="filterByStatus('ALL')">
+            <i class="bi bi-list"></i> Todos
+          </a>
+        </li>
+      </ul>
+      <div class="table-responsive d-none d-md-block">
+        <!-- tabla reportes -->
+        <table class="table table-striped table-hover align-middle">
+          <thead class="table-dark text-center">
+            <tr>
+              <th>Título</th>
+              <th>Dirección</th>
+              <th>Estado</th>
+              <th>Cuadrilla asignada</th>
+              <th>Fecha y hora</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
 
-              <!-- Dropdown de estados -->
-              <ul
-                *ngIf="openDropdownId === reporte.id"
-                class="dropdown-menu show position-absolute mt-1 shadow-sm border-0 rounded"
-                style="min-width: 160px; z-index: 1050"
-              >
-                <li
-                  *ngFor="let key of statusKeys"
-                  (click)="onStatusSelect(reporte, key)"
-                  class="dropdown-item d-flex align-items-center justify-content-start gap-2"
-                  style="cursor: pointer"
+          <tbody>
+            <tr *ngFor="let reporte of reports; let i = index" class="text-center">
+              <td>{{ reporte.title }}</td>
+              <td>{{ reporte.address }}</td>
+              <td class="position-relative">
+                <div class="d-inline-block dropdown">
+                  <!-- Botón con el estado actual -->
+                  <div
+                    class="badge rounded-pill px-3 py-2 status-drop d-flex align-items-center justify-content-center"
+                    [ngClass]="statusMap[reporte.status]?.class"
+                    (click)="toggleDropdown(reporte.id)"
+                  >
+                    {{ statusMap[reporte.status]?.text }}
+                    <i class="bi bi-chevron-down ms-1 small"></i>
+                  </div>
+
+                  <!-- Dropdown de estados -->
+                  <ul
+                    *ngIf="openDropdownId === reporte.id"
+                    class="dropdown-menu show position-absolute mt-1 shadow-sm border-0 rounded"
+                    style="min-width: 160px; z-index: 1050"
+                  >
+                    <li
+                      *ngFor="let key of statusKeys"
+                      (click)="onStatusSelect(reporte, key)"
+                      class="dropdown-item d-flex align-items-center justify-content-start gap-2"
+                      style="cursor: pointer"
+                    >
+                      <span
+                        class="badge rounded-circle"
+                        [ngClass]="statusMap[key].class"
+                        style="width: 12px; height: 12px"
+                      ></span>
+                      <span class="fw-semibold">{{ statusMap[key].text }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+
+              <td>
+                <ng-container *ngIf="reporte.squad; else noSquad">
+                  {{ reporte.squad.name }}
+                </ng-container>
+                <ng-template #noSquad>
+                  <span class="text-muted">No asignado</span>
+                </ng-template>
+              </td>
+              <td>
+                <p>{{ reporte?.createdAt | date : 'dd/MM/yyyy HH:mm' : 'UTC-3' }}</p>
+              </td>
+              <td>
+                <button
+                  class="btn btn-link text-secondary p-0"
+                  (click)="openDetailModal(reporte)"
+                  data-bs-toggle="modal"
+                  data-bs-target="#detailsModal"
+                  title="Ver detalles"
                 >
-                  <span
-                    class="badge rounded-circle"
-                    [ngClass]="statusMap[key].class"
-                    style="width: 12px; height: 12px"
-                  ></span>
-                  <span class="fw-semibold">{{ statusMap[key].text }}</span>
-                </li>
-              </ul>
-            </div>
-          </td>
+                  <i class="bi bi-eye fs-5"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-          <td>
-            <ng-container *ngIf="reporte.squad; else noSquad">
-              {{ reporte.squad.name }}
-            </ng-container>
-            <ng-template #noSquad>
-              <span class="text-muted">No asignado</span>
-            </ng-template>
-          </td>
-          <td>
-            <p>{{ reporte?.createdAt | date : 'dd/MM/yyyy HH:mm' : 'UTC-3' }}</p>
-          </td>
-          <td>
-            <button
-              class="btn btn-link text-secondary p-0"
-              (click)="openDetailModal(reporte)"
-              data-bs-toggle="modal"
-              data-bs-target="#detailsModal"
-              title="Ver detalles"
-            >
-              <i class="bi bi-eye fs-5"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="d-block d-md-none">
-    <div class="card mb-3" *ngFor="let reporte of reports">
-      <div class="card-body">
-        <h6 class="fw-bold">{{ reporte.title }}</h6>
-        <p class="mb-1">{{ reporte.address }}</p>
-        <div class="mt-2">
-          <button
-            class="btn btn-sm btn-outline-primary"
-            (click)="openDetailModal(reporte)"
-            data-bs-toggle="modal"
-            data-bs-target="#detailsModal"
-          >
-            Ver
-          </button>
-
-          <div class="d-inline-block dropdown m-2">
-            <!-- Botón con el estado actual -->
-            <div
-              class="badge rounded-pill px-3 py-2 status-drop d-flex align-items-center justify-content-center"
-              [ngClass]="statusMap[reporte.status]?.class"
-              (click)="toggleDropdown(reporte.id)"
-            >
-              {{ statusMap[reporte.status]?.text }}
-              <i class="bi bi-chevron-down ms-1 small"></i>
-            </div>
-
-            <!-- Dropdown de estados -->
-            <ul
-              *ngIf="openDropdownId === reporte.id"
-              class="dropdown-menu show position-absolute mt-1 shadow-sm border-0 rounded"
-              style="min-width: 160px; z-index: 1050"
-            >
-              <li
-                *ngFor="let key of statusKeys"
-                (click)="onStatusSelect(reporte, key)"
-                class="dropdown-item d-flex align-items-center justify-content-start gap-2"
-                style="cursor: pointer"
+      <!-- MOBILE REPORTES -->
+      <div class="d-block d-md-none">
+        <!-- cards reportes -->
+        <div class="card mb-3" *ngFor="let reporte of reports">
+          <div class="card-body">
+            <h6 class="fw-bold">{{ reporte.title }}</h6>
+            <p class="mb-1">{{ reporte.address }}</p>
+            <div class="mt-2">
+              <button
+                class="btn btn-sm btn-outline-primary"
+                (click)="openDetailModal(reporte)"
+                data-bs-toggle="modal"
+                data-bs-target="#detailsModal"
               >
-                <span
-                  class="badge rounded-circle"
-                  [ngClass]="statusMap[key].class"
-                  style="width: 12px; height: 12px"
-                ></span>
-                <span class="fw-semibold">{{ statusMap[key].text }}</span>
-              </li>
-            </ul>
+                Ver
+              </button>
+
+              <div class="d-inline-block dropdown m-2">
+                <!-- Botón con el estado actual -->
+                <div
+                  class="badge rounded-pill px-3 py-2 status-drop d-flex align-items-center justify-content-center"
+                  [ngClass]="statusMap[reporte.status]?.class"
+                  (click)="toggleDropdown(reporte.id)"
+                >
+                  {{ statusMap[reporte.status]?.text }}
+                  <i class="bi bi-chevron-down ms-1 small"></i>
+                </div>
+
+                <!-- Dropdown de estados -->
+                <ul
+                  *ngIf="openDropdownId === reporte.id"
+                  class="dropdown-menu show position-absolute mt-1 shadow-sm border-0 rounded"
+                  style="min-width: 160px; z-index: 1050"
+                >
+                  <li
+                    *ngFor="let key of statusKeys"
+                    (click)="onStatusSelect(reporte, key)"
+                    class="dropdown-item d-flex align-items-center justify-content-start gap-2"
+                    style="cursor: pointer"
+                  >
+                    <span
+                      class="badge rounded-circle"
+                      [ngClass]="statusMap[key].class"
+                      style="width: 12px; height: 12px"
+                    ></span>
+                    <span class="fw-semibold">{{ statusMap[key].text }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      <div *ngIf="reports.length === 0" class="alert alert-info mt-3">No hay ningún reporte.</div>
+
+      <hr class="my-4" />
+      <!-- CUADRILLAS -->
+      <h5 class="fw-semibold mb-2">Cuadrillas a tu cargo</h5>
+
+      <div class="table-responsive d-none d-md-block">
+        <!-- tabla cuadrillas -->
+        <table class="table  table-hover">
+          <thead class="table-dark text-center">
+            <tr>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Área</th>
+              <th>Integrantes</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let squad of squads" class="text-center">
+              <td class="fw-semibold">{{ squad.name }}</td>
+              <td>{{ squad.description }}</td>
+              <td>
+                <span
+                  class="badge rounded-pill px-3"
+                  [ngClass]="{
+                    'bg-primary': squad.area === 'ALUMBRADO',
+                    'bg-warning text-dark': squad.area === 'OBRAS',
+                    'bg-success': squad.area === 'RECOLECCION',
+                    'bg-secondary': squad.area === 'OTRA'
+                  }"
+                >
+                  {{ squad.area }}
+                </span>
+              </td>
+              <td>{{ squad.teamSize }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-block d-md-none">
+        <div class="card shadow-sm mb-3" *ngFor="let squad of squads">
+          <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-people-fill text-primary fs-4"></i>
+                <h6 class="fw-bold mb-0">{{ squad.name }}</h6>
+              </div>
+            </div>
+
+            <p class="text-muted mb-2">
+              {{ squad.description }}
+            </p>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span
+                class="badge"
+                [ngClass]="{
+                  'bg-primary': squad.area === 'ALUMBRADO',
+                  'bg-warning text-dark': squad.area === 'OBRAS',
+                  'bg-success': squad.area === 'RECOLECCION',
+                  'bg-secondary': squad.area === 'OTRA'
+                }"
+              >
+                {{ squad.area }}
+              </span>
+
+              <span class="text-muted">
+                <i class="bi bi-person-fill me-1"></i>
+                {{ squad.teamSize }} integrantes
+              </span>
+            </div>            
+          </div>
+        </div>
+      </div>
+      <div *ngIf="squads.length === 0" class="alert alert-info mt-3">
+        No tenés cuadrillas asignadas actualmente.
+      </div>
     </div>
   </div>
-
-  <div *ngIf="reports.length === 0" class="alert alert-info mt-3">No hay ningún reporte.</div>
-</main>
+</div>
 
 <!-- Modal de mensaje (éxito / error) -->
 <div

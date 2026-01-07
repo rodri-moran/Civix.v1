@@ -4,6 +4,8 @@ import com.example.report_service.dtos.NewResponseDto;
 import com.example.report_service.entity.NewEntity;
 import com.example.report_service.repository.NewRepository;
 import com.example.report_service.services.interfaces.NewService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -36,5 +38,13 @@ public class NewServiceImpl implements NewService {
                 .stream()
                 .map(x -> modelMapper.map(x, NewResponseDto.class))
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public void deleteNew(Long id) {
+        NewEntity entity = newRepository.findById(id)
+                        .orElseThrow(() -> new EntityNotFoundException("Noticia con id "+ id +"no encontrada"));
+        newRepository.delete(entity);
     }
 }

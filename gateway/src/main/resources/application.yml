@@ -22,7 +22,7 @@ spring:
           - id: report-service
             uri: http://report-service:8083
             predicates:
-              - Path=/api/report/**,/api/squad/reports/**
+              - Path=/api/report/**,/api/squad/reports/**,/api/new/**
             filters:
               - StripPrefix=0
 
@@ -30,13 +30,6 @@ spring:
             uri: http://inventory-service:8084
             predicates:
               - Path=/api/inventory/**
-            filters:
-              - StripPrefix=0
-
-          - id: notification-service
-            uri: http://notification-service:8086
-            predicates:
-              - Path=/api/notification/**
             filters:
               - StripPrefix=0
 
@@ -48,3 +41,7 @@ spring:
               - StripPrefix=0
 server:
   port: 8080
+
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS}

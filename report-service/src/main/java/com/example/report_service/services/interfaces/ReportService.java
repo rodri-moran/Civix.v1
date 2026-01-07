@@ -13,7 +13,6 @@ public interface ReportService {
     ReportResponseDto createReport(ReportRequestDto request);
     List<ReportResponseDto> getReportsByUserId(Long userId);
     List<ReportResponseDto> getAll();
-    ReportResponseDto deleteById(Long userId);
     ReportResponseDto assignSquadToReport(Long reportId, Long squadId);
     ReportResponseDto getById(Long id);
     List<ReportResponseDto> getReportsByStatus(String status);

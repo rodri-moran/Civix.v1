@@ -1,5 +1,4 @@
 package com.example.inventory_service.services;
-import com.example.inventory_service.configs.JwtUtil;
 import com.example.inventory_service.dtos.*;
 import com.example.inventory_service.entities.InventoryMovementEntity;
 import com.example.inventory_service.entities.ResourceEntity;
@@ -8,38 +7,35 @@ import com.example.inventory_service.enums.TypeMovement;
 import com.example.inventory_service.repositories.MovementRepository;
 import com.example.inventory_service.repositories.ResourceRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 public class InventoryServiceImpl implements InventoryService{
     private final MovementRepository inventoryRepository;
     private final ResourceRepository resourceRepository;
     private final ModelMapper mapper;
-    private final WebClient userClient;
-    private final JwtUtil jwtUtil;
-
 
     public InventoryServiceImpl(
             MovementRepository inventoryRepository,
             ResourceRepository resourceRepository,
-            ModelMapper mapper,
-            WebClient.Builder builder,
-            JwtUtil jwtUtil
+            ModelMapper mapper
     ) {
         this.inventoryRepository = inventoryRepository;
         this.resourceRepository = resourceRepository;
         this.mapper = mapper;
-        this.jwtUtil = jwtUtil;
-        this.userClient = builder
-                .baseUrl("http://user-service:8081/api/users")
-                .build();
     }
+
+    private static final Logger log =
+            LoggerFactory.getLogger(InventoryServiceImpl.class);
+
     @Override
     public List<ResourceDto> getAllResources() {
         return resourceRepository.findByActiveTrue().
@@ -74,6 +70,7 @@ public class InventoryServiceImpl implements InventoryService{
         resourceRepository.save(resourceEntity);
         return mapper.map(resourceEntity, ResourceCreateDto.class);
     }
+    @Transactional
     @Override
     public InventoryMovementDto registerMovement(InventoryMovementDto dto) {
 
@@ -81,7 +78,18 @@ public class InventoryServiceImpl implements InventoryService{
         if (dto.getMovementDetail() == null || dto.getMovementDetail().isEmpty()) {
             throw new IllegalArgumentException("Debe especificar al menos un recurso en el movimiento de inventario");
         }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//
+//        log.info("Auth principal: {}", auth.getPrincipal());
+//        log.info("Auth authorities: {}", auth.getAuthorities());
+//        log.info("Auth details: {}", auth.getDetails());
 
+
+        if (auth == null ) {
+            throw new IllegalStateException("No hay usuario autenticado");
+        }
+        Long userId = (Long) auth.getDetails();
+        String userName = auth.getName();
         // Recorremos cada item del detalle
         for (ItemMovementDetailDto item : dto.getMovementDetail()) {
 
@@ -102,7 +110,8 @@ public class InventoryServiceImpl implements InventoryService{
             movement.setResource(resourceEntity);
             movement.setTypeMovement(dto.getTypeMovement());
             movement.setQuantity(item.getQuantity());
-            movement.setUserId(dto.getUserId());
+            movement.setUserId(userId);
+            movement.setUserName(userName);
             movement.setReason(dto.getReason());
             movement.setReportId(dto.getReportId());
 
@@ -124,37 +133,20 @@ public class InventoryServiceImpl implements InventoryService{
     }
     @Override
     public List<InventoryMovementResponseDto> getAllMovements() {
-        List<InventoryMovementResponseDto> responseList = new ArrayList<>();
-        List<InventoryMovementEntity> entityList = inventoryRepository.findAll();
-        for (InventoryMovementEntity movement : entityList) {
-            System.out.println("Movement justo despues del for: " + movement);
-            UserDto user = null;
+        return inventoryRepository.findAll()
+                .stream()
+                .map(movement -> {
+                    InventoryMovementResponseDto dto =
+                            mapper.map(movement, InventoryMovementResponseDto.class);
 
-            try {
-                String token = jwtUtil.generateServiceToken();
+                    dto.setUserName(
+                            movement.getUserName() != null
+                                    ? movement.getUserName()
+                                    : "Usuario desconocido"
+                    );
 
-                user = userClient.get()
-                        .uri("/admin/{id}", movement.getUserId())
-                        .header("Authorization","Bearer " + token)
-                        .retrieve()
-                        .bodyToMono(UserDto.class)
-                        .block();
-                System.out.println("Usuario: " + user);
-            } catch (Exception e) {
-                System.out.println("Error buscando usuario con id = " + movement.getUserId());
-                e.printStackTrace();
-
-            }
-
-            InventoryMovementResponseDto dto = mapper.map(movement, InventoryMovementResponseDto.class);
-
-            if (user != null) {
-                dto.setUserName(user.getName());
-            } else {
-                dto.setUserName("Usuario desconocido");
-            }
-            responseList.add(dto);
-        }
-        return responseList;
+                    return dto;
+                })
+                .toList();
     }
 }

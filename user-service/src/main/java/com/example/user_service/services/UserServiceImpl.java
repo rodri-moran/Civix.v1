@@ -3,10 +3,13 @@ package com.example.user_service.services;
 import com.example.user_service.configs.JwtUtil;
 import com.example.user_service.dtos.*;
 import com.example.user_service.entity.UserEntity;
+import com.example.user_service.enums.Role;
 import com.example.user_service.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +23,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper modelMapper;
-
-    @Autowired
-    private JwtUtil jwtUtil;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -105,16 +105,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getProfile(String token) {
-        String email = jwtUtil.extractUsername(token.substring(7));
+    public UserDto getProfile() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null) {
+            throw new IllegalStateException("No hay usuario autenticado");
+        }
+
+        String email = auth.getName();
+
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
         return modelMapper.map(user, UserDto.class);
     }
 
     @Override
-    public UserDto updateProfile(String token, UserUpdateDto dto) {
-        String email = jwtUtil.extractUsername(token.substring(7));
+    public UserDto updateProfile(UserUpdateDto dto) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null) {
+            throw new IllegalStateException("No hay usuario autenticado");
+        }
+
+        String email = auth.getName();
+
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -125,5 +140,13 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
         return modelMapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public List<UserResponseDto> getUsersByRole(Role role) {
+        return userRepository.getAllByRole(role)
+                .stream()
+                .map(user -> modelMapper.map(user, UserResponseDto.class))
+                .toList();
     }
 }

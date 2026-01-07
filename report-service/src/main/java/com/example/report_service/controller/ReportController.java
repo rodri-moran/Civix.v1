@@ -6,6 +6,7 @@ import com.example.report_service.services.interfaces.ReportService;
 import com.example.report_service.services.interfaces.SquadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
@@ -30,17 +31,14 @@ public class ReportController {
     public ResponseEntity<ReportResponseDto> createReport(@RequestBody ReportRequestDto dto){
         return ResponseEntity.ok(reportService.createReport(dto));
     }
-    @DeleteMapping("/admin/delete/{id}")
-    public ResponseEntity<ReportResponseDto> deleteById(@PathVariable Long id){
-        return ResponseEntity.ok(reportService.deleteById(id));
-    }
     @GetMapping("/admin/report/{id}")
     public ResponseEntity<ReportResponseDto> getById(@PathVariable Long id){
         return ResponseEntity.ok(reportService.getById(id));
     }
 
-    @GetMapping("/public/get-by-user-id/{userId}")
-    public ResponseEntity<List<ReportResponseDto>> getReportsByUserId(@PathVariable Long userId){
+    @GetMapping("/get-by-user-id")
+    public ResponseEntity<List<ReportResponseDto>> getReportsByUserId(Authentication authentication){
+        Long userId = (Long) authentication.getPrincipal();
         return ResponseEntity.ok(reportService.getReportsByUserId(userId));
     }
     @GetMapping("/admin/getAll")

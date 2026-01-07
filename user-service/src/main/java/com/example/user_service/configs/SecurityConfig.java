@@ -28,18 +28,20 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
-
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos
                         .requestMatchers("/api/users/public/**").permitAll()
+
+                        .requestMatchers("/api/users/internal/auth/**").permitAll()
+
+                        .requestMatchers("/api/users/internal/**").authenticated()
+
                         .requestMatchers("/api/users/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/users/**").authenticated()
+
+                        .requestMatchers("/api/users/me").authenticated()
+
                         .anyRequest().authenticated()
                 )
-
-                // Agregar filtro JWT para validar token antes del UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-
                 .build();
     }
 }

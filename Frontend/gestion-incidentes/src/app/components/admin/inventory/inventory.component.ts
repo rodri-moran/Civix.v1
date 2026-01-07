@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
 import { IventoryServiceService } from '../../../services/iventory-service.service';
 import { InventoryMovementDto, TypeMovement } from '../../../dtos/inventory-movement.dto';
 import { ResourceDto } from '../../../dtos/ResourceDto';
@@ -15,7 +14,7 @@ declare const bootstrap: any;
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, HttpClientModule]
+  imports: [CommonModule, FormsModule, RouterLink]
 })
 
 export class InventoryComponent implements OnInit {
@@ -90,7 +89,6 @@ movement = {
         quantity: this.movement.quantity
       }]
     }
-
 
     this.inventoryService.registerMovement(dto).subscribe({
       next: () => {
@@ -202,5 +200,4 @@ confirmDelete() {
       toast.show();
     }
   }
-
 }

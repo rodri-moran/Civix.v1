@@ -16,8 +16,7 @@ export class AdminLayoutComponent {
   userName: string = "Usuario";
   currentRoute = '';
   hasToken = false;
-  //isLoggedIn: boolean = false;
-  isOpen = false; // sidebar abierto por defecto en desktop
+  isOpen = false
 
   menuItems = [
     { title: 'Reportes', icon: 'bi bi-exclamation-triangle', route: '/admin/reportes' },
@@ -27,7 +26,6 @@ export class AdminLayoutComponent {
   ];
  ngOnInit() {
   const token = localStorage.getItem('token')
-  const role = this.authService.getRole();
   const storedName = localStorage.getItem('userName');
 
   if (token && !this.authService.isTokenExpired()) {
@@ -65,6 +63,6 @@ export class AdminLayoutComponent {
   }
 
   profile() {
-    this.router.navigate(['/admin']);
+    this.router.navigate(['/admin/perfil']);
   }
 }

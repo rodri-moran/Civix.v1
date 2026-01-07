@@ -2,9 +2,9 @@ spring:
   application:
     name: report-service
   datasource:
-    url: jdbc:postgresql://report-db:5436/reportdb
-    username: report
-    password: report
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -23,7 +23,7 @@ server:
   port: 8083
 logging:
   level:
-    org.springframework.security: DEBUG
+    org.springframework.security: ${SECURITY_LOG_LEVEL:INFO}
 
 jwt:
-  secret: miClaveSuperUltraMegaSecretaClaveDeJWT1234567890
+  secret: ${JWT_SECRET}

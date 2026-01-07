@@ -1,23 +1,16 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { ReportServiceService } from '../../services/report-service.service';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { IventoryServiceService } from '../../services/iventory-service.service';
-import { ResourcesUsedDto } from '../../dtos/ResourcesUsedDto.dto';
 import { ResourceDto } from '../../dtos/ResourceDto';
-
+import { Squad } from '../../dtos/SquadDto.dto';
+import { SquadServiceService } from '../../services/squad-service.service';
+import { RouterLink } from '@angular/router';
 declare var bootstrap: any;
-interface Squad {
-  id: number;
-  name: string;
-  description: string;
-  area: string;
-  teamSize: number;
-}
+
 interface Report {
   id: number;
   title: string;
@@ -33,47 +26,37 @@ interface Report {
 
 @Component({
   selector: 'app-cuadrilla',
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './cuadrilla.component.html',
   styleUrl: './cuadrilla.component.css',
 })
 export class CuadrillaComponent implements OnInit {
-  //statusMap es un objeto literal (como un diccionario o mapa).
-  //Cada clave (PENDING, IN_PROCESS, RESOLVED) representa el valor que llega del backend.
-  //Cada valor asociado es otro objeto que tiene dos propiedades:
-  //text: el texto que se quiere mostrar en el front (en español).
-  //class: la clase de Bootstrap que define el color del badge.
-
-  //Entonces, si el backend devuelve IN_PROCESS, se puede acceder a:
-  //statusMap["IN_PROCESS"].text → "En proceso"
-  //statusMap["IN_PROCESS"].class → "bg-warning text-dark"
   statusMap: { [key: string]: { text: string; class: string } } = {
     PENDING: { text: 'Pendiente', class: 'bg-primary' },
     IN_PROCESS: { text: 'En proceso', class: 'bg-warning text-dark' },
     RESOLVED: { text: 'Resuelto', class: 'bg-success' },
   };
   private map!: L.Map;
-  private apiUrl = 'http://localhost:8080/api/report/admin/getAll';
-  private apiUrlSquads = 'http://localhost:8080/api/report/admin/squads';
-
   resources: ResourceDto[] = [];
   reports: Report[] = [];
   allReports: Report[] = [];
-  squads: Squad[] = [];
-  isAssigning = false;
   reportPendingResolve?: Report;
   resourcesUsed: {
     resourceId: number | null;
     quantity: number;
   }[] = [];
+  squads: Squad[] = [];
+  loading = false;
+  errorMessage: string = '';
 
-  constructor(private http: HttpClient, private service: ReportServiceService, private inventoryService : IventoryServiceService) {}
+  constructor(
+    private service: ReportServiceService,
+    private inventoryService: IventoryServiceService,
+    private squadService: SquadServiceService
+  ) {}
 
   ngOnInit(): void {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
+    this.loadSquads();
 
     this.service.getReportsForSupervisor().subscribe({
       next: (data) => {
@@ -95,8 +78,7 @@ export class CuadrillaComponent implements OnInit {
       },
     });
   }
-  selectedReport?: Report;
-  selectedSquadId?: number;
+
   reportToDetail?: Report;
   statusKeys = Object.keys(this.statusMap);
   openDropdownId: number | null = null;
@@ -112,7 +94,7 @@ export class CuadrillaComponent implements OnInit {
         next: (data) => {
           this.resources = data;
         },
-        error: (err) => console.error('Error al traer recursos: ', err)
+        error: (err) => console.error('Error al traer recursos: ', err),
       });
       this.reportPendingResolve = report;
       this.openResourcesModal();
@@ -137,70 +119,8 @@ export class CuadrillaComponent implements OnInit {
     }
   }
 
-  openAssignModal(reporte: Report) {
-    this.selectedReport = reporte;
-    this.selectedSquadId = reporte.squad?.id;
-  }
-
-  assignSquad() {
-    if (!this.selectedReport || !this.selectedSquadId || this.isAssigning) return;
-    const selectedSquad = this.squads.find((s) => s.id === this.selectedSquadId);
-    if (!selectedSquad) return;
-
-    this.isAssigning = true;
-
-    this.service.assignSquadToReport(this.selectedReport.id, this.selectedSquadId).subscribe({
-      next: (data) => {
-        console.log('respuesta de back al asignar squad a report: ' + data);
-        this.selectedReport!.squad = selectedSquad;
-        this.selectedReport!.status = 'IN_PROCESS';
-        this.showMessage(true, 'La cuadrilla fue asignada correctamente al reporte.');
-
-        this.isAssigning = false;
-        this.closeAssignModal();
-      },
-      error: (err) => {
-        console.error('Error al asignar cuadrilla', err);
-        this.showMessage(false, 'Hubo un error al asignar la cuadrilla. Intenta nuevamente.');
-        this.isAssigning = false;
-      },
-    });
-
-    const modalEl = document.getElementById('assignModal');
-    if (modalEl) {
-      const modal = bootstrap.Modal.getInstance(modalEl);
-      modal?.hide();
-    }
-  }
-  selectedSquad?: Squad;
-
-  onSquadChange() {
-    this.selectedSquad = this.squads.find((s) => s.id === this.selectedSquadId);
-  }
-
-  closeAssignModal() {
-    const modalEl = document.getElementById('assignModal');
-    if (modalEl) {
-      const modal = bootstrap.Modal.getInstance(modalEl);
-      modal?.hide();
-    }
-
-    this.selectedSquadId = undefined;
-  }
-
   isSuccess: boolean = true;
   messageText: string = '';
-
-  showMessage(isSuccess: boolean, text: string) {
-    this.isSuccess = isSuccess;
-    this.messageText = text;
-
-    const modalEl = document.getElementById('messageModal');
-    if (modalEl) {
-      const modal = new bootstrap.Modal(modalEl);
-      modal.show();
-    }
-  }
 
   openDetailModal(report: Report) {
     this.reportToDetail = report;
@@ -231,57 +151,50 @@ export class CuadrillaComponent implements OnInit {
   }
 
   addResource() {
-  this.resourcesUsed.push({
-    resourceId: null,
-    quantity: 1
-  });
-}
+    this.resourcesUsed.push({
+      resourceId: null,
+      quantity: 1,
+    });
+  }
 
   removeResource(index: number) {
     this.resourcesUsed.splice(index, 1);
   }
 
-confirmResolve() {
-  if (!this.reportPendingResolve) return;
+  confirmResolve() {
+    if (!this.reportPendingResolve) return;
 
-  const dto = {
-    items: this.resourcesUsed
-      .filter(r => r.resourceId !== null && r.quantity > 0)
-      .map(r => ({
-        resourceId: r.resourceId!,
-        quantity: r.quantity
-      })),
-    typeMovement: 'SALIDA',
-    userId: Number(localStorage.getItem('userId')),
-    reportId: this.reportPendingResolve.id,
-    reason: 'Resolución de reporte'
-  };
+    const dto = {
+      items: this.resourcesUsed
+        .filter((r) => r.resourceId !== null && r.quantity > 0)
+        .map((r) => ({
+          resourceId: r.resourceId!,
+          quantity: r.quantity,
+        })),
+      typeMovement: 'SALIDA',
+      userId: Number(localStorage.getItem('userId')),
+      reportId: this.reportPendingResolve.id,
+      reason: 'Resolución de reporte',
+    };
 
-  this.service.updateStatus(
-    this.reportPendingResolve.id,
-    'RESOLVED',
-    dto
-  ).subscribe({
-    next: () => {
-      this.reportPendingResolve!.status = 'RESOLVED';
-      this.closeResourcesModal();
-      this.resourcesUsed = [];
-      this.reportPendingResolve = undefined;
-    },
-    error: err => console.error(err)
-  });
-}
-
-
-closeResourcesModal() {
-  const modalEl = document.getElementById('resourcesModal');
-  if (modalEl) {
-    const modal = bootstrap.Modal.getInstance(modalEl);
-    modal?.hide();
+    this.service.updateStatus(this.reportPendingResolve.id, 'RESOLVED', dto).subscribe({
+      next: () => {
+        this.reportPendingResolve!.status = 'RESOLVED';
+        this.closeResourcesModal();
+        this.resourcesUsed = [];
+        this.reportPendingResolve = undefined;
+      },
+      error: (err) => console.error(err),
+    });
   }
-}
 
-
+  closeResourcesModal() {
+    const modalEl = document.getElementById('resourcesModal');
+    if (modalEl) {
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      modal?.hide();
+    }
+  }
 
   filterByStatus(status?: string) {
     if (!status || status === 'ALL') {
@@ -298,6 +211,22 @@ closeResourcesModal() {
     if (!clickedInside) {
       this.openDropdownId = null;
     }
+  }
+
+  private loadSquads(): void {
+    this.loading = true;
+
+    this.squadService.getSquadsForSupervisor().subscribe({
+      next: (data) => {
+        this.squads = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error cargando cuadrillas del supervisor', err);
+        this.errorMessage = 'No se pudieron cargar las cuadrillas.';
+        this.loading = false;
+      },
+    });
   }
 }
 function getEstadoOrden(status: string): number {

@@ -6,11 +6,12 @@ import com.example.report_service.entity.ReportEntity;
 import com.example.report_service.entity.ReportStatusHistoryEntity;
 import com.example.report_service.entity.SquadEntity;
 import com.example.report_service.enums.Status;
-import com.example.report_service.repository.HistoryRepository;
+//import com.example.report_service.repository.HistoryRepository;
 import com.example.report_service.repository.ReportRepository;
 import com.example.report_service.repository.SquadRepository;
 import com.example.report_service.services.interfaces.ReportService;
-import io.jsonwebtoken.Jwts;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -40,8 +41,8 @@ public class ReportServiceImpl implements ReportService {
     private SquadRepository squadRepository;
     @Autowired
     private WebClient.Builder webClientBuilder;
-    @Autowired
-    private HistoryRepository historyRepository;
+//    @Autowired
+//    private HistoryRepository historyRepository;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -79,14 +80,6 @@ public class ReportServiceImpl implements ReportService {
         return reportEntityList.stream()
                 .map(this::convertEntityToDto)
                 .toList();
-    }
-
-    @Override
-    public ReportResponseDto deleteById(Long reportId) {
-        ReportEntity reportEntity = repository.findById(reportId)
-                .orElseThrow(() -> new EntityNotFoundException("Repositorio con ese id no encontrado"));
-        repository.deleteById(reportId);
-        return modelMapper.map(reportEntity, ReportResponseDto.class);
     }
 
     @Override
@@ -164,12 +157,12 @@ public class ReportServiceImpl implements ReportService {
             entity.setResolvedAt(null);
         }
 
-        ReportStatusHistoryEntity history = new ReportStatusHistoryEntity();
-        history.setReport(entity);
-        history.setOldStatus(entity.getStatus());
-        history.setNewStatus(status);
-
-        historyRepository.save(history);
+//        ReportStatusHistoryEntity history = new ReportStatusHistoryEntity();
+//        history.setReport(entity);
+//        history.setOldStatus(entity.getStatus());
+//        history.setNewStatus(status);
+//
+//        historyRepository.save(history);
 
         entity.setStatus(status);
         repository.save(entity);
@@ -181,7 +174,7 @@ public class ReportServiceImpl implements ReportService {
         InventoryMovementDto inventoryDto = new InventoryMovementDto();
 
         inventoryDto.setTypeMovement(resourcesUsed.getTypeMovement());
-        inventoryDto.setUserId(resourcesUsed.getUserId());
+        inventoryDto.setUserId((Long) SecurityContextHolder.getContext().getAuthentication().getDetails());
         inventoryDto.setReportId(resourcesUsed.getReportId());
         inventoryDto.setReason(resourcesUsed.getReason());
 
@@ -202,21 +195,21 @@ public class ReportServiceImpl implements ReportService {
             inventoryDto.setMovementDetail(List.of());
         }
 
-        String serviceToken = jwtUtil.generateServiceToken();
-
+        String userToken = getBearerTokenFromCurrentRequest();
+        if (userToken == null) {
+            throw new AccessDeniedException("Falta token para llamar a inventory-service");
+        }
+        log.info("Token reenviado a inventory-service: {}", userToken != null);
 
         webClientBuilder.build()
                 .post()
                 .uri("http://inventory-service:8084/api/inventory/squad/movements")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + serviceToken)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + userToken)
                 .bodyValue(inventoryDto)
                 .retrieve()
                 .toBodilessEntity()
                 .block();
     }
-
-
-
 
 
 //    UserResponseDto user = webClientBuilder.build()
@@ -236,4 +229,19 @@ public class ReportServiceImpl implements ReportService {
                 .stream().map(x  -> modelMapper.map(x, ReportResponseDto.class))
                 .toList();
     }
+
+    private String getBearerTokenFromCurrentRequest() {
+        ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attrs == null) return null;
+        String auth = attrs.getRequest().getHeader(HttpHeaders.AUTHORIZATION);
+        if(auth!=null) {
+            log.info("Auth string: {}", auth.substring(7));
+        }
+
+        if (auth != null && auth.startsWith("Bearer "))
+
+            return auth.substring(7);
+        return null;
+    }
+
 }

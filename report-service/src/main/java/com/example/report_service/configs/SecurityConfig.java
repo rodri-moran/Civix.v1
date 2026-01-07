@@ -8,25 +8,32 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
     private final JwtFilter jwtFilter;
-
     public SecurityConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/report/public","/api/report/public/**").permitAll()
+                        .requestMatchers("/api/report/get-by-user-id").authenticated()
+
+                        .requestMatchers("/api/report/public/**").permitAll()
+
+                        .requestMatchers("/api/report/admin/**").hasRole("ADMIN")
+
+                        .requestMatchers("/api/new/admin/**","/api/new/admin").hasRole("ADMIN")
+
                         .requestMatchers("/api/report/status/**").hasAnyRole("ADMIN", "CUADRILLA")
-                        .requestMatchers("/api/squad/reports","/api/squad/reports/**").hasRole("CUADRILLA")
-                        .requestMatchers("/api/report/admin").hasRole("ADMIN")
-                        .requestMatchers("/api/report/admin/**","/api/report/admin/squad", "/api/report/admin/").hasRole("ADMIN")
+
+                        .requestMatchers("/api/squad/reports/**").hasRole("CUADRILLA")
+
                         .requestMatchers("/api/report/**").hasAnyRole("USER", "ADMIN")
+
+
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

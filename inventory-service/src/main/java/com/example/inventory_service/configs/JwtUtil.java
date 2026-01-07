@@ -15,17 +15,6 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateServiceToken() {
-
-        return Jwts.builder()
-                .setSubject("inventory-service")
-                .claim("role", "ADMIN")
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 30 min
-                .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS256)
-                .compact();
-    }
-
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes()))
@@ -33,12 +22,4 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
-//    public Claims extractClaims(String token) {
-//        return Jwts.parserBuilder()
-//                .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
-//                .build()
-//                .parseClaimsJws(token)
-//                .getBody();
-//    }
 }

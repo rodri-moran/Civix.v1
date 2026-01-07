@@ -3,18 +3,11 @@ import { ReportServiceService } from '../../../services/report-service.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { Squad } from '../../../dtos/SquadDto.dto';
 
 declare var bootstrap: any;
-interface Squad {
-  id: number;
-  name: string;
-  description: string;
-  area: string;
-  teamSize: number;
-}
 interface Report {
   id: number, 
   title: string,
@@ -27,8 +20,6 @@ interface Report {
   squad?: Squad;
   imageUrl?: string;
 }
-
-
 
 @Component({
   selector: 'app-admin-reports',
@@ -55,22 +46,15 @@ export class AdminReports implements OnInit {
   RESOLVED: { text: 'Resuelto', class: 'bg-success' }
 };
   private map!: L.Map;
-  private apiUrl = "http://localhost:8080/api/report/admin/getAll"
-  private apiUrlSquads = "http://localhost:8080/api/report/admin/squads"
   reports : Report[] = [];
   allReports: Report[] = [];
   squads: Squad[] = [];
   isAssigning = false;
 
-  constructor(private http: HttpClient, private service: ReportServiceService){}
+  constructor(private service: ReportServiceService){}
   
   ngOnInit() : void{
-    const token = localStorage.getItem("token");
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    })
-
-    this.http.get<Squad[]>(this.apiUrlSquads, { headers }).subscribe({
+    this.service.getSquads().subscribe({
         next: (data) => {
           this.squads = data;
         },

@@ -5,68 +5,58 @@ import { InventoryMovementDto } from '../dtos/inventory-movement.dto';
 import { ResourceDto } from '../dtos/ResourceDto';
 import { InventoryMovementResponseDto } from '../dtos/InventoryMovementResponse.dto';
 import { ResourceCreateDto } from '../dtos/resource-create.dto';
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IventoryServiceService {
-  private apiUrl = 'http://localhost:8080/api/inventory/admin'
+private baseUrl = `${environment.apiUrl}/api/inventory`
 constructor(private http :HttpClient) { }
 
+    private authHeaders() {
+    const token = localStorage.getItem('token');
+    return {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      }),
+    };
+  }
+
   createResource(resourceCreate : ResourceCreateDto) : Observable<ResourceCreateDto>{
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders( {
-      'Authorization': `Bearer ${token}`
-    })
+
     return this.http.post<ResourceCreateDto>(
-      this.apiUrl,
+      this.baseUrl + '/admin',
       resourceCreate,
-      { headers }
+      this.authHeaders()
     );
   }
+
   getAllResources() : Observable<ResourceDto[]> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    })
-
     return this.http.get<ResourceDto[]>(
-      'http://localhost:8080/api/inventory/squad/getAll',
-      { headers }
+      `${this.baseUrl}/squad/getAll`,
+      this.authHeaders()
     )
   }
 
-  registerMovement(movement: InventoryMovementDto){
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    })
-
+  registerMovement(movement: InventoryMovementDto){    
     return this.http.post(
-      'http://localhost:8080/api/inventory/squad/movements',
+      `${this.baseUrl}/squad/movements`,
       movement,
-      { headers }
+      this.authHeaders()
     );
   }
+
   getAllMovements() : Observable<InventoryMovementResponseDto[]>{
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    })
     return this.http.get<InventoryMovementResponseDto[]>(
-      'http://localhost:8080/api/inventory/admin/movements',
-      { headers }
+      `${this.baseUrl}/admin/movements`,
+      this.authHeaders()
     )
   }
-  deleteResource(id: number) {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    })
 
-  return this.http.delete(`http://localhost:8080/api/inventory/admin/delete/${id}`,
-    { headers }
+  deleteResource(id: number) {
+  return this.http.delete(`${this.baseUrl}/admin/delete/${id}`,
+    this.authHeaders()
   );
 }
 }

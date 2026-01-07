@@ -21,28 +21,30 @@ public class AuthenticationService {
 
     public AuthResponseDto login(LoginRequestDto dto) {
 
-        //TODO CAMBIAR AL FINALIZAR PRODUCCIÓN
-        UserResponseDto user = webClientBuilder.build()
+        UserAuthDto user = webClientBuilder.build()
                 .get()
-                .uri("http://user-service:8081/api/users/public/by-email/{email}", dto.getEmail())
+                .uri("http://user-service:8081/api/users/internal/auth/{email}", dto.getEmail())
                 .retrieve()
-                .bodyToMono(UserResponseDto.class)
+                .bodyToMono(UserAuthDto.class)
                 .block();
-
 
         if (user == null || !passwordEncoder.matches(dto.getPassword(), user.getPasswordHash())) {
             throw new RuntimeException("Credenciales inválidas");
         }
-        System.out.println("name del user desde auth service: " + user.getName());
-        System.out.println("lastName del user desde auth service: " + user.getLastName());
 
-        String token = jwtUtil.generateToken(user.getId(),user.getEmail(), user.getRole().name());
+        String token = jwtUtil.generateToken(
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
 
-        return new AuthResponseDto(token,
-                user.getRole().name(),
+        return new AuthResponseDto(
+                token,
+                user.getRole(),
                 user.getId(),
                 user.getName(),
-                user.getLastName());
+                user.getLastName()
+        );
     }
 
     public AuthResponseDto register(RegisterRequestDto request){

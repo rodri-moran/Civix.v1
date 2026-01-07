@@ -10,7 +10,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h3 class="fw-bold text-dark m-0">Inventario</h3>
 
-  <div class="d-flex gap-2">
+  <div class="d-flex gap-2 m-1">
     <button
       class="btn btn-outline-secondary d-flex align-items-center shadow-sm rounded-pill px-3"
       data-bs-toggle="modal"
@@ -30,7 +30,7 @@
   </div>
 </div>
 
-<div class="table-responsive shadow-sm rounded-4 border bg-white p-3">
+<div class="table-responsive shadow-sm rounded-4 border bg-white p-3 d-none d-md-block">
   <table class="table table-hover align-middle mb-0 text-center">
     <thead class="table-light border-bottom">
       <tr class="text-secondary text-uppercase small">
@@ -57,7 +57,6 @@
               'bg-success text-white': resource.area === 'RECOLECCION',
               'bg-info text-dark': resource.area === 'HERRAMIENTA',
               'bg-secondary text-white': resource.area === 'OTRO'
-
             }"
           >
             {{ resource.area }}
@@ -86,18 +85,65 @@
             <i class="bi bi-pencil-square"></i>
           </button>
           <!-- (click)="deleteResource"-->
-          <button 
+          <button
             class="btn btn-outline-danger btn-sm"
             data-bs-toggle="modal"
             data-bs-target="#deleteModal"
             (click)="openDeleteModal(resource.id)"
-            >
+          >
             <i class="bi bi-trash"></i>
           </button>
         </td>
       </tr>
     </tbody>
   </table>
+</div>
+
+<div class="d-block d-md-none">
+  <div class="card shadow-sm mb-3" *ngFor="let resource of resources; let i = index">
+    <div class="card-body">
+
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-boxes text-primary fs-4"></i>
+          <h6 class="fw-bold mb-0">{{ resource.name }}</h6>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center text-muted mb-3 gap-2">
+        <i class="bi bi-box-seam text-secondary"></i>
+        <span>
+          Stock: <strong>{{ resource.stock }}</strong>
+        </span>
+      </div>
+
+      <div class="d-flex align-items-center text-muted mb-3 gap-2">
+        <i class="bi bi-rulers text-secondary"></i>
+        <span>
+          Unidad de medida: <strong>{{ resource.unit }}</strong>
+        </span>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button
+          class="btn btn-outline-primary btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#movementModal"
+        >
+          <i class="bi bi-pencil-square"></i>
+        </button>
+
+        <button
+          class="btn btn-outline-danger btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#deleteModal"
+          (click)="openDeleteModal(resource.id)"      
+        >
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL CREAR RECURSO -->
@@ -391,10 +437,6 @@
   </div>
 </div> -->
 
-
-
-
-
 <div
   class="modal fade"
   id="deleteModal"
@@ -404,7 +446,6 @@
 >
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-4 shadow">
-
       <!-- HEADER -->
       <div class="modal-header border-0">
         <h5 class="modal-title text-danger fw-bold" id="deleteModalLabel">
@@ -416,57 +457,61 @@
 
       <!-- BODY -->
       <div class="modal-body text-center px-4">
-        <p class="mb-0 fs-6">
-          ¿Seguro que desea eliminar este recurso?
-        </p>
-        <small class="text-muted">
-          Esta acción no se puede deshacer.
-        </small>
+        <p class="mb-0 fs-6">¿Seguro que desea eliminar este recurso?</p>
+        <small class="text-muted"> Esta acción no se puede deshacer. </small>
       </div>
 
       <!-- FOOTER -->
       <div class="modal-footer border-0 justify-content-center gap-3">
-        <button
-          type="button"
-          class="btn btn-outline-secondary px-4"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
           Cancelar
         </button>
 
-        <button
-          type="button"
-          class="btn btn-danger px-4"
-          (click)="confirmDelete()"
-        >
+        <button type="button" class="btn btn-danger px-4" (click)="confirmDelete()">
           <i class="bi bi-trash me-1"></i>
           Eliminar
         </button>
       </div>
-
     </div>
   </div>
 </div>
 
-
-<div class="toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-4" id="toastSuccess"
-  role="alert" aria-live="assertive" aria-atomic="true">
+<div
+  class="toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-4"
+  id="toastSuccess"
+  role="alert"
+  aria-live="assertive"
+  aria-atomic="true"
+>
   <div class="d-flex">
     <div class="toast-body">
       <i class="bi bi-check-circle-fill me-2"></i>
       Recurso eliminado correctamente
     </div>
-    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    <button
+      type="button"
+      class="btn-close btn-close-white me-2 m-auto"
+      data-bs-dismiss="toast"
+    ></button>
   </div>
 </div>
 
-<div class="toast align-items-center text-bg-danger border-0 position-fixed bottom-0 end-0 m-4" id="toastError"
-  role="alert" aria-live="assertive" aria-atomic="true">
+<div
+  class="toast align-items-center text-bg-danger border-0 position-fixed bottom-0 end-0 m-4"
+  id="toastError"
+  role="alert"
+  aria-live="assertive"
+  aria-atomic="true"
+>
   <div class="d-flex">
     <div class="toast-body">
       <i class="bi bi-x-circle-fill me-2"></i>
       Error al eliminar el recurso
     </div>
-    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    <button
+      type="button"
+      class="btn-close btn-close-white me-2 m-auto"
+      data-bs-dismiss="toast"
+    ></button>
   </div>
 </div>

@@ -8,14 +8,20 @@ import {
   BarController,
   BarElement,
   CategoryScale,
-  LinearScale
+  LinearScale,
 } from 'chart.js';
 import { StatisticsService } from '../../services/statistics.service';
 import { RouterLink } from '@angular/router';
 
 Chart.register(
-  PieController, ArcElement, Tooltip, Legend,
-  BarController, BarElement, CategoryScale, LinearScale
+  PieController,
+  ArcElement,
+  Tooltip,
+  Legend,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale
 );
 
 @Component({
@@ -23,7 +29,7 @@ Chart.register(
   templateUrl: './statistics.component.html',
   styleUrls: ['./statistics.component.css'],
   standalone: true,
-  imports: [RouterLink]
+  imports: [RouterLink],
 })
 export class StatisticsComponent implements OnInit {
   fastestSquadTime = '0';
@@ -33,11 +39,9 @@ export class StatisticsComponent implements OnInit {
   squadData: { [key: string]: number } = {};
   totalReports = 0;
 
+  constructor(private service: StatisticsService) {}
 
-  constructor(private service: StatisticsService) { }
-  
-  ngOnInit() {
-  }
+  ngOnInit() {}
   ngAfterViewInit() {
     this.renderPieChartStatus();
     this.renderBarChartSquad();
@@ -47,88 +51,85 @@ export class StatisticsComponent implements OnInit {
   }
   // === TORTA ===
   renderPieChartStatus() {
-  this.service.getCountOfReportsByStatus()
-    .subscribe(response => {
-
+    this.service.getCountOfReportsByStatus().subscribe((response) => {
       this.statusData = response;
-      
+
       new Chart('pieChartStatus', {
         type: 'pie',
         data: {
           labels: ['Pendiente', 'En proceso', 'Resuelto'],
-          datasets: [{
-            data: [
-              this.statusData["PENDING"],
-              this.statusData["IN_PROCESS"],
-              this.statusData["RESOLVED"]
-            ],
-            backgroundColor: ['#0D6EFD', '#60A5FA', '#34D399']
-          }]
-        }
+          datasets: [
+            {
+              data: [
+                this.statusData['PENDING'],
+                this.statusData['IN_PROCESS'],
+                this.statusData['RESOLVED'],
+              ],
+              backgroundColor: ['#0D6EFD', '#60A5FA', '#34D399'],
+            },
+          ],
+        },
       });
-
     });
-}
+  }
 
   // === BARRAS ===
   renderBarChartSquad() {
-    this.service.getCountOfReportsBySquad()
-    .subscribe(response => {
+    this.service.getCountOfReportsBySquad().subscribe((response) => {
       this.squadData = response;
       console.log('response: ', this.squadData);
 
-    new Chart('barChartSquad', {
-      type: 'bar',
-      data: {
-        labels: Object.keys(this.squadData),  // nombres
-        datasets: [{
-          label: 'Cantidad de reportes',
-          data: Object.values(this.squadData), 
-          backgroundColor: '#0D6EFD'
-        }]
-      },
-      options: {
-    indexAxis: 'y', 
-    scales: {
-      x: { beginAtZero: true }
-    }
-  }
+      new Chart('barChartSquad', {
+        type: 'bar',
+        data: {
+          labels: Object.keys(this.squadData), // nombres
+          datasets: [
+            {
+              label: 'Cantidad de reportes',
+              data: Object.values(this.squadData),
+              backgroundColor: '#0D6EFD',
+            },
+          ],
+        },
+        options: {
+          indexAxis: 'y',
+          scales: {
+            x: { beginAtZero: true },
+          },
+        },
+      });
     });
   }
-  )};
 
-  renderTotalReports(){
-    this.service.getTotalReports()
-    .subscribe(response => {
+  renderTotalReports() {
+    this.service.getTotalReports().subscribe((response) => {
       this.totalReports = response;
-    })
+    });
   }
 
-  renderAverageResolutionTime(){
-    this.service.getAverageResolutionTime()
-    .subscribe(response => {
+  renderAverageResolutionTime() {
+    this.service.getAverageResolutionTime().subscribe((response) => {
       let responseStr = '';
-      const totalHours = response / 3600;      
+      const totalHours = response / 3600;
       const days = Math.floor(totalHours / 24);
       const hours = Math.floor(totalHours % 24);
 
-      if(days > 0){
-        responseStr += days === 1 ? "1 día": `${days} días`;
-      } 
-      if(hours > 0){
-        responseStr += (responseStr ? " " : "") + `${hours} h`;
+      if (days > 0) {
+        responseStr += days === 1 ? '1 día' : `${days} días`;
+      }
+      if (hours > 0) {
+        responseStr += (responseStr ? ' ' : '') + `${hours} h`;
       }
       if (!responseStr) {
-        responseStr = "0 h";
+        responseStr = '0 h';
       }
       this.avgResolutionTimeHours = responseStr;
-    })
+    });
   }
 
   loadFastestSquad() {
-  this.service.getAverageResolutionTimeBySquad()
-    .subscribe(data => {
-      console.log('data de squad: ', data)
+    this.service.getAverageResolutionTimeBySquad().subscribe((data) => {
+      console.log('data de squad: ', data);
       let fastestSquad: string | null = null;
       let fastestSeconds = Number.MAX_VALUE;
 
@@ -141,29 +142,25 @@ export class StatisticsComponent implements OnInit {
         }
       }
 
-      this.fastestSquad = fastestSquad ?? "Sin datos";
+      this.fastestSquad = fastestSquad ?? 'Sin datos';
 
-      if(fastestSeconds == Number.MAX_VALUE){
+      if (fastestSeconds == Number.MAX_VALUE) {
         this.fastestSquadTime = this.formatSecondsToDaysHours(0);
-      }
-      else {
+      } else {
         this.fastestSquadTime = this.formatSecondsToDaysHours(fastestSeconds);
       }
-      
     });
-}
-formatSecondsToDaysHours(seconds: number): string {
-  const hours = Math.floor(seconds / 3600);
-  const days = Math.floor(hours / 24);
-  
-  const remainingHours = hours % 24;
-
-  if (days > 0) {
-    return remainingHours > 0
-      ? `${days} días ${remainingHours} h`
-      : `${days} días`;
   }
+  formatSecondsToDaysHours(seconds: number): string {
+    const hours = Math.floor(seconds / 3600);
+    const days = Math.floor(hours / 24);
 
-  return `${hours} h`;
-}
+    const remainingHours = hours % 24;
+
+    if (days > 0) {
+      return remainingHours > 0 ? `${days} días ${remainingHours} h` : `${days} días`;
+    }
+
+    return `${hours} h`;
+  }
 }

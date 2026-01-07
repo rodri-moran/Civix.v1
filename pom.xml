@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.redcomunal</groupId>
-    <artifactId>redcomunal</artifactId>
+    <artifactId>Civix</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
 
@@ -13,7 +13,6 @@
         <module>auth-service</module>
         <module>gateway</module>
         <module>inventory-service</module>
-        <module>notification-service</module>
         <module>report-service</module>
         <module>statistics-service</module>
         <module>user-service</module>

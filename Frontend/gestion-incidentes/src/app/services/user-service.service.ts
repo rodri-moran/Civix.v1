@@ -12,13 +12,13 @@ export class UserService {
     const headers = new HttpHeaders ({
       'Authorization': `Bearer ${token}`
     })
-    return this.http.get<UserDto>(`${this.apiUrl}/public/me`, { headers });
+    return this.http.get<UserDto>(`${this.apiUrl}/me`, { headers });
   }
   updateProfile(data: UserDto): Observable<UserDto> {
     const token = localStorage.getItem("token");
     const headers = new HttpHeaders ({
       'Authorization': `Bearer ${token}`
     })
-    return this.http.put<UserDto>(`${this.apiUrl}/public/me`, data, { headers });
+    return this.http.put<UserDto>(`${this.apiUrl}/me`, data, { headers });
   }
 }

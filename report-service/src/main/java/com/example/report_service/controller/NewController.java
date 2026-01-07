@@ -4,10 +4,8 @@ import com.example.report_service.dtos.NewResponseDto;
 import com.example.report_service.services.interfaces.NewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 @RestController
 @RequestMapping("/api/new")
@@ -22,5 +20,10 @@ public class NewController {
     @GetMapping("/admin")
     public ResponseEntity<List<NewResponseDto>> getAllNews(){
         return ResponseEntity.ok(service.getAllNews());
+    }
+    @DeleteMapping("/admin/delete/{id}")
+    public ResponseEntity<Void> deleteNew(@PathVariable Long id){
+        service.deleteNew(id);
+        return ResponseEntity.noContent().build();
     }
 }

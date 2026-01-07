@@ -2,8 +2,8 @@ INSERT INTO user_entity (name, last_name, email, password_hash, role, registrati
 VALUES (
            'Admin',
            'Principal',
-           'admin@gmail.com',
-           '$2a$12$HTTnhnHsMJGmEps6slPoaeoGZKD2u5Tof/hIplXBbNowCacICzHFW', -- hash de admin123
+           'admin@test.com',
+           '$2a$12$.pPERWaouFqxxJNvn96JZ.s81maM51l8hHVt.gsGeXUTUacjJIqM.',
            'ADMIN',
            CURRENT_DATE,
            '3510000000',
@@ -12,10 +12,10 @@ VALUES (
 
 INSERT INTO user_entity (name, last_name, email, password_hash, role, registration_date, phone, address)
 VALUES (
-           'Rodrigo',
-           'Moran',
-           'email@gmail.com',
-           '$2a$12$g0FLy8DQN.mLvf/D6bfXcOGE/SXE.OrnkFq7vGxc9elpa2C0.dByS',
+           'Demo',
+           'User',
+           'user@test.com',
+           '$2a$12$.pPERWaouFqxxJNvn96JZ.s81maM51l8hHVt.gsGeXUTUacjJIqM.',
            'CIUDADANO',
            CURRENT_DATE,
            '3510000000',
@@ -26,10 +26,10 @@ VALUES (
 
 INSERT INTO user_entity (name, last_name, email, password_hash, role, registration_date, phone, address)
 VALUES (
-           'Juan',
-           'Perez',
-           'juan.perez@civix.com',
-           '$2a$12$g0FLy8DQN.mLvf/D6bfXcOGE/SXE.OrnkFq7vGxc9elpa2C0.dByS', -- mismo hash
+           'Demo',
+           'Supervisor',
+           'squad@test.com',
+           '$2a$12$.pPERWaouFqxxJNvn96JZ.s81maM51l8hHVt.gsGeXUTUacjJIqM.',
            'CUADRILLA',
            CURRENT_DATE,
            '3511111111',
@@ -38,10 +38,10 @@ VALUES (
 
 INSERT INTO user_entity (name, last_name, email, password_hash, role, registration_date, phone, address)
 VALUES (
-           'Maria',
-           'Gomez',
-           'maria.gomez@civix.com',
-           '$2a$12$g0FLy8DQN.mLvf/D6bfXcOGE/SXE.OrnkFq7vGxc9elpa2C0.dByS',
+           'Demo',
+           'Supervisor',
+           'squad2@test.com',
+           '$2a$12$.pPERWaouFqxxJNvn96JZ.s81maM51l8hHVt.gsGeXUTUacjJIqM.',
            'CUADRILLA',
            CURRENT_DATE,
            '3512222222',
@@ -50,10 +50,10 @@ VALUES (
 
 INSERT INTO user_entity (name, last_name, email, password_hash, role, registration_date, phone, address)
 VALUES (
-           'Carlos',
-           'Lopez',
-           'carlos.lopez@civix.com',
-           '$2a$12$g0FLy8DQN.mLvf/D6bfXcOGE/SXE.OrnkFq7vGxc9elpa2C0.dByS',
+           'Supervisor',
+           'Supervisor',
+           'squad3@test.com',
+           '$2a$12$.pPERWaouFqxxJNvn96JZ.s81maM51l8hHVt.gsGeXUTUacjJIqM.',
            'CUADRILLA',
            CURRENT_DATE,
            '3513333333',

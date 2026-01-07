@@ -20,4 +20,4 @@ server:
   port: 8081
 
 jwt:
-  secret: miClaveSuperUltraMegaSecretaClaveDeJWT1234567890
+  secret: ${JWT_SECRET}

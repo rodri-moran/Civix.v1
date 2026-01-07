@@ -92,6 +92,13 @@ export const routes: Routes = [
           import('./components/cuadrilla/cuadrilla.component').then(
             m => m.CuadrillaComponent
           )
+      },
+      {
+        path: 'misCuadrillas',
+        loadComponent: () =>
+          import('./components/cuadrilla/misCuadrillasSupervisor/misCuadrillasSupervisor.component').then(
+            m => m.MisCuadrillasSupervisorComponent
+          )
       }
     ]
   },

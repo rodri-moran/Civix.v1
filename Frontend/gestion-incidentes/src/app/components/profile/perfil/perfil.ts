@@ -5,20 +5,18 @@ import { UserService } from '../../../services/user-service.service';
 import { UserDto } from '../../../dtos/UserDto.dto';
 import { RouterLink } from '@angular/router';
 
-
 @Component({
   selector: 'app-perfil',
   styleUrls: ['./perfil.css'],
   standalone: true,
   templateUrl: './perfil.html',
-  imports: [CommonModule, FormsModule, RouterLink]
+  imports: [CommonModule, FormsModule, RouterLink],
 })
 export class PerfilComponent implements OnInit {
-
   user: UserDto = {
-    name: "",
-    lastName: "",
-    email: ""
+    name: '',
+    lastName: '',
+    email: '',
   };
 
   editedValues: any = {};
@@ -39,7 +37,7 @@ export class PerfilComponent implements OnInit {
         this.user = { ...data };
         this.editedValues = { ...data };
       },
-      error: (err) => console.error(err)
+      error: (err) => console.error(err),
     });
   }
 
@@ -64,10 +62,8 @@ export class PerfilComponent implements OnInit {
       name: this.editedValues.name,
       lastName: this.editedValues.lastName,
       phone: this.editedValues.phone,
-      address: this.editedValues.address
+      address: this.editedValues.address,
     };
-
-    console.log("DTO enviado:", dto);
 
     this.userService.updateProfile(dto).subscribe({
       next: (updated) => {
@@ -76,7 +72,7 @@ export class PerfilComponent implements OnInit {
         this.hasChanges = false;
         this.isEditing = false;
       },
-      error: (err) => console.error("Error actualizando perfil", err)
+      error: (err) => console.error('Error actualizando perfil', err),
     });
   }
 }

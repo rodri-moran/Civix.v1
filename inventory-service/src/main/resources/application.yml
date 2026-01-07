@@ -3,9 +3,9 @@ spring:
     name: inventory-service
 
   datasource:
-    url: jdbc:postgresql://inventory-db:5433/inventorydb
-    username: inventory
-    password: inventory
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
 
   jpa:
     hibernate:
@@ -26,4 +26,4 @@ server:
   port: 8084
 
 jwt:
-  secret: miClaveSuperUltraMegaSecretaClaveDeJWT1234567890
+  secret: ${JWT_SECRET}
